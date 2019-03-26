@@ -23,6 +23,8 @@
 #include "modules/perception/camera/lib/interface/base_obstacle_detector.h"
 #include "modules/perception/camera/lib/interface/base_obstacle_transformer.h"
 #include "modules/perception/common/io/io_util.h"
+#include "modules/perception/camera/lib/obstacle/detector/yolo/yolo_obstacle_detector.h"
+#include "modules/perception/camera/lib/obstacle/transformer/multicue/multicue_obstacle_transformer.h"
 
 DEFINE_string(test_list, "full_test_list.txt", "test image list");
 DEFINE_string(image_root, "", "root dir of images");
@@ -44,17 +46,17 @@ namespace apollo {
 namespace perception {
 namespace camera {
 
-static const cv::Scalar kBoxColorMap[] = {
-    cv::Scalar(0, 0, 0),        // 0
-    cv::Scalar(128, 128, 128),  // 1
-    cv::Scalar(255, 0, 0),      // 2
-    cv::Scalar(0, 255, 0),      // 3
-    cv::Scalar(0, 0, 255),      // 4
-    cv::Scalar(255, 255, 0),    // 5
-    cv::Scalar(0, 255, 255),    // 6
-    cv::Scalar(255, 0, 255),    // 7
-    cv::Scalar(255, 255, 255),  // 8
-};
+//static const cv::Scalar kBoxColorMap[] = {
+//    cv::Scalar(0, 0, 0),        // 0
+//    cv::Scalar(128, 128, 128),  // 1
+//    cv::Scalar(255, 0, 0),      // 2
+//    cv::Scalar(0, 255, 0),      // 3
+//    cv::Scalar(0, 0, 255),      // 4
+//    cv::Scalar(255, 255, 0),    // 5
+//    cv::Scalar(0, 255, 255),    // 6
+//    cv::Scalar(255, 0, 255),    // 7
+//    cv::Scalar(255, 255, 255),  // 8
+//};
 
 static const cv::Scalar kFaceColorMap[] = {
     cv::Scalar(255, 255, 255),  // 0
@@ -167,7 +169,16 @@ int main() {
   init_options.conf_file = FLAGS_detector_conf;
 
   base::BrownCameraDistortionModel model;
-  common::LoadBrownCameraIntrinsic("params/front_6mm_intrinsics.yaml", &model);
+
+  // JIEJIE: hack start
+//  common::LoadBrownCameraIntrinsic("params/front_6mm_intrinsics.yaml", &model);
+  common::LoadBrownCameraIntrinsic(
+  "/apollo/modules/perception/testdata/"
+  "camera/lib/obstacle/detector/yolo/params/"
+  "onsemi_obstacle_intrinsics.yaml",
+  &model);
+  // JIEJIE: hack end
+
   init_options.base_camera_model = model.get_camera_model();
   auto pinhole =
       static_cast<base::PinholeCameraModel *>(model.get_camera_model().get());
@@ -175,8 +186,9 @@ int main() {
   frame.camera_k_matrix = intrinsic;
 
   AINFO << "Init Detector ...";
-  BaseObstacleDetector *detector =
-      BaseObstacleDetectorRegisterer::GetInstanceByName(FLAGS_detector);
+//  BaseObstacleDetector *detector =
+//      BaseObstacleDetectorRegisterer::GetInstanceByName(FLAGS_detector);
+  BaseObstacleDetector *detector = new YoloObstacleDetector();
   if (FLAGS_pre_detected_dir == "") {
     CHECK_EQ(detector->Name(), FLAGS_detector);
     CHECK(detector->Init(init_options));
@@ -188,8 +200,9 @@ int main() {
   transformer_init_options.root_dir = FLAGS_transformer_root;
   transformer_init_options.conf_file = FLAGS_transformer_conf;
 
-  BaseObstacleTransformer *transformer =
-      BaseObstacleTransformerRegisterer::GetInstanceByName(FLAGS_transformer);
+//  BaseObstacleTransformer *transformer =
+//      BaseObstacleTransformerRegisterer::GetInstanceByName(FLAGS_transformer);
+  BaseObstacleTransformer *transformer = new MultiCueObstacleTransformer();
   CHECK_EQ(transformer->Name(), FLAGS_transformer);
   CHECK(transformer->Init(transformer_init_options));
   AINFO << "Done!";
@@ -234,14 +247,22 @@ int main() {
 
       EXPECT_TRUE(detector->Detect(options, &frame));
     }
+
+    // Overwrite detected object's id
+    int obj_id = 0;
+    for (auto obj : frame.detected_objects) {
+      obj->id = obj_id++;
+    }
+
+    AINFO << "JIEJIE: " << "Detect done";
     EXPECT_TRUE(transformer->Transform(transformer_options, &frame));
+    AINFO << "JIEJIE: " << "Transform done";
 
     FILE *fp = fopen(result_path.c_str(), "w");
     if (fp == NULL) {
       AINFO << "Failed to open " << result_path;
       return -1;
     }
-    int obj_id = 0;
     for (auto obj : frame.detected_objects) {
       auto &supp = obj->camera_supplement;
       auto &box = supp.box;
@@ -309,13 +330,27 @@ int main() {
                 supp.cut_off_ratios[0], supp.cut_off_ratios[1],
                 supp.cut_off_ratios[2], supp.cut_off_ratios[3], box.xmin, xmid,
                 box.xmax, area_id);
-        std::stringstream text;
-        auto &name = base::kSubType2NameMap.at(obj->sub_type);
-        text << name[0] << name[1] << name[2] << " - " << obj_id++;
+        std::stringstream text1;
+//        auto &name = base::kSubType2NameMap.at(obj->sub_type);
+//        text << name[0] << name[1] << name[2] << " - " << obj_id++;
+//        text << obj->id;
+        text1 << "H(m):" << obj->size[2] << " W(m):" << obj->size[1] << " L(m):" << obj->size[0];
         cv::putText(
-            cv_img, text.str(),
+            cv_img, text1.str(),
             cv::Point(static_cast<int>(box.xmin), static_cast<int>(box.ymin)),
-            cv::FONT_HERSHEY_PLAIN, 2, cv::Scalar(255, 0, 0), 2);
+            cv::FONT_HERSHEY_PLAIN, 1.5, cv::Scalar(0, 255, 0), 1);
+        std::stringstream text2;
+        text2 << "Relative XYZ(m):" << obj->center.transpose();
+        cv::putText(
+            cv_img, text2.str(),
+            cv::Point(static_cast<int>(box.xmin), static_cast<int>(box.ymax)),
+            cv::FONT_HERSHEY_PLAIN, 1.5, cv::Scalar(0, 0, 255), 1);
+        std::stringstream text3;
+        text3 << "Yaw:" << obj->theta;
+        cv::putText(
+            cv_img, text3.str(),
+            cv::Point(static_cast<int>(box.xmin), static_cast<int>(box.ymax + 25)),
+            cv::FONT_HERSHEY_PLAIN, 1.5, cv::Scalar(0, 0, 255), 1);
       }
     }
     if (FLAGS_vis_dir != "") {

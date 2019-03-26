@@ -1,0 +1,5690 @@
+name: "darknet/16c-16x/os2d"
+layer {
+  name: "input"
+  type: "Input"
+  top: "data"
+  input_param {
+    shape {
+      dim: 1
+      dim: 800
+      dim: 1440
+      dim: 3
+    }
+  }
+}
+layer {
+  name: "data_perm"
+  type: "Permute"
+  bottom: "data"
+  top: "data_perm"
+  permute_param {
+    order: 0
+    order: 3
+    order: 1
+    order: 2
+  }
+}
+layer {
+  name: "data_scale"
+  type: "Power"
+  bottom: "data_perm"
+  top: "data_scale"
+  power_param {
+    power: 1.0
+    scale: 0.00392156885937
+    shift: 0.0
+  }
+}
+layer {
+  name: "conv1"
+  type: "Convolution"
+  bottom: "data_scale"
+  top: "conv1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  convolution_param {
+    num_output: 16
+    bias_term: false
+    pad: 1
+    kernel_size: 3
+    dilation: 1
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+  }
+}
+layer {
+  name: "conv1_bn"
+  type: "BatchNorm"
+  bottom: "conv1"
+  top: "conv1"
+  batch_norm_param {
+    eps: 1e-06
+  }
+}
+layer {
+  name: "conv1_scale"
+  type: "Scale"
+  bottom: "conv1"
+  top: "conv1"
+  scale_param {
+    filler {
+      type: "constant"
+      value: 1
+    }
+    bias_term: true
+  }
+}
+layer {
+  name: "conv1_relu"
+  type: "ReLU"
+  bottom: "conv1"
+  top: "conv1"
+  relu_param {
+    negative_slope: 0.0
+  }
+}
+
+layer {
+  name: "pool1"
+  type: "Pooling"
+  bottom: "conv1"
+  top: "pool1"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    pad: 0
+    stride: 2
+  }
+}
+
+layer {
+  name: "conv2"
+  type: "Convolution"
+  bottom: "pool1"
+  top: "conv2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  convolution_param {
+    num_output: 32
+    bias_term: false
+    pad: 1
+    kernel_size: 3
+    dilation: 1
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+  }
+}
+layer {
+  name: "conv2_bn"
+  type: "BatchNorm"
+  bottom: "conv2"
+  top: "conv2"
+  batch_norm_param {
+    eps: 1e-06
+  }
+}
+layer {
+  name: "conv2_scale"
+  type: "Scale"
+  bottom: "conv2"
+  top: "conv2"
+  scale_param {
+    filler {
+      type: "constant"
+      value: 1
+    }
+    bias_term: true
+  }
+}
+layer {
+  name: "conv2_relu"
+  type: "ReLU"
+  bottom: "conv2"
+  top: "conv2"
+  relu_param {
+    negative_slope: 0.0
+  }
+}
+
+layer {
+  name: "pool2"
+  type: "Pooling"
+  bottom: "conv2"
+  top: "pool2"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    pad: 0
+    stride: 2
+  }
+}
+
+layer {
+  name: "conv3_1"
+  type: "Convolution"
+  bottom: "pool2"
+  top: "conv3_1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  convolution_param {
+    num_output: 64
+    bias_term: false
+    pad: 1
+    kernel_size: 3
+    dilation: 1
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+  }
+}
+layer {
+  name: "conv3_1_bn"
+  type: "BatchNorm"
+  bottom: "conv3_1"
+  top: "conv3_1"
+  batch_norm_param {
+    eps: 1e-06
+  }
+}
+layer {
+  name: "conv3_1_scale"
+  type: "Scale"
+  bottom: "conv3_1"
+  top: "conv3_1"
+  scale_param {
+    filler {
+      type: "constant"
+      value: 1
+    }
+    bias_term: true
+  }
+}
+layer {
+  name: "conv3_1_relu"
+  type: "ReLU"
+  bottom: "conv3_1"
+  top: "conv3_1"
+  relu_param {
+    negative_slope: 0.0
+  }
+}
+
+layer {
+  name: "conv3_2"
+  type: "Convolution"
+  bottom: "conv3_1"
+  top: "conv3_2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  convolution_param {
+    num_output: 32
+    bias_term: false
+    pad: 0
+    kernel_size: 1
+    dilation: 1
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+  }
+}
+layer {
+  name: "conv3_2_bn"
+  type: "BatchNorm"
+  bottom: "conv3_2"
+  top: "conv3_2"
+  batch_norm_param {
+    eps: 1e-06
+  }
+}
+layer {
+  name: "conv3_2_scale"
+  type: "Scale"
+  bottom: "conv3_2"
+  top: "conv3_2"
+  scale_param {
+    filler {
+      type: "constant"
+      value: 1
+    }
+    bias_term: true
+  }
+}
+layer {
+  name: "conv3_2_relu"
+  type: "ReLU"
+  bottom: "conv3_2"
+  top: "conv3_2"
+  relu_param {
+    negative_slope: 0.0
+  }
+}
+
+layer {
+  name: "conv3_3"
+  type: "Convolution"
+  bottom: "conv3_2"
+  top: "conv3_3"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  convolution_param {
+    num_output: 64
+    bias_term: false
+    pad: 1
+    kernel_size: 3
+    dilation: 1
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+  }
+}
+layer {
+  name: "conv3_3_bn"
+  type: "BatchNorm"
+  bottom: "conv3_3"
+  top: "conv3_3"
+  batch_norm_param {
+    eps: 1e-06
+  }
+}
+layer {
+  name: "conv3_3_scale"
+  type: "Scale"
+  bottom: "conv3_3"
+  top: "conv3_3"
+  scale_param {
+    filler {
+      type: "constant"
+      value: 1
+    }
+    bias_term: true
+  }
+}
+layer {
+  name: "conv3_3_relu"
+  type: "ReLU"
+  bottom: "conv3_3"
+  top: "conv3_3"
+  relu_param {
+    negative_slope: 0.0
+  }
+}
+
+layer {
+  name: "pool3"
+  type: "Pooling"
+  bottom: "conv3_3"
+  top: "pool3"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    pad: 0
+    stride: 2
+  }
+}
+
+layer {
+  name: "conv4_1"
+  type: "Convolution"
+  bottom: "pool3"
+  top: "conv4_1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  convolution_param {
+    num_output: 128
+    bias_term: false
+    pad: 1
+    kernel_size: 3
+    dilation: 1
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+  }
+}
+layer {
+  name: "conv4_1_bn"
+  type: "BatchNorm"
+  bottom: "conv4_1"
+  top: "conv4_1"
+  batch_norm_param {
+    eps: 1e-06
+  }
+}
+layer {
+  name: "conv4_1_scale"
+  type: "Scale"
+  bottom: "conv4_1"
+  top: "conv4_1"
+  scale_param {
+    filler {
+      type: "constant"
+      value: 1
+    }
+    bias_term: true
+  }
+}
+layer {
+  name: "conv4_1_relu"
+  type: "ReLU"
+  bottom: "conv4_1"
+  top: "conv4_1"
+  relu_param {
+    negative_slope: 0.0
+  }
+}
+
+layer {
+  name: "conv4_2"
+  type: "Convolution"
+  bottom: "conv4_1"
+  top: "conv4_2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  convolution_param {
+    num_output: 64
+    bias_term: false
+    pad: 0
+    kernel_size: 1
+    dilation: 1
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+  }
+}
+layer {
+  name: "conv4_2_bn"
+  type: "BatchNorm"
+  bottom: "conv4_2"
+  top: "conv4_2"
+  batch_norm_param {
+    eps: 1e-06
+  }
+}
+layer {
+  name: "conv4_2_scale"
+  type: "Scale"
+  bottom: "conv4_2"
+  top: "conv4_2"
+  scale_param {
+    filler {
+      type: "constant"
+      value: 1
+    }
+    bias_term: true
+  }
+}
+layer {
+  name: "conv4_2_relu"
+  type: "ReLU"
+  bottom: "conv4_2"
+  top: "conv4_2"
+  relu_param {
+    negative_slope: 0.0
+  }
+}
+
+layer {
+  name: "conv4_3"
+  type: "Convolution"
+  bottom: "conv4_2"
+  top: "conv4_3"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  convolution_param {
+    num_output: 128
+    bias_term: false
+    pad: 1
+    kernel_size: 3
+    dilation: 1
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+  }
+}
+layer {
+  name: "conv4_3_bn"
+  type: "BatchNorm"
+  bottom: "conv4_3"
+  top: "conv4_3"
+  batch_norm_param {
+    eps: 1e-06
+  }
+}
+layer {
+  name: "conv4_3_scale"
+  type: "Scale"
+  bottom: "conv4_3"
+  top: "conv4_3"
+  scale_param {
+    filler {
+      type: "constant"
+      value: 1
+    }
+    bias_term: true
+  }
+}
+layer {
+  name: "conv4_3_relu"
+  type: "ReLU"
+  bottom: "conv4_3"
+  top: "conv4_3"
+  relu_param {
+    negative_slope: 0.0
+  }
+}
+
+layer {
+  name: "pool4"
+  type: "Pooling"
+  bottom: "conv4_3"
+  top: "pool4"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    pad: 0
+    stride: 2
+  }
+}
+
+layer {
+  name: "conv5_1"
+  type: "Convolution"
+  bottom: "pool4"
+  top: "conv5_1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  convolution_param {
+    num_output: 256
+    bias_term: false
+    pad: 1
+    kernel_size: 3
+    dilation: 1
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+  }
+}
+layer {
+  name: "conv5_1_bn"
+  type: "BatchNorm"
+  bottom: "conv5_1"
+  top: "conv5_1"
+  batch_norm_param {
+    eps: 1e-06
+  }
+}
+layer {
+  name: "conv5_1_scale"
+  type: "Scale"
+  bottom: "conv5_1"
+  top: "conv5_1"
+  scale_param {
+    filler {
+      type: "constant"
+      value: 1
+    }
+    bias_term: true
+  }
+}
+layer {
+  name: "conv5_1_relu"
+  type: "ReLU"
+  bottom: "conv5_1"
+  top: "conv5_1"
+  relu_param {
+    negative_slope: 0.0
+  }
+}
+
+layer {
+  name: "conv5_2"
+  type: "Convolution"
+  bottom: "conv5_1"
+  top: "conv5_2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  convolution_param {
+    num_output: 128
+    bias_term: false
+    pad: 0
+    kernel_size: 1
+    dilation: 1
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+  }
+}
+layer {
+  name: "conv5_2_bn"
+  type: "BatchNorm"
+  bottom: "conv5_2"
+  top: "conv5_2"
+  batch_norm_param {
+    eps: 1e-06
+  }
+}
+layer {
+  name: "conv5_2_scale"
+  type: "Scale"
+  bottom: "conv5_2"
+  top: "conv5_2"
+  scale_param {
+    filler {
+      type: "constant"
+      value: 1
+    }
+    bias_term: true
+  }
+}
+layer {
+  name: "conv5_2_relu"
+  type: "ReLU"
+  bottom: "conv5_2"
+  top: "conv5_2"
+  relu_param {
+    negative_slope: 0.0
+  }
+}
+
+layer {
+  name: "conv5_3"
+  type: "Convolution"
+  bottom: "conv5_2"
+  top: "conv5_3"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  convolution_param {
+    num_output: 256
+    bias_term: false
+    pad: 1
+    kernel_size: 3
+    dilation: 1
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+  }
+}
+layer {
+  name: "conv5_3_bn"
+  type: "BatchNorm"
+  bottom: "conv5_3"
+  top: "conv5_3"
+  batch_norm_param {
+    eps: 1e-06
+  }
+}
+layer {
+  name: "conv5_3_scale"
+  type: "Scale"
+  bottom: "conv5_3"
+  top: "conv5_3"
+  scale_param {
+    filler {
+      type: "constant"
+      value: 1
+    }
+    bias_term: true
+  }
+}
+layer {
+  name: "conv5_3_relu"
+  type: "ReLU"
+  bottom: "conv5_3"
+  top: "conv5_3"
+  relu_param {
+    negative_slope: 0.0
+  }
+}
+
+layer {
+  name: "conv5_4"
+  type: "Convolution"
+  bottom: "conv5_3"
+  top: "conv5_4"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  convolution_param {
+    num_output: 128
+    bias_term: false
+    pad: 0
+    kernel_size: 1
+    dilation: 1
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+  }
+}
+layer {
+  name: "conv5_4_bn"
+  type: "BatchNorm"
+  bottom: "conv5_4"
+  top: "conv5_4"
+  batch_norm_param {
+    eps: 1e-06
+  }
+}
+layer {
+  name: "conv5_4_scale"
+  type: "Scale"
+  bottom: "conv5_4"
+  top: "conv5_4"
+  scale_param {
+    filler {
+      type: "constant"
+      value: 1
+    }
+    bias_term: true
+  }
+}
+layer {
+  name: "conv5_4_relu"
+  type: "ReLU"
+  bottom: "conv5_4"
+  top: "conv5_4"
+  relu_param {
+    negative_slope: 0.0
+  }
+}
+
+layer {
+  name: "conv5_5"
+  type: "Convolution"
+  bottom: "conv5_4"
+  top: "conv5_5"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  convolution_param {
+    num_output: 256
+    bias_term: false
+    pad: 1
+    kernel_size: 3
+    dilation: 1
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+  }
+}
+layer {
+  name: "conv5_5_bn"
+  type: "BatchNorm"
+  bottom: "conv5_5"
+  top: "conv5_5"
+  batch_norm_param {
+    eps: 1e-06
+  }
+}
+layer {
+  name: "conv5_5_scale"
+  type: "Scale"
+  bottom: "conv5_5"
+  top: "conv5_5"
+  scale_param {
+    filler {
+      type: "constant"
+      value: 1
+    }
+    bias_term: true
+  }
+}
+layer {
+  name: "conv5_5_relu"
+  type: "ReLU"
+  bottom: "conv5_5"
+  top: "conv5_5"
+  relu_param {
+    negative_slope: 0.0
+  }
+}
+
+###########################################
+layer {
+  name: "conv6_1_internal_slice_internal_slice"
+  type: "Slice"
+  bottom: "conv5_5"
+  top: "conv6_1_internal_slice_internal1"
+  top: "conv6_1_internal_slice_internal2"
+  top: "conv6_1_internal_slice_internal3"
+  top: "conv6_1_internal_slice_internal4"
+  top: "conv6_1_internal_slice_internal5"
+  top: "conv6_1_internal_slice_internal6"
+  top: "conv6_1_internal_slice_internal7"
+  top: "conv6_1_internal_slice_internal8"
+  top: "conv6_1_internal_slice_internal9"
+  top: "conv6_1_internal_slice_internal10"
+  top: "conv6_1_internal_slice_internal11"
+  top: "conv6_1_internal_slice_internal12"
+  top: "conv6_1_internal_slice_internal13"
+  top: "conv6_1_internal_slice_internal14"
+  top: "conv6_1_internal_slice_internal15"
+  top: "conv6_1_internal_slice_internal16"
+  top: "conv6_1_internal_slice_internal17"
+  top: "conv6_1_internal_slice_internal18"
+  top: "conv6_1_internal_slice_internal19"
+  top: "conv6_1_internal_slice_internal20"
+  top: "conv6_1_internal_slice_internal21"
+  top: "conv6_1_internal_slice_internal22"
+  top: "conv6_1_internal_slice_internal23"
+  top: "conv6_1_internal_slice_internal24"
+  top: "conv6_1_internal_slice_internal25"
+  top: "conv6_1_internal_slice_internal26"
+  top: "conv6_1_internal_slice_internal27"
+  top: "conv6_1_internal_slice_internal28"
+  top: "conv6_1_internal_slice_internal29"
+  top: "conv6_1_internal_slice_internal30"
+  top: "conv6_1_internal_slice_internal31"
+  top: "conv6_1_internal_slice_internal32"
+  top: "conv6_1_internal_slice_internal33"
+  top: "conv6_1_internal_slice_internal34"
+  top: "conv6_1_internal_slice_internal35"
+  top: "conv6_1_internal_slice_internal36"
+  top: "conv6_1_internal_slice_internal37"
+  top: "conv6_1_internal_slice_internal38"
+  top: "conv6_1_internal_slice_internal39"
+  top: "conv6_1_internal_slice_internal40"
+  top: "conv6_1_internal_slice_internal41"
+  top: "conv6_1_internal_slice_internal42"
+  top: "conv6_1_internal_slice_internal43"
+  top: "conv6_1_internal_slice_internal44"
+  top: "conv6_1_internal_slice_internal45"
+  top: "conv6_1_internal_slice_internal46"
+  top: "conv6_1_internal_slice_internal47"
+  top: "conv6_1_internal_slice_internal48"
+  top: "conv6_1_internal_slice_internal49"
+  top: "conv6_1_internal_slice_internal50"
+  top: "conv6_1_internal_slice_internal51"
+  top: "conv6_1_internal_slice_internal52"
+  top: "conv6_1_internal_slice_internal53"
+  top: "conv6_1_internal_slice_internal54"
+  top: "conv6_1_internal_slice_internal55"
+  top: "conv6_1_internal_slice_internal56"
+  top: "conv6_1_internal_slice_internal57"
+  top: "conv6_1_internal_slice_internal58"
+  top: "conv6_1_internal_slice_internal59"
+  top: "conv6_1_internal_slice_internal60"
+  top: "conv6_1_internal_slice_internal61"
+  top: "conv6_1_internal_slice_internal62"
+  top: "conv6_1_internal_slice_internal63"
+  top: "conv6_1_internal_slice_internal64"
+  top: "conv6_1_internal_slice_internal65"
+  top: "conv6_1_internal_slice_internal66"
+  top: "conv6_1_internal_slice_internal67"
+  top: "conv6_1_internal_slice_internal68"
+  top: "conv6_1_internal_slice_internal69"
+  top: "conv6_1_internal_slice_internal70"
+  top: "conv6_1_internal_slice_internal71"
+  top: "conv6_1_internal_slice_internal72"
+  top: "conv6_1_internal_slice_internal73"
+  top: "conv6_1_internal_slice_internal74"
+  top: "conv6_1_internal_slice_internal75"
+  top: "conv6_1_internal_slice_internal76"
+  top: "conv6_1_internal_slice_internal77"
+  top: "conv6_1_internal_slice_internal78"
+  top: "conv6_1_internal_slice_internal79"
+  top: "conv6_1_internal_slice_internal80"
+  top: "conv6_1_internal_slice_internal81"
+  top: "conv6_1_internal_slice_internal82"
+  top: "conv6_1_internal_slice_internal83"
+  top: "conv6_1_internal_slice_internal84"
+  top: "conv6_1_internal_slice_internal85"
+  top: "conv6_1_internal_slice_internal86"
+  top: "conv6_1_internal_slice_internal87"
+  top: "conv6_1_internal_slice_internal88"
+  top: "conv6_1_internal_slice_internal89"
+  top: "conv6_1_internal_slice_internal90"
+  top: "conv6_1_internal_slice_internal91"
+  top: "conv6_1_internal_slice_internal92"
+  top: "conv6_1_internal_slice_internal93"
+  top: "conv6_1_internal_slice_internal94"
+  top: "conv6_1_internal_slice_internal95"
+  top: "conv6_1_internal_slice_internal96"
+  top: "conv6_1_internal_slice_internal97"
+  top: "conv6_1_internal_slice_internal98"
+  top: "conv6_1_internal_slice_internal99"
+  top: "conv6_1_internal_slice_internal100"
+  top: "conv6_1_internal_slice_internal101"
+  top: "conv6_1_internal_slice_internal102"
+  top: "conv6_1_internal_slice_internal103"
+  top: "conv6_1_internal_slice_internal104"
+  top: "conv6_1_internal_slice_internal105"
+  top: "conv6_1_internal_slice_internal106"
+  top: "conv6_1_internal_slice_internal107"
+  top: "conv6_1_internal_slice_internal108"
+  top: "conv6_1_internal_slice_internal109"
+  top: "conv6_1_internal_slice_internal110"
+  top: "conv6_1_internal_slice_internal111"
+  top: "conv6_1_internal_slice_internal112"
+  top: "conv6_1_internal_slice_internal113"
+  top: "conv6_1_internal_slice_internal114"
+  top: "conv6_1_internal_slice_internal115"
+  top: "conv6_1_internal_slice_internal116"
+  top: "conv6_1_internal_slice_internal117"
+  top: "conv6_1_internal_slice_internal118"
+  top: "conv6_1_internal_slice_internal119"
+  top: "conv6_1_internal_slice_internal120"
+  top: "conv6_1_internal_slice_internal121"
+  top: "conv6_1_internal_slice_internal122"
+  top: "conv6_1_internal_slice_internal123"
+  top: "conv6_1_internal_slice_internal124"
+  top: "conv6_1_internal_slice_internal125"
+  top: "conv6_1_internal_slice_internal126"
+  top: "conv6_1_internal_slice_internal127"
+  top: "conv6_1_internal_slice_internal128"
+  top: "conv6_1_internal_slice_internal129"
+  top: "conv6_1_internal_slice_internal130"
+  top: "conv6_1_internal_slice_internal131"
+  top: "conv6_1_internal_slice_internal132"
+  top: "conv6_1_internal_slice_internal133"
+  top: "conv6_1_internal_slice_internal134"
+  top: "conv6_1_internal_slice_internal135"
+  top: "conv6_1_internal_slice_internal136"
+  top: "conv6_1_internal_slice_internal137"
+  top: "conv6_1_internal_slice_internal138"
+  top: "conv6_1_internal_slice_internal139"
+  top: "conv6_1_internal_slice_internal140"
+  top: "conv6_1_internal_slice_internal141"
+  top: "conv6_1_internal_slice_internal142"
+  top: "conv6_1_internal_slice_internal143"
+  top: "conv6_1_internal_slice_internal144"
+  top: "conv6_1_internal_slice_internal145"
+  top: "conv6_1_internal_slice_internal146"
+  top: "conv6_1_internal_slice_internal147"
+  top: "conv6_1_internal_slice_internal148"
+  top: "conv6_1_internal_slice_internal149"
+  top: "conv6_1_internal_slice_internal150"
+  top: "conv6_1_internal_slice_internal151"
+  top: "conv6_1_internal_slice_internal152"
+  top: "conv6_1_internal_slice_internal153"
+  top: "conv6_1_internal_slice_internal154"
+  top: "conv6_1_internal_slice_internal155"
+  top: "conv6_1_internal_slice_internal156"
+  top: "conv6_1_internal_slice_internal157"
+  top: "conv6_1_internal_slice_internal158"
+  top: "conv6_1_internal_slice_internal159"
+  top: "conv6_1_internal_slice_internal160"
+  top: "conv6_1_internal_slice_internal161"
+  top: "conv6_1_internal_slice_internal162"
+  top: "conv6_1_internal_slice_internal163"
+  top: "conv6_1_internal_slice_internal164"
+  top: "conv6_1_internal_slice_internal165"
+  top: "conv6_1_internal_slice_internal166"
+  top: "conv6_1_internal_slice_internal167"
+  top: "conv6_1_internal_slice_internal168"
+  top: "conv6_1_internal_slice_internal169"
+  top: "conv6_1_internal_slice_internal170"
+  top: "conv6_1_internal_slice_internal171"
+  top: "conv6_1_internal_slice_internal172"
+  top: "conv6_1_internal_slice_internal173"
+  top: "conv6_1_internal_slice_internal174"
+  top: "conv6_1_internal_slice_internal175"
+  top: "conv6_1_internal_slice_internal176"
+  top: "conv6_1_internal_slice_internal177"
+  top: "conv6_1_internal_slice_internal178"
+  top: "conv6_1_internal_slice_internal179"
+  top: "conv6_1_internal_slice_internal180"
+  top: "conv6_1_internal_slice_internal181"
+  top: "conv6_1_internal_slice_internal182"
+  top: "conv6_1_internal_slice_internal183"
+  top: "conv6_1_internal_slice_internal184"
+  top: "conv6_1_internal_slice_internal185"
+  top: "conv6_1_internal_slice_internal186"
+  top: "conv6_1_internal_slice_internal187"
+  top: "conv6_1_internal_slice_internal188"
+  top: "conv6_1_internal_slice_internal189"
+  top: "conv6_1_internal_slice_internal190"
+  top: "conv6_1_internal_slice_internal191"
+  top: "conv6_1_internal_slice_internal192"
+  top: "conv6_1_internal_slice_internal193"
+  top: "conv6_1_internal_slice_internal194"
+  top: "conv6_1_internal_slice_internal195"
+  top: "conv6_1_internal_slice_internal196"
+  top: "conv6_1_internal_slice_internal197"
+  top: "conv6_1_internal_slice_internal198"
+  top: "conv6_1_internal_slice_internal199"
+  top: "conv6_1_internal_slice_internal200"
+  top: "conv6_1_internal_slice_internal201"
+  top: "conv6_1_internal_slice_internal202"
+  top: "conv6_1_internal_slice_internal203"
+  top: "conv6_1_internal_slice_internal204"
+  top: "conv6_1_internal_slice_internal205"
+  top: "conv6_1_internal_slice_internal206"
+  top: "conv6_1_internal_slice_internal207"
+  top: "conv6_1_internal_slice_internal208"
+  top: "conv6_1_internal_slice_internal209"
+  top: "conv6_1_internal_slice_internal210"
+  top: "conv6_1_internal_slice_internal211"
+  top: "conv6_1_internal_slice_internal212"
+  top: "conv6_1_internal_slice_internal213"
+  top: "conv6_1_internal_slice_internal214"
+  top: "conv6_1_internal_slice_internal215"
+  top: "conv6_1_internal_slice_internal216"
+  top: "conv6_1_internal_slice_internal217"
+  top: "conv6_1_internal_slice_internal218"
+  top: "conv6_1_internal_slice_internal219"
+  top: "conv6_1_internal_slice_internal220"
+  top: "conv6_1_internal_slice_internal221"
+  top: "conv6_1_internal_slice_internal222"
+  top: "conv6_1_internal_slice_internal223"
+  top: "conv6_1_internal_slice_internal224"
+  top: "conv6_1_internal_slice_internal225"
+  top: "conv6_1_internal_slice_internal226"
+  top: "conv6_1_internal_slice_internal227"
+  top: "conv6_1_internal_slice_internal228"
+  top: "conv6_1_internal_slice_internal229"
+  top: "conv6_1_internal_slice_internal230"
+  top: "conv6_1_internal_slice_internal231"
+  top: "conv6_1_internal_slice_internal232"
+  top: "conv6_1_internal_slice_internal233"
+  top: "conv6_1_internal_slice_internal234"
+  top: "conv6_1_internal_slice_internal235"
+  top: "conv6_1_internal_slice_internal236"
+  top: "conv6_1_internal_slice_internal237"
+  top: "conv6_1_internal_slice_internal238"
+  top: "conv6_1_internal_slice_internal239"
+  top: "conv6_1_internal_slice_internal240"
+  top: "conv6_1_internal_slice_internal241"
+  top: "conv6_1_internal_slice_internal242"
+  top: "conv6_1_internal_slice_internal243"
+  top: "conv6_1_internal_slice_internal244"
+  top: "conv6_1_internal_slice_internal245"
+  top: "conv6_1_internal_slice_internal246"
+  top: "conv6_1_internal_slice_internal247"
+  top: "conv6_1_internal_slice_internal248"
+  top: "conv6_1_internal_slice_internal249"
+  top: "conv6_1_internal_slice_internal250"
+  top: "conv6_1_internal_slice_internal251"
+  top: "conv6_1_internal_slice_internal252"
+  top: "conv6_1_internal_slice_internal253"
+  top: "conv6_1_internal_slice_internal254"
+  top: "conv6_1_internal_slice_internal255"
+  top: "conv6_1_internal_slice_internal256"
+  slice_param { axis: 1 }
+}
+layer {
+  name: "conv6_1_internal_slice_internal_concat1"
+  type: "Concat"
+  bottom: "conv6_1_internal_slice_internal1"
+  bottom: "conv6_1_internal_slice_internal2"
+  bottom: "conv6_1_internal_slice_internal3"
+  bottom: "conv6_1_internal_slice_internal4"
+  bottom: "conv6_1_internal_slice_internal5"
+  bottom: "conv6_1_internal_slice_internal6"
+  bottom: "conv6_1_internal_slice_internal7"
+  bottom: "conv6_1_internal_slice_internal8"
+  bottom: "conv6_1_internal_slice_internal9"
+  bottom: "conv6_1_internal_slice_internal10"
+  bottom: "conv6_1_internal_slice_internal11"
+  bottom: "conv6_1_internal_slice_internal12"
+  bottom: "conv6_1_internal_slice_internal13"
+  bottom: "conv6_1_internal_slice_internal14"
+  bottom: "conv6_1_internal_slice_internal15"
+  bottom: "conv6_1_internal_slice_internal16"
+  bottom: "conv6_1_internal_slice_internal17"
+  bottom: "conv6_1_internal_slice_internal18"
+  bottom: "conv6_1_internal_slice_internal19"
+  bottom: "conv6_1_internal_slice_internal20"
+  bottom: "conv6_1_internal_slice_internal21"
+  bottom: "conv6_1_internal_slice_internal22"
+  bottom: "conv6_1_internal_slice_internal23"
+  bottom: "conv6_1_internal_slice_internal24"
+  bottom: "conv6_1_internal_slice_internal25"
+  bottom: "conv6_1_internal_slice_internal26"
+  bottom: "conv6_1_internal_slice_internal27"
+  bottom: "conv6_1_internal_slice_internal28"
+  bottom: "conv6_1_internal_slice_internal29"
+  bottom: "conv6_1_internal_slice_internal30"
+  bottom: "conv6_1_internal_slice_internal31"
+  bottom: "conv6_1_internal_slice_internal32"
+  bottom: "conv6_1_internal_slice_internal33"
+  bottom: "conv6_1_internal_slice_internal34"
+  bottom: "conv6_1_internal_slice_internal35"
+  bottom: "conv6_1_internal_slice_internal36"
+  bottom: "conv6_1_internal_slice_internal37"
+  bottom: "conv6_1_internal_slice_internal38"
+  bottom: "conv6_1_internal_slice_internal39"
+  bottom: "conv6_1_internal_slice_internal40"
+  bottom: "conv6_1_internal_slice_internal41"
+  bottom: "conv6_1_internal_slice_internal42"
+  bottom: "conv6_1_internal_slice_internal43"
+  bottom: "conv6_1_internal_slice_internal44"
+  bottom: "conv6_1_internal_slice_internal45"
+  bottom: "conv6_1_internal_slice_internal46"
+  bottom: "conv6_1_internal_slice_internal47"
+  bottom: "conv6_1_internal_slice_internal48"
+  bottom: "conv6_1_internal_slice_internal49"
+  bottom: "conv6_1_internal_slice_internal50"
+  bottom: "conv6_1_internal_slice_internal51"
+  bottom: "conv6_1_internal_slice_internal52"
+  bottom: "conv6_1_internal_slice_internal53"
+  bottom: "conv6_1_internal_slice_internal54"
+  bottom: "conv6_1_internal_slice_internal55"
+  bottom: "conv6_1_internal_slice_internal56"
+  bottom: "conv6_1_internal_slice_internal57"
+  bottom: "conv6_1_internal_slice_internal58"
+  bottom: "conv6_1_internal_slice_internal59"
+  bottom: "conv6_1_internal_slice_internal60"
+  bottom: "conv6_1_internal_slice_internal61"
+  bottom: "conv6_1_internal_slice_internal62"
+  bottom: "conv6_1_internal_slice_internal63"
+  bottom: "conv6_1_internal_slice_internal64"
+  bottom: "conv6_1_internal_slice_internal65"
+  bottom: "conv6_1_internal_slice_internal66"
+  bottom: "conv6_1_internal_slice_internal67"
+  bottom: "conv6_1_internal_slice_internal68"
+  bottom: "conv6_1_internal_slice_internal69"
+  bottom: "conv6_1_internal_slice_internal70"
+  bottom: "conv6_1_internal_slice_internal71"
+  bottom: "conv6_1_internal_slice_internal72"
+  bottom: "conv6_1_internal_slice_internal73"
+  bottom: "conv6_1_internal_slice_internal74"
+  bottom: "conv6_1_internal_slice_internal75"
+  bottom: "conv6_1_internal_slice_internal76"
+  bottom: "conv6_1_internal_slice_internal77"
+  bottom: "conv6_1_internal_slice_internal78"
+  bottom: "conv6_1_internal_slice_internal79"
+  bottom: "conv6_1_internal_slice_internal80"
+  bottom: "conv6_1_internal_slice_internal81"
+  bottom: "conv6_1_internal_slice_internal82"
+  bottom: "conv6_1_internal_slice_internal83"
+  bottom: "conv6_1_internal_slice_internal84"
+  bottom: "conv6_1_internal_slice_internal85"
+  bottom: "conv6_1_internal_slice_internal86"
+  bottom: "conv6_1_internal_slice_internal87"
+  bottom: "conv6_1_internal_slice_internal88"
+  bottom: "conv6_1_internal_slice_internal89"
+  bottom: "conv6_1_internal_slice_internal90"
+  bottom: "conv6_1_internal_slice_internal91"
+  bottom: "conv6_1_internal_slice_internal92"
+  bottom: "conv6_1_internal_slice_internal93"
+  bottom: "conv6_1_internal_slice_internal94"
+  bottom: "conv6_1_internal_slice_internal95"
+  bottom: "conv6_1_internal_slice_internal96"
+  bottom: "conv6_1_internal_slice_internal97"
+  bottom: "conv6_1_internal_slice_internal98"
+  bottom: "conv6_1_internal_slice_internal99"
+  bottom: "conv6_1_internal_slice_internal100"
+  bottom: "conv6_1_internal_slice_internal101"
+  bottom: "conv6_1_internal_slice_internal102"
+  bottom: "conv6_1_internal_slice_internal103"
+  bottom: "conv6_1_internal_slice_internal104"
+  bottom: "conv6_1_internal_slice_internal105"
+  bottom: "conv6_1_internal_slice_internal106"
+  bottom: "conv6_1_internal_slice_internal107"
+  bottom: "conv6_1_internal_slice_internal108"
+  bottom: "conv6_1_internal_slice_internal109"
+  bottom: "conv6_1_internal_slice_internal110"
+  bottom: "conv6_1_internal_slice_internal111"
+  bottom: "conv6_1_internal_slice_internal112"
+  bottom: "conv6_1_internal_slice_internal113"
+  bottom: "conv6_1_internal_slice_internal114"
+  bottom: "conv6_1_internal_slice_internal115"
+  bottom: "conv6_1_internal_slice_internal116"
+  bottom: "conv6_1_internal_slice_internal117"
+  bottom: "conv6_1_internal_slice_internal118"
+  bottom: "conv6_1_internal_slice_internal119"
+  bottom: "conv6_1_internal_slice_internal120"
+  bottom: "conv6_1_internal_slice_internal121"
+  bottom: "conv6_1_internal_slice_internal122"
+  bottom: "conv6_1_internal_slice_internal123"
+  bottom: "conv6_1_internal_slice_internal124"
+  bottom: "conv6_1_internal_slice_internal125"
+  bottom: "conv6_1_internal_slice_internal126"
+  bottom: "conv6_1_internal_slice_internal127"
+  bottom: "conv6_1_internal_slice_internal128"
+  top: "conv6_1_internal_slice1"
+  concat_param { axis: 1 }
+}
+layer {
+  name: "conv6_1_internal_slice_internal_concat2"
+  type: "Concat"
+  bottom: "conv6_1_internal_slice_internal129"
+  bottom: "conv6_1_internal_slice_internal130"
+  bottom: "conv6_1_internal_slice_internal131"
+  bottom: "conv6_1_internal_slice_internal132"
+  bottom: "conv6_1_internal_slice_internal133"
+  bottom: "conv6_1_internal_slice_internal134"
+  bottom: "conv6_1_internal_slice_internal135"
+  bottom: "conv6_1_internal_slice_internal136"
+  bottom: "conv6_1_internal_slice_internal137"
+  bottom: "conv6_1_internal_slice_internal138"
+  bottom: "conv6_1_internal_slice_internal139"
+  bottom: "conv6_1_internal_slice_internal140"
+  bottom: "conv6_1_internal_slice_internal141"
+  bottom: "conv6_1_internal_slice_internal142"
+  bottom: "conv6_1_internal_slice_internal143"
+  bottom: "conv6_1_internal_slice_internal144"
+  bottom: "conv6_1_internal_slice_internal145"
+  bottom: "conv6_1_internal_slice_internal146"
+  bottom: "conv6_1_internal_slice_internal147"
+  bottom: "conv6_1_internal_slice_internal148"
+  bottom: "conv6_1_internal_slice_internal149"
+  bottom: "conv6_1_internal_slice_internal150"
+  bottom: "conv6_1_internal_slice_internal151"
+  bottom: "conv6_1_internal_slice_internal152"
+  bottom: "conv6_1_internal_slice_internal153"
+  bottom: "conv6_1_internal_slice_internal154"
+  bottom: "conv6_1_internal_slice_internal155"
+  bottom: "conv6_1_internal_slice_internal156"
+  bottom: "conv6_1_internal_slice_internal157"
+  bottom: "conv6_1_internal_slice_internal158"
+  bottom: "conv6_1_internal_slice_internal159"
+  bottom: "conv6_1_internal_slice_internal160"
+  bottom: "conv6_1_internal_slice_internal161"
+  bottom: "conv6_1_internal_slice_internal162"
+  bottom: "conv6_1_internal_slice_internal163"
+  bottom: "conv6_1_internal_slice_internal164"
+  bottom: "conv6_1_internal_slice_internal165"
+  bottom: "conv6_1_internal_slice_internal166"
+  bottom: "conv6_1_internal_slice_internal167"
+  bottom: "conv6_1_internal_slice_internal168"
+  bottom: "conv6_1_internal_slice_internal169"
+  bottom: "conv6_1_internal_slice_internal170"
+  bottom: "conv6_1_internal_slice_internal171"
+  bottom: "conv6_1_internal_slice_internal172"
+  bottom: "conv6_1_internal_slice_internal173"
+  bottom: "conv6_1_internal_slice_internal174"
+  bottom: "conv6_1_internal_slice_internal175"
+  bottom: "conv6_1_internal_slice_internal176"
+  bottom: "conv6_1_internal_slice_internal177"
+  bottom: "conv6_1_internal_slice_internal178"
+  bottom: "conv6_1_internal_slice_internal179"
+  bottom: "conv6_1_internal_slice_internal180"
+  bottom: "conv6_1_internal_slice_internal181"
+  bottom: "conv6_1_internal_slice_internal182"
+  bottom: "conv6_1_internal_slice_internal183"
+  bottom: "conv6_1_internal_slice_internal184"
+  bottom: "conv6_1_internal_slice_internal185"
+  bottom: "conv6_1_internal_slice_internal186"
+  bottom: "conv6_1_internal_slice_internal187"
+  bottom: "conv6_1_internal_slice_internal188"
+  bottom: "conv6_1_internal_slice_internal189"
+  bottom: "conv6_1_internal_slice_internal190"
+  bottom: "conv6_1_internal_slice_internal191"
+  bottom: "conv6_1_internal_slice_internal192"
+  bottom: "conv6_1_internal_slice_internal193"
+  bottom: "conv6_1_internal_slice_internal194"
+  bottom: "conv6_1_internal_slice_internal195"
+  bottom: "conv6_1_internal_slice_internal196"
+  bottom: "conv6_1_internal_slice_internal197"
+  bottom: "conv6_1_internal_slice_internal198"
+  bottom: "conv6_1_internal_slice_internal199"
+  bottom: "conv6_1_internal_slice_internal200"
+  bottom: "conv6_1_internal_slice_internal201"
+  bottom: "conv6_1_internal_slice_internal202"
+  bottom: "conv6_1_internal_slice_internal203"
+  bottom: "conv6_1_internal_slice_internal204"
+  bottom: "conv6_1_internal_slice_internal205"
+  bottom: "conv6_1_internal_slice_internal206"
+  bottom: "conv6_1_internal_slice_internal207"
+  bottom: "conv6_1_internal_slice_internal208"
+  bottom: "conv6_1_internal_slice_internal209"
+  bottom: "conv6_1_internal_slice_internal210"
+  bottom: "conv6_1_internal_slice_internal211"
+  bottom: "conv6_1_internal_slice_internal212"
+  bottom: "conv6_1_internal_slice_internal213"
+  bottom: "conv6_1_internal_slice_internal214"
+  bottom: "conv6_1_internal_slice_internal215"
+  bottom: "conv6_1_internal_slice_internal216"
+  bottom: "conv6_1_internal_slice_internal217"
+  bottom: "conv6_1_internal_slice_internal218"
+  bottom: "conv6_1_internal_slice_internal219"
+  bottom: "conv6_1_internal_slice_internal220"
+  bottom: "conv6_1_internal_slice_internal221"
+  bottom: "conv6_1_internal_slice_internal222"
+  bottom: "conv6_1_internal_slice_internal223"
+  bottom: "conv6_1_internal_slice_internal224"
+  bottom: "conv6_1_internal_slice_internal225"
+  bottom: "conv6_1_internal_slice_internal226"
+  bottom: "conv6_1_internal_slice_internal227"
+  bottom: "conv6_1_internal_slice_internal228"
+  bottom: "conv6_1_internal_slice_internal229"
+  bottom: "conv6_1_internal_slice_internal230"
+  bottom: "conv6_1_internal_slice_internal231"
+  bottom: "conv6_1_internal_slice_internal232"
+  bottom: "conv6_1_internal_slice_internal233"
+  bottom: "conv6_1_internal_slice_internal234"
+  bottom: "conv6_1_internal_slice_internal235"
+  bottom: "conv6_1_internal_slice_internal236"
+  bottom: "conv6_1_internal_slice_internal237"
+  bottom: "conv6_1_internal_slice_internal238"
+  bottom: "conv6_1_internal_slice_internal239"
+  bottom: "conv6_1_internal_slice_internal240"
+  bottom: "conv6_1_internal_slice_internal241"
+  bottom: "conv6_1_internal_slice_internal242"
+  bottom: "conv6_1_internal_slice_internal243"
+  bottom: "conv6_1_internal_slice_internal244"
+  bottom: "conv6_1_internal_slice_internal245"
+  bottom: "conv6_1_internal_slice_internal246"
+  bottom: "conv6_1_internal_slice_internal247"
+  bottom: "conv6_1_internal_slice_internal248"
+  bottom: "conv6_1_internal_slice_internal249"
+  bottom: "conv6_1_internal_slice_internal250"
+  bottom: "conv6_1_internal_slice_internal251"
+  bottom: "conv6_1_internal_slice_internal252"
+  bottom: "conv6_1_internal_slice_internal253"
+  bottom: "conv6_1_internal_slice_internal254"
+  bottom: "conv6_1_internal_slice_internal255"
+  bottom: "conv6_1_internal_slice_internal256"
+  top: "conv6_1_internal_slice2"
+  concat_param { axis: 1 }
+}
+
+layer {
+  name: "conv6_1_internal_conv1"
+  type: "Convolution"
+  bottom: "conv6_1_internal_slice1"
+  top: "conv6_1_internal_conv1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  convolution_param {
+    engine: CAFFE
+    group: 1
+    num_output: 256
+    bias_term: false
+    pad: 2
+    kernel_size: 3
+    dilation: 2
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+  }
+}
+layer {
+  name: "conv6_1_internal_conv2"
+  type: "Convolution"
+  bottom: "conv6_1_internal_slice2"
+  top: "conv6_1_internal_conv2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  convolution_param {
+    engine: CAFFE
+    group: 1
+    num_output: 256
+    bias_term: false
+    pad: 2
+    kernel_size: 3
+    dilation: 2
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+  }
+}
+layer {
+  name: "conv6_1_internal_concat"
+  type: "Concat"
+  bottom: "conv6_1_internal_conv1"
+  bottom: "conv6_1_internal_conv2"
+  top: "conv6_1"
+  concat_param {
+    axis: 1
+  }
+}
+###########################################
+layer {
+  name: "conv6_1_bn"
+  type: "BatchNorm"
+  bottom: "conv6_1"
+  top: "conv6_1"
+  batch_norm_param {
+    eps: 1e-06
+  }
+}
+layer {
+  name: "conv6_1_scale"
+  type: "Scale"
+  bottom: "conv6_1"
+  top: "conv6_1"
+  scale_param {
+    filler {
+      type: "constant"
+      value: 1
+    }
+    bias_term: true
+  }
+}
+layer {
+  name: "conv6_1_relu"
+  type: "ReLU"
+  bottom: "conv6_1"
+  top: "conv6_1"
+  relu_param {
+    negative_slope: 0.0
+  }
+}
+
+layer {
+  name: "conv6_2"
+  type: "Convolution"
+  bottom: "conv6_1"
+  top: "conv6_2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  convolution_param {
+    num_output: 256
+    bias_term: false
+    pad: 0
+    kernel_size: 1
+    dilation: 1
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+  }
+}
+layer {
+  name: "conv6_2_bn"
+  type: "BatchNorm"
+  bottom: "conv6_2"
+  top: "conv6_2"
+  batch_norm_param {
+    eps: 1e-06
+  }
+}
+layer {
+  name: "conv6_2_scale"
+  type: "Scale"
+  bottom: "conv6_2"
+  top: "conv6_2"
+  scale_param {
+    filler {
+      type: "constant"
+      value: 1
+    }
+    bias_term: true
+  }
+}
+layer {
+  name: "conv6_2_relu"
+  type: "ReLU"
+  bottom: "conv6_2"
+  top: "conv6_2"
+  relu_param {
+    negative_slope: 0.0
+  }
+}
+
+###########################################
+layer {
+  name: "conv6_3_internal_slice_internal_slice"
+  type: "Slice"
+  bottom: "conv6_2"
+  top: "conv6_3_internal_slice_internal1"
+  top: "conv6_3_internal_slice_internal2"
+  top: "conv6_3_internal_slice_internal3"
+  top: "conv6_3_internal_slice_internal4"
+  top: "conv6_3_internal_slice_internal5"
+  top: "conv6_3_internal_slice_internal6"
+  top: "conv6_3_internal_slice_internal7"
+  top: "conv6_3_internal_slice_internal8"
+  top: "conv6_3_internal_slice_internal9"
+  top: "conv6_3_internal_slice_internal10"
+  top: "conv6_3_internal_slice_internal11"
+  top: "conv6_3_internal_slice_internal12"
+  top: "conv6_3_internal_slice_internal13"
+  top: "conv6_3_internal_slice_internal14"
+  top: "conv6_3_internal_slice_internal15"
+  top: "conv6_3_internal_slice_internal16"
+  top: "conv6_3_internal_slice_internal17"
+  top: "conv6_3_internal_slice_internal18"
+  top: "conv6_3_internal_slice_internal19"
+  top: "conv6_3_internal_slice_internal20"
+  top: "conv6_3_internal_slice_internal21"
+  top: "conv6_3_internal_slice_internal22"
+  top: "conv6_3_internal_slice_internal23"
+  top: "conv6_3_internal_slice_internal24"
+  top: "conv6_3_internal_slice_internal25"
+  top: "conv6_3_internal_slice_internal26"
+  top: "conv6_3_internal_slice_internal27"
+  top: "conv6_3_internal_slice_internal28"
+  top: "conv6_3_internal_slice_internal29"
+  top: "conv6_3_internal_slice_internal30"
+  top: "conv6_3_internal_slice_internal31"
+  top: "conv6_3_internal_slice_internal32"
+  top: "conv6_3_internal_slice_internal33"
+  top: "conv6_3_internal_slice_internal34"
+  top: "conv6_3_internal_slice_internal35"
+  top: "conv6_3_internal_slice_internal36"
+  top: "conv6_3_internal_slice_internal37"
+  top: "conv6_3_internal_slice_internal38"
+  top: "conv6_3_internal_slice_internal39"
+  top: "conv6_3_internal_slice_internal40"
+  top: "conv6_3_internal_slice_internal41"
+  top: "conv6_3_internal_slice_internal42"
+  top: "conv6_3_internal_slice_internal43"
+  top: "conv6_3_internal_slice_internal44"
+  top: "conv6_3_internal_slice_internal45"
+  top: "conv6_3_internal_slice_internal46"
+  top: "conv6_3_internal_slice_internal47"
+  top: "conv6_3_internal_slice_internal48"
+  top: "conv6_3_internal_slice_internal49"
+  top: "conv6_3_internal_slice_internal50"
+  top: "conv6_3_internal_slice_internal51"
+  top: "conv6_3_internal_slice_internal52"
+  top: "conv6_3_internal_slice_internal53"
+  top: "conv6_3_internal_slice_internal54"
+  top: "conv6_3_internal_slice_internal55"
+  top: "conv6_3_internal_slice_internal56"
+  top: "conv6_3_internal_slice_internal57"
+  top: "conv6_3_internal_slice_internal58"
+  top: "conv6_3_internal_slice_internal59"
+  top: "conv6_3_internal_slice_internal60"
+  top: "conv6_3_internal_slice_internal61"
+  top: "conv6_3_internal_slice_internal62"
+  top: "conv6_3_internal_slice_internal63"
+  top: "conv6_3_internal_slice_internal64"
+  top: "conv6_3_internal_slice_internal65"
+  top: "conv6_3_internal_slice_internal66"
+  top: "conv6_3_internal_slice_internal67"
+  top: "conv6_3_internal_slice_internal68"
+  top: "conv6_3_internal_slice_internal69"
+  top: "conv6_3_internal_slice_internal70"
+  top: "conv6_3_internal_slice_internal71"
+  top: "conv6_3_internal_slice_internal72"
+  top: "conv6_3_internal_slice_internal73"
+  top: "conv6_3_internal_slice_internal74"
+  top: "conv6_3_internal_slice_internal75"
+  top: "conv6_3_internal_slice_internal76"
+  top: "conv6_3_internal_slice_internal77"
+  top: "conv6_3_internal_slice_internal78"
+  top: "conv6_3_internal_slice_internal79"
+  top: "conv6_3_internal_slice_internal80"
+  top: "conv6_3_internal_slice_internal81"
+  top: "conv6_3_internal_slice_internal82"
+  top: "conv6_3_internal_slice_internal83"
+  top: "conv6_3_internal_slice_internal84"
+  top: "conv6_3_internal_slice_internal85"
+  top: "conv6_3_internal_slice_internal86"
+  top: "conv6_3_internal_slice_internal87"
+  top: "conv6_3_internal_slice_internal88"
+  top: "conv6_3_internal_slice_internal89"
+  top: "conv6_3_internal_slice_internal90"
+  top: "conv6_3_internal_slice_internal91"
+  top: "conv6_3_internal_slice_internal92"
+  top: "conv6_3_internal_slice_internal93"
+  top: "conv6_3_internal_slice_internal94"
+  top: "conv6_3_internal_slice_internal95"
+  top: "conv6_3_internal_slice_internal96"
+  top: "conv6_3_internal_slice_internal97"
+  top: "conv6_3_internal_slice_internal98"
+  top: "conv6_3_internal_slice_internal99"
+  top: "conv6_3_internal_slice_internal100"
+  top: "conv6_3_internal_slice_internal101"
+  top: "conv6_3_internal_slice_internal102"
+  top: "conv6_3_internal_slice_internal103"
+  top: "conv6_3_internal_slice_internal104"
+  top: "conv6_3_internal_slice_internal105"
+  top: "conv6_3_internal_slice_internal106"
+  top: "conv6_3_internal_slice_internal107"
+  top: "conv6_3_internal_slice_internal108"
+  top: "conv6_3_internal_slice_internal109"
+  top: "conv6_3_internal_slice_internal110"
+  top: "conv6_3_internal_slice_internal111"
+  top: "conv6_3_internal_slice_internal112"
+  top: "conv6_3_internal_slice_internal113"
+  top: "conv6_3_internal_slice_internal114"
+  top: "conv6_3_internal_slice_internal115"
+  top: "conv6_3_internal_slice_internal116"
+  top: "conv6_3_internal_slice_internal117"
+  top: "conv6_3_internal_slice_internal118"
+  top: "conv6_3_internal_slice_internal119"
+  top: "conv6_3_internal_slice_internal120"
+  top: "conv6_3_internal_slice_internal121"
+  top: "conv6_3_internal_slice_internal122"
+  top: "conv6_3_internal_slice_internal123"
+  top: "conv6_3_internal_slice_internal124"
+  top: "conv6_3_internal_slice_internal125"
+  top: "conv6_3_internal_slice_internal126"
+  top: "conv6_3_internal_slice_internal127"
+  top: "conv6_3_internal_slice_internal128"
+  top: "conv6_3_internal_slice_internal129"
+  top: "conv6_3_internal_slice_internal130"
+  top: "conv6_3_internal_slice_internal131"
+  top: "conv6_3_internal_slice_internal132"
+  top: "conv6_3_internal_slice_internal133"
+  top: "conv6_3_internal_slice_internal134"
+  top: "conv6_3_internal_slice_internal135"
+  top: "conv6_3_internal_slice_internal136"
+  top: "conv6_3_internal_slice_internal137"
+  top: "conv6_3_internal_slice_internal138"
+  top: "conv6_3_internal_slice_internal139"
+  top: "conv6_3_internal_slice_internal140"
+  top: "conv6_3_internal_slice_internal141"
+  top: "conv6_3_internal_slice_internal142"
+  top: "conv6_3_internal_slice_internal143"
+  top: "conv6_3_internal_slice_internal144"
+  top: "conv6_3_internal_slice_internal145"
+  top: "conv6_3_internal_slice_internal146"
+  top: "conv6_3_internal_slice_internal147"
+  top: "conv6_3_internal_slice_internal148"
+  top: "conv6_3_internal_slice_internal149"
+  top: "conv6_3_internal_slice_internal150"
+  top: "conv6_3_internal_slice_internal151"
+  top: "conv6_3_internal_slice_internal152"
+  top: "conv6_3_internal_slice_internal153"
+  top: "conv6_3_internal_slice_internal154"
+  top: "conv6_3_internal_slice_internal155"
+  top: "conv6_3_internal_slice_internal156"
+  top: "conv6_3_internal_slice_internal157"
+  top: "conv6_3_internal_slice_internal158"
+  top: "conv6_3_internal_slice_internal159"
+  top: "conv6_3_internal_slice_internal160"
+  top: "conv6_3_internal_slice_internal161"
+  top: "conv6_3_internal_slice_internal162"
+  top: "conv6_3_internal_slice_internal163"
+  top: "conv6_3_internal_slice_internal164"
+  top: "conv6_3_internal_slice_internal165"
+  top: "conv6_3_internal_slice_internal166"
+  top: "conv6_3_internal_slice_internal167"
+  top: "conv6_3_internal_slice_internal168"
+  top: "conv6_3_internal_slice_internal169"
+  top: "conv6_3_internal_slice_internal170"
+  top: "conv6_3_internal_slice_internal171"
+  top: "conv6_3_internal_slice_internal172"
+  top: "conv6_3_internal_slice_internal173"
+  top: "conv6_3_internal_slice_internal174"
+  top: "conv6_3_internal_slice_internal175"
+  top: "conv6_3_internal_slice_internal176"
+  top: "conv6_3_internal_slice_internal177"
+  top: "conv6_3_internal_slice_internal178"
+  top: "conv6_3_internal_slice_internal179"
+  top: "conv6_3_internal_slice_internal180"
+  top: "conv6_3_internal_slice_internal181"
+  top: "conv6_3_internal_slice_internal182"
+  top: "conv6_3_internal_slice_internal183"
+  top: "conv6_3_internal_slice_internal184"
+  top: "conv6_3_internal_slice_internal185"
+  top: "conv6_3_internal_slice_internal186"
+  top: "conv6_3_internal_slice_internal187"
+  top: "conv6_3_internal_slice_internal188"
+  top: "conv6_3_internal_slice_internal189"
+  top: "conv6_3_internal_slice_internal190"
+  top: "conv6_3_internal_slice_internal191"
+  top: "conv6_3_internal_slice_internal192"
+  top: "conv6_3_internal_slice_internal193"
+  top: "conv6_3_internal_slice_internal194"
+  top: "conv6_3_internal_slice_internal195"
+  top: "conv6_3_internal_slice_internal196"
+  top: "conv6_3_internal_slice_internal197"
+  top: "conv6_3_internal_slice_internal198"
+  top: "conv6_3_internal_slice_internal199"
+  top: "conv6_3_internal_slice_internal200"
+  top: "conv6_3_internal_slice_internal201"
+  top: "conv6_3_internal_slice_internal202"
+  top: "conv6_3_internal_slice_internal203"
+  top: "conv6_3_internal_slice_internal204"
+  top: "conv6_3_internal_slice_internal205"
+  top: "conv6_3_internal_slice_internal206"
+  top: "conv6_3_internal_slice_internal207"
+  top: "conv6_3_internal_slice_internal208"
+  top: "conv6_3_internal_slice_internal209"
+  top: "conv6_3_internal_slice_internal210"
+  top: "conv6_3_internal_slice_internal211"
+  top: "conv6_3_internal_slice_internal212"
+  top: "conv6_3_internal_slice_internal213"
+  top: "conv6_3_internal_slice_internal214"
+  top: "conv6_3_internal_slice_internal215"
+  top: "conv6_3_internal_slice_internal216"
+  top: "conv6_3_internal_slice_internal217"
+  top: "conv6_3_internal_slice_internal218"
+  top: "conv6_3_internal_slice_internal219"
+  top: "conv6_3_internal_slice_internal220"
+  top: "conv6_3_internal_slice_internal221"
+  top: "conv6_3_internal_slice_internal222"
+  top: "conv6_3_internal_slice_internal223"
+  top: "conv6_3_internal_slice_internal224"
+  top: "conv6_3_internal_slice_internal225"
+  top: "conv6_3_internal_slice_internal226"
+  top: "conv6_3_internal_slice_internal227"
+  top: "conv6_3_internal_slice_internal228"
+  top: "conv6_3_internal_slice_internal229"
+  top: "conv6_3_internal_slice_internal230"
+  top: "conv6_3_internal_slice_internal231"
+  top: "conv6_3_internal_slice_internal232"
+  top: "conv6_3_internal_slice_internal233"
+  top: "conv6_3_internal_slice_internal234"
+  top: "conv6_3_internal_slice_internal235"
+  top: "conv6_3_internal_slice_internal236"
+  top: "conv6_3_internal_slice_internal237"
+  top: "conv6_3_internal_slice_internal238"
+  top: "conv6_3_internal_slice_internal239"
+  top: "conv6_3_internal_slice_internal240"
+  top: "conv6_3_internal_slice_internal241"
+  top: "conv6_3_internal_slice_internal242"
+  top: "conv6_3_internal_slice_internal243"
+  top: "conv6_3_internal_slice_internal244"
+  top: "conv6_3_internal_slice_internal245"
+  top: "conv6_3_internal_slice_internal246"
+  top: "conv6_3_internal_slice_internal247"
+  top: "conv6_3_internal_slice_internal248"
+  top: "conv6_3_internal_slice_internal249"
+  top: "conv6_3_internal_slice_internal250"
+  top: "conv6_3_internal_slice_internal251"
+  top: "conv6_3_internal_slice_internal252"
+  top: "conv6_3_internal_slice_internal253"
+  top: "conv6_3_internal_slice_internal254"
+  top: "conv6_3_internal_slice_internal255"
+  top: "conv6_3_internal_slice_internal256"
+  slice_param { axis: 1 }
+}
+
+layer {
+  name: "conv6_3_internal_slice_internal_concat1"
+  type: "Concat"
+  bottom: "conv6_3_internal_slice_internal1"
+  bottom: "conv6_3_internal_slice_internal2"
+  bottom: "conv6_3_internal_slice_internal3"
+  bottom: "conv6_3_internal_slice_internal4"
+  bottom: "conv6_3_internal_slice_internal5"
+  bottom: "conv6_3_internal_slice_internal6"
+  bottom: "conv6_3_internal_slice_internal7"
+  bottom: "conv6_3_internal_slice_internal8"
+  bottom: "conv6_3_internal_slice_internal9"
+  bottom: "conv6_3_internal_slice_internal10"
+  bottom: "conv6_3_internal_slice_internal11"
+  bottom: "conv6_3_internal_slice_internal12"
+  bottom: "conv6_3_internal_slice_internal13"
+  bottom: "conv6_3_internal_slice_internal14"
+  bottom: "conv6_3_internal_slice_internal15"
+  bottom: "conv6_3_internal_slice_internal16"
+  bottom: "conv6_3_internal_slice_internal17"
+  bottom: "conv6_3_internal_slice_internal18"
+  bottom: "conv6_3_internal_slice_internal19"
+  bottom: "conv6_3_internal_slice_internal20"
+  bottom: "conv6_3_internal_slice_internal21"
+  bottom: "conv6_3_internal_slice_internal22"
+  bottom: "conv6_3_internal_slice_internal23"
+  bottom: "conv6_3_internal_slice_internal24"
+  bottom: "conv6_3_internal_slice_internal25"
+  bottom: "conv6_3_internal_slice_internal26"
+  bottom: "conv6_3_internal_slice_internal27"
+  bottom: "conv6_3_internal_slice_internal28"
+  bottom: "conv6_3_internal_slice_internal29"
+  bottom: "conv6_3_internal_slice_internal30"
+  bottom: "conv6_3_internal_slice_internal31"
+  bottom: "conv6_3_internal_slice_internal32"
+  bottom: "conv6_3_internal_slice_internal33"
+  bottom: "conv6_3_internal_slice_internal34"
+  bottom: "conv6_3_internal_slice_internal35"
+  bottom: "conv6_3_internal_slice_internal36"
+  bottom: "conv6_3_internal_slice_internal37"
+  bottom: "conv6_3_internal_slice_internal38"
+  bottom: "conv6_3_internal_slice_internal39"
+  bottom: "conv6_3_internal_slice_internal40"
+  bottom: "conv6_3_internal_slice_internal41"
+  bottom: "conv6_3_internal_slice_internal42"
+  bottom: "conv6_3_internal_slice_internal43"
+  bottom: "conv6_3_internal_slice_internal44"
+  bottom: "conv6_3_internal_slice_internal45"
+  bottom: "conv6_3_internal_slice_internal46"
+  bottom: "conv6_3_internal_slice_internal47"
+  bottom: "conv6_3_internal_slice_internal48"
+  bottom: "conv6_3_internal_slice_internal49"
+  bottom: "conv6_3_internal_slice_internal50"
+  bottom: "conv6_3_internal_slice_internal51"
+  bottom: "conv6_3_internal_slice_internal52"
+  bottom: "conv6_3_internal_slice_internal53"
+  bottom: "conv6_3_internal_slice_internal54"
+  bottom: "conv6_3_internal_slice_internal55"
+  bottom: "conv6_3_internal_slice_internal56"
+  bottom: "conv6_3_internal_slice_internal57"
+  bottom: "conv6_3_internal_slice_internal58"
+  bottom: "conv6_3_internal_slice_internal59"
+  bottom: "conv6_3_internal_slice_internal60"
+  bottom: "conv6_3_internal_slice_internal61"
+  bottom: "conv6_3_internal_slice_internal62"
+  bottom: "conv6_3_internal_slice_internal63"
+  bottom: "conv6_3_internal_slice_internal64"
+  bottom: "conv6_3_internal_slice_internal65"
+  bottom: "conv6_3_internal_slice_internal66"
+  bottom: "conv6_3_internal_slice_internal67"
+  bottom: "conv6_3_internal_slice_internal68"
+  bottom: "conv6_3_internal_slice_internal69"
+  bottom: "conv6_3_internal_slice_internal70"
+  bottom: "conv6_3_internal_slice_internal71"
+  bottom: "conv6_3_internal_slice_internal72"
+  bottom: "conv6_3_internal_slice_internal73"
+  bottom: "conv6_3_internal_slice_internal74"
+  bottom: "conv6_3_internal_slice_internal75"
+  bottom: "conv6_3_internal_slice_internal76"
+  bottom: "conv6_3_internal_slice_internal77"
+  bottom: "conv6_3_internal_slice_internal78"
+  bottom: "conv6_3_internal_slice_internal79"
+  bottom: "conv6_3_internal_slice_internal80"
+  bottom: "conv6_3_internal_slice_internal81"
+  bottom: "conv6_3_internal_slice_internal82"
+  bottom: "conv6_3_internal_slice_internal83"
+  bottom: "conv6_3_internal_slice_internal84"
+  bottom: "conv6_3_internal_slice_internal85"
+  bottom: "conv6_3_internal_slice_internal86"
+  bottom: "conv6_3_internal_slice_internal87"
+  bottom: "conv6_3_internal_slice_internal88"
+  bottom: "conv6_3_internal_slice_internal89"
+  bottom: "conv6_3_internal_slice_internal90"
+  bottom: "conv6_3_internal_slice_internal91"
+  bottom: "conv6_3_internal_slice_internal92"
+  bottom: "conv6_3_internal_slice_internal93"
+  bottom: "conv6_3_internal_slice_internal94"
+  bottom: "conv6_3_internal_slice_internal95"
+  bottom: "conv6_3_internal_slice_internal96"
+  bottom: "conv6_3_internal_slice_internal97"
+  bottom: "conv6_3_internal_slice_internal98"
+  bottom: "conv6_3_internal_slice_internal99"
+  bottom: "conv6_3_internal_slice_internal100"
+  bottom: "conv6_3_internal_slice_internal101"
+  bottom: "conv6_3_internal_slice_internal102"
+  bottom: "conv6_3_internal_slice_internal103"
+  bottom: "conv6_3_internal_slice_internal104"
+  bottom: "conv6_3_internal_slice_internal105"
+  bottom: "conv6_3_internal_slice_internal106"
+  bottom: "conv6_3_internal_slice_internal107"
+  bottom: "conv6_3_internal_slice_internal108"
+  bottom: "conv6_3_internal_slice_internal109"
+  bottom: "conv6_3_internal_slice_internal110"
+  bottom: "conv6_3_internal_slice_internal111"
+  bottom: "conv6_3_internal_slice_internal112"
+  bottom: "conv6_3_internal_slice_internal113"
+  bottom: "conv6_3_internal_slice_internal114"
+  bottom: "conv6_3_internal_slice_internal115"
+  bottom: "conv6_3_internal_slice_internal116"
+  bottom: "conv6_3_internal_slice_internal117"
+  bottom: "conv6_3_internal_slice_internal118"
+  bottom: "conv6_3_internal_slice_internal119"
+  bottom: "conv6_3_internal_slice_internal120"
+  bottom: "conv6_3_internal_slice_internal121"
+  bottom: "conv6_3_internal_slice_internal122"
+  bottom: "conv6_3_internal_slice_internal123"
+  bottom: "conv6_3_internal_slice_internal124"
+  bottom: "conv6_3_internal_slice_internal125"
+  bottom: "conv6_3_internal_slice_internal126"
+  bottom: "conv6_3_internal_slice_internal127"
+  bottom: "conv6_3_internal_slice_internal128"
+  top: "conv6_3_internal_slice1"
+  concat_param { axis: 1 }
+}
+layer {
+  name: "conv6_3_internal_slice_internal_concat2"
+  type: "Concat"
+  bottom: "conv6_3_internal_slice_internal129"
+  bottom: "conv6_3_internal_slice_internal130"
+  bottom: "conv6_3_internal_slice_internal131"
+  bottom: "conv6_3_internal_slice_internal132"
+  bottom: "conv6_3_internal_slice_internal133"
+  bottom: "conv6_3_internal_slice_internal134"
+  bottom: "conv6_3_internal_slice_internal135"
+  bottom: "conv6_3_internal_slice_internal136"
+  bottom: "conv6_3_internal_slice_internal137"
+  bottom: "conv6_3_internal_slice_internal138"
+  bottom: "conv6_3_internal_slice_internal139"
+  bottom: "conv6_3_internal_slice_internal140"
+  bottom: "conv6_3_internal_slice_internal141"
+  bottom: "conv6_3_internal_slice_internal142"
+  bottom: "conv6_3_internal_slice_internal143"
+  bottom: "conv6_3_internal_slice_internal144"
+  bottom: "conv6_3_internal_slice_internal145"
+  bottom: "conv6_3_internal_slice_internal146"
+  bottom: "conv6_3_internal_slice_internal147"
+  bottom: "conv6_3_internal_slice_internal148"
+  bottom: "conv6_3_internal_slice_internal149"
+  bottom: "conv6_3_internal_slice_internal150"
+  bottom: "conv6_3_internal_slice_internal151"
+  bottom: "conv6_3_internal_slice_internal152"
+  bottom: "conv6_3_internal_slice_internal153"
+  bottom: "conv6_3_internal_slice_internal154"
+  bottom: "conv6_3_internal_slice_internal155"
+  bottom: "conv6_3_internal_slice_internal156"
+  bottom: "conv6_3_internal_slice_internal157"
+  bottom: "conv6_3_internal_slice_internal158"
+  bottom: "conv6_3_internal_slice_internal159"
+  bottom: "conv6_3_internal_slice_internal160"
+  bottom: "conv6_3_internal_slice_internal161"
+  bottom: "conv6_3_internal_slice_internal162"
+  bottom: "conv6_3_internal_slice_internal163"
+  bottom: "conv6_3_internal_slice_internal164"
+  bottom: "conv6_3_internal_slice_internal165"
+  bottom: "conv6_3_internal_slice_internal166"
+  bottom: "conv6_3_internal_slice_internal167"
+  bottom: "conv6_3_internal_slice_internal168"
+  bottom: "conv6_3_internal_slice_internal169"
+  bottom: "conv6_3_internal_slice_internal170"
+  bottom: "conv6_3_internal_slice_internal171"
+  bottom: "conv6_3_internal_slice_internal172"
+  bottom: "conv6_3_internal_slice_internal173"
+  bottom: "conv6_3_internal_slice_internal174"
+  bottom: "conv6_3_internal_slice_internal175"
+  bottom: "conv6_3_internal_slice_internal176"
+  bottom: "conv6_3_internal_slice_internal177"
+  bottom: "conv6_3_internal_slice_internal178"
+  bottom: "conv6_3_internal_slice_internal179"
+  bottom: "conv6_3_internal_slice_internal180"
+  bottom: "conv6_3_internal_slice_internal181"
+  bottom: "conv6_3_internal_slice_internal182"
+  bottom: "conv6_3_internal_slice_internal183"
+  bottom: "conv6_3_internal_slice_internal184"
+  bottom: "conv6_3_internal_slice_internal185"
+  bottom: "conv6_3_internal_slice_internal186"
+  bottom: "conv6_3_internal_slice_internal187"
+  bottom: "conv6_3_internal_slice_internal188"
+  bottom: "conv6_3_internal_slice_internal189"
+  bottom: "conv6_3_internal_slice_internal190"
+  bottom: "conv6_3_internal_slice_internal191"
+  bottom: "conv6_3_internal_slice_internal192"
+  bottom: "conv6_3_internal_slice_internal193"
+  bottom: "conv6_3_internal_slice_internal194"
+  bottom: "conv6_3_internal_slice_internal195"
+  bottom: "conv6_3_internal_slice_internal196"
+  bottom: "conv6_3_internal_slice_internal197"
+  bottom: "conv6_3_internal_slice_internal198"
+  bottom: "conv6_3_internal_slice_internal199"
+  bottom: "conv6_3_internal_slice_internal200"
+  bottom: "conv6_3_internal_slice_internal201"
+  bottom: "conv6_3_internal_slice_internal202"
+  bottom: "conv6_3_internal_slice_internal203"
+  bottom: "conv6_3_internal_slice_internal204"
+  bottom: "conv6_3_internal_slice_internal205"
+  bottom: "conv6_3_internal_slice_internal206"
+  bottom: "conv6_3_internal_slice_internal207"
+  bottom: "conv6_3_internal_slice_internal208"
+  bottom: "conv6_3_internal_slice_internal209"
+  bottom: "conv6_3_internal_slice_internal210"
+  bottom: "conv6_3_internal_slice_internal211"
+  bottom: "conv6_3_internal_slice_internal212"
+  bottom: "conv6_3_internal_slice_internal213"
+  bottom: "conv6_3_internal_slice_internal214"
+  bottom: "conv6_3_internal_slice_internal215"
+  bottom: "conv6_3_internal_slice_internal216"
+  bottom: "conv6_3_internal_slice_internal217"
+  bottom: "conv6_3_internal_slice_internal218"
+  bottom: "conv6_3_internal_slice_internal219"
+  bottom: "conv6_3_internal_slice_internal220"
+  bottom: "conv6_3_internal_slice_internal221"
+  bottom: "conv6_3_internal_slice_internal222"
+  bottom: "conv6_3_internal_slice_internal223"
+  bottom: "conv6_3_internal_slice_internal224"
+  bottom: "conv6_3_internal_slice_internal225"
+  bottom: "conv6_3_internal_slice_internal226"
+  bottom: "conv6_3_internal_slice_internal227"
+  bottom: "conv6_3_internal_slice_internal228"
+  bottom: "conv6_3_internal_slice_internal229"
+  bottom: "conv6_3_internal_slice_internal230"
+  bottom: "conv6_3_internal_slice_internal231"
+  bottom: "conv6_3_internal_slice_internal232"
+  bottom: "conv6_3_internal_slice_internal233"
+  bottom: "conv6_3_internal_slice_internal234"
+  bottom: "conv6_3_internal_slice_internal235"
+  bottom: "conv6_3_internal_slice_internal236"
+  bottom: "conv6_3_internal_slice_internal237"
+  bottom: "conv6_3_internal_slice_internal238"
+  bottom: "conv6_3_internal_slice_internal239"
+  bottom: "conv6_3_internal_slice_internal240"
+  bottom: "conv6_3_internal_slice_internal241"
+  bottom: "conv6_3_internal_slice_internal242"
+  bottom: "conv6_3_internal_slice_internal243"
+  bottom: "conv6_3_internal_slice_internal244"
+  bottom: "conv6_3_internal_slice_internal245"
+  bottom: "conv6_3_internal_slice_internal246"
+  bottom: "conv6_3_internal_slice_internal247"
+  bottom: "conv6_3_internal_slice_internal248"
+  bottom: "conv6_3_internal_slice_internal249"
+  bottom: "conv6_3_internal_slice_internal250"
+  bottom: "conv6_3_internal_slice_internal251"
+  bottom: "conv6_3_internal_slice_internal252"
+  bottom: "conv6_3_internal_slice_internal253"
+  bottom: "conv6_3_internal_slice_internal254"
+  bottom: "conv6_3_internal_slice_internal255"
+  bottom: "conv6_3_internal_slice_internal256"
+  top: "conv6_3_internal_slice2"
+  concat_param { axis: 1 }
+}
+layer {
+  name: "conv6_3_internal_conv1"
+  type: "Convolution"
+  bottom: "conv6_3_internal_slice1"
+  top: "conv6_3_internal_conv1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  convolution_param {
+    engine: CAFFE
+    group: 1
+    num_output: 256
+    bias_term: false
+    pad: 1
+    kernel_size: 3
+    dilation: 1
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+  }
+}
+layer {
+  name: "conv6_3_internal_conv2"
+  type: "Convolution"
+  bottom: "conv6_3_internal_slice2"
+  top: "conv6_3_internal_conv2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  convolution_param {
+    engine: CAFFE
+    group: 1
+    num_output: 256
+    bias_term: false
+    pad: 1
+    kernel_size: 3
+    dilation: 1
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+  }
+}
+layer {
+  name: "conv6_3_internal_concat"
+  type: "Concat"
+  bottom: "conv6_3_internal_conv1"
+  bottom: "conv6_3_internal_conv2"
+  top: "conv6_3"
+  concat_param {
+    axis: 1
+  }
+}
+###########################################
+
+layer {
+  name: "conv6_3_bn"
+  type: "BatchNorm"
+  bottom: "conv6_3"
+  top: "conv6_3"
+  batch_norm_param {
+    eps: 1e-06
+  }
+}
+layer {
+  name: "conv6_3_scale"
+  type: "Scale"
+  bottom: "conv6_3"
+  top: "conv6_3"
+  scale_param {
+    filler {
+      type: "constant"
+      value: 1
+    }
+    bias_term: true
+  }
+}
+layer {
+  name: "conv6_3_relu"
+  type: "ReLU"
+  bottom: "conv6_3"
+  top: "conv6_3"
+  relu_param {
+    negative_slope: 0.0
+  }
+}
+
+layer {
+  name: "conv6_4"
+  type: "Convolution"
+  bottom: "conv6_3"
+  top: "conv6_4"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  convolution_param {
+    num_output: 256
+    bias_term: false
+    pad: 0
+    kernel_size: 1
+    dilation: 1
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+  }
+}
+layer {
+  name: "conv6_4_bn"
+  type: "BatchNorm"
+  bottom: "conv6_4"
+  top: "conv6_4"
+  batch_norm_param {
+    eps: 1e-06
+  }
+}
+layer {
+  name: "conv6_4_scale"
+  type: "Scale"
+  bottom: "conv6_4"
+  top: "conv6_4"
+  scale_param {
+    filler {
+      type: "constant"
+      value: 1
+    }
+    bias_term: true
+  }
+}
+layer {
+  name: "conv6_4_relu"
+  type: "ReLU"
+  bottom: "conv6_4"
+  top: "conv6_4"
+  relu_param {
+    negative_slope: 0.0
+  }
+}
+
+###########################################
+layer {
+  name: "conv6_5_internal_slice_internal_slice"
+  type: "Slice"
+  bottom: "conv6_4"
+  top: "conv6_5_internal_slice_internal1"
+  top: "conv6_5_internal_slice_internal2"
+  top: "conv6_5_internal_slice_internal3"
+  top: "conv6_5_internal_slice_internal4"
+  top: "conv6_5_internal_slice_internal5"
+  top: "conv6_5_internal_slice_internal6"
+  top: "conv6_5_internal_slice_internal7"
+  top: "conv6_5_internal_slice_internal8"
+  top: "conv6_5_internal_slice_internal9"
+  top: "conv6_5_internal_slice_internal10"
+  top: "conv6_5_internal_slice_internal11"
+  top: "conv6_5_internal_slice_internal12"
+  top: "conv6_5_internal_slice_internal13"
+  top: "conv6_5_internal_slice_internal14"
+  top: "conv6_5_internal_slice_internal15"
+  top: "conv6_5_internal_slice_internal16"
+  top: "conv6_5_internal_slice_internal17"
+  top: "conv6_5_internal_slice_internal18"
+  top: "conv6_5_internal_slice_internal19"
+  top: "conv6_5_internal_slice_internal20"
+  top: "conv6_5_internal_slice_internal21"
+  top: "conv6_5_internal_slice_internal22"
+  top: "conv6_5_internal_slice_internal23"
+  top: "conv6_5_internal_slice_internal24"
+  top: "conv6_5_internal_slice_internal25"
+  top: "conv6_5_internal_slice_internal26"
+  top: "conv6_5_internal_slice_internal27"
+  top: "conv6_5_internal_slice_internal28"
+  top: "conv6_5_internal_slice_internal29"
+  top: "conv6_5_internal_slice_internal30"
+  top: "conv6_5_internal_slice_internal31"
+  top: "conv6_5_internal_slice_internal32"
+  top: "conv6_5_internal_slice_internal33"
+  top: "conv6_5_internal_slice_internal34"
+  top: "conv6_5_internal_slice_internal35"
+  top: "conv6_5_internal_slice_internal36"
+  top: "conv6_5_internal_slice_internal37"
+  top: "conv6_5_internal_slice_internal38"
+  top: "conv6_5_internal_slice_internal39"
+  top: "conv6_5_internal_slice_internal40"
+  top: "conv6_5_internal_slice_internal41"
+  top: "conv6_5_internal_slice_internal42"
+  top: "conv6_5_internal_slice_internal43"
+  top: "conv6_5_internal_slice_internal44"
+  top: "conv6_5_internal_slice_internal45"
+  top: "conv6_5_internal_slice_internal46"
+  top: "conv6_5_internal_slice_internal47"
+  top: "conv6_5_internal_slice_internal48"
+  top: "conv6_5_internal_slice_internal49"
+  top: "conv6_5_internal_slice_internal50"
+  top: "conv6_5_internal_slice_internal51"
+  top: "conv6_5_internal_slice_internal52"
+  top: "conv6_5_internal_slice_internal53"
+  top: "conv6_5_internal_slice_internal54"
+  top: "conv6_5_internal_slice_internal55"
+  top: "conv6_5_internal_slice_internal56"
+  top: "conv6_5_internal_slice_internal57"
+  top: "conv6_5_internal_slice_internal58"
+  top: "conv6_5_internal_slice_internal59"
+  top: "conv6_5_internal_slice_internal60"
+  top: "conv6_5_internal_slice_internal61"
+  top: "conv6_5_internal_slice_internal62"
+  top: "conv6_5_internal_slice_internal63"
+  top: "conv6_5_internal_slice_internal64"
+  top: "conv6_5_internal_slice_internal65"
+  top: "conv6_5_internal_slice_internal66"
+  top: "conv6_5_internal_slice_internal67"
+  top: "conv6_5_internal_slice_internal68"
+  top: "conv6_5_internal_slice_internal69"
+  top: "conv6_5_internal_slice_internal70"
+  top: "conv6_5_internal_slice_internal71"
+  top: "conv6_5_internal_slice_internal72"
+  top: "conv6_5_internal_slice_internal73"
+  top: "conv6_5_internal_slice_internal74"
+  top: "conv6_5_internal_slice_internal75"
+  top: "conv6_5_internal_slice_internal76"
+  top: "conv6_5_internal_slice_internal77"
+  top: "conv6_5_internal_slice_internal78"
+  top: "conv6_5_internal_slice_internal79"
+  top: "conv6_5_internal_slice_internal80"
+  top: "conv6_5_internal_slice_internal81"
+  top: "conv6_5_internal_slice_internal82"
+  top: "conv6_5_internal_slice_internal83"
+  top: "conv6_5_internal_slice_internal84"
+  top: "conv6_5_internal_slice_internal85"
+  top: "conv6_5_internal_slice_internal86"
+  top: "conv6_5_internal_slice_internal87"
+  top: "conv6_5_internal_slice_internal88"
+  top: "conv6_5_internal_slice_internal89"
+  top: "conv6_5_internal_slice_internal90"
+  top: "conv6_5_internal_slice_internal91"
+  top: "conv6_5_internal_slice_internal92"
+  top: "conv6_5_internal_slice_internal93"
+  top: "conv6_5_internal_slice_internal94"
+  top: "conv6_5_internal_slice_internal95"
+  top: "conv6_5_internal_slice_internal96"
+  top: "conv6_5_internal_slice_internal97"
+  top: "conv6_5_internal_slice_internal98"
+  top: "conv6_5_internal_slice_internal99"
+  top: "conv6_5_internal_slice_internal100"
+  top: "conv6_5_internal_slice_internal101"
+  top: "conv6_5_internal_slice_internal102"
+  top: "conv6_5_internal_slice_internal103"
+  top: "conv6_5_internal_slice_internal104"
+  top: "conv6_5_internal_slice_internal105"
+  top: "conv6_5_internal_slice_internal106"
+  top: "conv6_5_internal_slice_internal107"
+  top: "conv6_5_internal_slice_internal108"
+  top: "conv6_5_internal_slice_internal109"
+  top: "conv6_5_internal_slice_internal110"
+  top: "conv6_5_internal_slice_internal111"
+  top: "conv6_5_internal_slice_internal112"
+  top: "conv6_5_internal_slice_internal113"
+  top: "conv6_5_internal_slice_internal114"
+  top: "conv6_5_internal_slice_internal115"
+  top: "conv6_5_internal_slice_internal116"
+  top: "conv6_5_internal_slice_internal117"
+  top: "conv6_5_internal_slice_internal118"
+  top: "conv6_5_internal_slice_internal119"
+  top: "conv6_5_internal_slice_internal120"
+  top: "conv6_5_internal_slice_internal121"
+  top: "conv6_5_internal_slice_internal122"
+  top: "conv6_5_internal_slice_internal123"
+  top: "conv6_5_internal_slice_internal124"
+  top: "conv6_5_internal_slice_internal125"
+  top: "conv6_5_internal_slice_internal126"
+  top: "conv6_5_internal_slice_internal127"
+  top: "conv6_5_internal_slice_internal128"
+  top: "conv6_5_internal_slice_internal129"
+  top: "conv6_5_internal_slice_internal130"
+  top: "conv6_5_internal_slice_internal131"
+  top: "conv6_5_internal_slice_internal132"
+  top: "conv6_5_internal_slice_internal133"
+  top: "conv6_5_internal_slice_internal134"
+  top: "conv6_5_internal_slice_internal135"
+  top: "conv6_5_internal_slice_internal136"
+  top: "conv6_5_internal_slice_internal137"
+  top: "conv6_5_internal_slice_internal138"
+  top: "conv6_5_internal_slice_internal139"
+  top: "conv6_5_internal_slice_internal140"
+  top: "conv6_5_internal_slice_internal141"
+  top: "conv6_5_internal_slice_internal142"
+  top: "conv6_5_internal_slice_internal143"
+  top: "conv6_5_internal_slice_internal144"
+  top: "conv6_5_internal_slice_internal145"
+  top: "conv6_5_internal_slice_internal146"
+  top: "conv6_5_internal_slice_internal147"
+  top: "conv6_5_internal_slice_internal148"
+  top: "conv6_5_internal_slice_internal149"
+  top: "conv6_5_internal_slice_internal150"
+  top: "conv6_5_internal_slice_internal151"
+  top: "conv6_5_internal_slice_internal152"
+  top: "conv6_5_internal_slice_internal153"
+  top: "conv6_5_internal_slice_internal154"
+  top: "conv6_5_internal_slice_internal155"
+  top: "conv6_5_internal_slice_internal156"
+  top: "conv6_5_internal_slice_internal157"
+  top: "conv6_5_internal_slice_internal158"
+  top: "conv6_5_internal_slice_internal159"
+  top: "conv6_5_internal_slice_internal160"
+  top: "conv6_5_internal_slice_internal161"
+  top: "conv6_5_internal_slice_internal162"
+  top: "conv6_5_internal_slice_internal163"
+  top: "conv6_5_internal_slice_internal164"
+  top: "conv6_5_internal_slice_internal165"
+  top: "conv6_5_internal_slice_internal166"
+  top: "conv6_5_internal_slice_internal167"
+  top: "conv6_5_internal_slice_internal168"
+  top: "conv6_5_internal_slice_internal169"
+  top: "conv6_5_internal_slice_internal170"
+  top: "conv6_5_internal_slice_internal171"
+  top: "conv6_5_internal_slice_internal172"
+  top: "conv6_5_internal_slice_internal173"
+  top: "conv6_5_internal_slice_internal174"
+  top: "conv6_5_internal_slice_internal175"
+  top: "conv6_5_internal_slice_internal176"
+  top: "conv6_5_internal_slice_internal177"
+  top: "conv6_5_internal_slice_internal178"
+  top: "conv6_5_internal_slice_internal179"
+  top: "conv6_5_internal_slice_internal180"
+  top: "conv6_5_internal_slice_internal181"
+  top: "conv6_5_internal_slice_internal182"
+  top: "conv6_5_internal_slice_internal183"
+  top: "conv6_5_internal_slice_internal184"
+  top: "conv6_5_internal_slice_internal185"
+  top: "conv6_5_internal_slice_internal186"
+  top: "conv6_5_internal_slice_internal187"
+  top: "conv6_5_internal_slice_internal188"
+  top: "conv6_5_internal_slice_internal189"
+  top: "conv6_5_internal_slice_internal190"
+  top: "conv6_5_internal_slice_internal191"
+  top: "conv6_5_internal_slice_internal192"
+  top: "conv6_5_internal_slice_internal193"
+  top: "conv6_5_internal_slice_internal194"
+  top: "conv6_5_internal_slice_internal195"
+  top: "conv6_5_internal_slice_internal196"
+  top: "conv6_5_internal_slice_internal197"
+  top: "conv6_5_internal_slice_internal198"
+  top: "conv6_5_internal_slice_internal199"
+  top: "conv6_5_internal_slice_internal200"
+  top: "conv6_5_internal_slice_internal201"
+  top: "conv6_5_internal_slice_internal202"
+  top: "conv6_5_internal_slice_internal203"
+  top: "conv6_5_internal_slice_internal204"
+  top: "conv6_5_internal_slice_internal205"
+  top: "conv6_5_internal_slice_internal206"
+  top: "conv6_5_internal_slice_internal207"
+  top: "conv6_5_internal_slice_internal208"
+  top: "conv6_5_internal_slice_internal209"
+  top: "conv6_5_internal_slice_internal210"
+  top: "conv6_5_internal_slice_internal211"
+  top: "conv6_5_internal_slice_internal212"
+  top: "conv6_5_internal_slice_internal213"
+  top: "conv6_5_internal_slice_internal214"
+  top: "conv6_5_internal_slice_internal215"
+  top: "conv6_5_internal_slice_internal216"
+  top: "conv6_5_internal_slice_internal217"
+  top: "conv6_5_internal_slice_internal218"
+  top: "conv6_5_internal_slice_internal219"
+  top: "conv6_5_internal_slice_internal220"
+  top: "conv6_5_internal_slice_internal221"
+  top: "conv6_5_internal_slice_internal222"
+  top: "conv6_5_internal_slice_internal223"
+  top: "conv6_5_internal_slice_internal224"
+  top: "conv6_5_internal_slice_internal225"
+  top: "conv6_5_internal_slice_internal226"
+  top: "conv6_5_internal_slice_internal227"
+  top: "conv6_5_internal_slice_internal228"
+  top: "conv6_5_internal_slice_internal229"
+  top: "conv6_5_internal_slice_internal230"
+  top: "conv6_5_internal_slice_internal231"
+  top: "conv6_5_internal_slice_internal232"
+  top: "conv6_5_internal_slice_internal233"
+  top: "conv6_5_internal_slice_internal234"
+  top: "conv6_5_internal_slice_internal235"
+  top: "conv6_5_internal_slice_internal236"
+  top: "conv6_5_internal_slice_internal237"
+  top: "conv6_5_internal_slice_internal238"
+  top: "conv6_5_internal_slice_internal239"
+  top: "conv6_5_internal_slice_internal240"
+  top: "conv6_5_internal_slice_internal241"
+  top: "conv6_5_internal_slice_internal242"
+  top: "conv6_5_internal_slice_internal243"
+  top: "conv6_5_internal_slice_internal244"
+  top: "conv6_5_internal_slice_internal245"
+  top: "conv6_5_internal_slice_internal246"
+  top: "conv6_5_internal_slice_internal247"
+  top: "conv6_5_internal_slice_internal248"
+  top: "conv6_5_internal_slice_internal249"
+  top: "conv6_5_internal_slice_internal250"
+  top: "conv6_5_internal_slice_internal251"
+  top: "conv6_5_internal_slice_internal252"
+  top: "conv6_5_internal_slice_internal253"
+  top: "conv6_5_internal_slice_internal254"
+  top: "conv6_5_internal_slice_internal255"
+  top: "conv6_5_internal_slice_internal256"
+  slice_param { axis: 1 }
+}
+
+layer {
+  name: "conv6_5_internal_slice_internal_concat1"
+  type: "Concat"
+  bottom: "conv6_5_internal_slice_internal1"
+  bottom: "conv6_5_internal_slice_internal2"
+  bottom: "conv6_5_internal_slice_internal3"
+  bottom: "conv6_5_internal_slice_internal4"
+  bottom: "conv6_5_internal_slice_internal5"
+  bottom: "conv6_5_internal_slice_internal6"
+  bottom: "conv6_5_internal_slice_internal7"
+  bottom: "conv6_5_internal_slice_internal8"
+  bottom: "conv6_5_internal_slice_internal9"
+  bottom: "conv6_5_internal_slice_internal10"
+  bottom: "conv6_5_internal_slice_internal11"
+  bottom: "conv6_5_internal_slice_internal12"
+  bottom: "conv6_5_internal_slice_internal13"
+  bottom: "conv6_5_internal_slice_internal14"
+  bottom: "conv6_5_internal_slice_internal15"
+  bottom: "conv6_5_internal_slice_internal16"
+  bottom: "conv6_5_internal_slice_internal17"
+  bottom: "conv6_5_internal_slice_internal18"
+  bottom: "conv6_5_internal_slice_internal19"
+  bottom: "conv6_5_internal_slice_internal20"
+  bottom: "conv6_5_internal_slice_internal21"
+  bottom: "conv6_5_internal_slice_internal22"
+  bottom: "conv6_5_internal_slice_internal23"
+  bottom: "conv6_5_internal_slice_internal24"
+  bottom: "conv6_5_internal_slice_internal25"
+  bottom: "conv6_5_internal_slice_internal26"
+  bottom: "conv6_5_internal_slice_internal27"
+  bottom: "conv6_5_internal_slice_internal28"
+  bottom: "conv6_5_internal_slice_internal29"
+  bottom: "conv6_5_internal_slice_internal30"
+  bottom: "conv6_5_internal_slice_internal31"
+  bottom: "conv6_5_internal_slice_internal32"
+  bottom: "conv6_5_internal_slice_internal33"
+  bottom: "conv6_5_internal_slice_internal34"
+  bottom: "conv6_5_internal_slice_internal35"
+  bottom: "conv6_5_internal_slice_internal36"
+  bottom: "conv6_5_internal_slice_internal37"
+  bottom: "conv6_5_internal_slice_internal38"
+  bottom: "conv6_5_internal_slice_internal39"
+  bottom: "conv6_5_internal_slice_internal40"
+  bottom: "conv6_5_internal_slice_internal41"
+  bottom: "conv6_5_internal_slice_internal42"
+  bottom: "conv6_5_internal_slice_internal43"
+  bottom: "conv6_5_internal_slice_internal44"
+  bottom: "conv6_5_internal_slice_internal45"
+  bottom: "conv6_5_internal_slice_internal46"
+  bottom: "conv6_5_internal_slice_internal47"
+  bottom: "conv6_5_internal_slice_internal48"
+  bottom: "conv6_5_internal_slice_internal49"
+  bottom: "conv6_5_internal_slice_internal50"
+  bottom: "conv6_5_internal_slice_internal51"
+  bottom: "conv6_5_internal_slice_internal52"
+  bottom: "conv6_5_internal_slice_internal53"
+  bottom: "conv6_5_internal_slice_internal54"
+  bottom: "conv6_5_internal_slice_internal55"
+  bottom: "conv6_5_internal_slice_internal56"
+  bottom: "conv6_5_internal_slice_internal57"
+  bottom: "conv6_5_internal_slice_internal58"
+  bottom: "conv6_5_internal_slice_internal59"
+  bottom: "conv6_5_internal_slice_internal60"
+  bottom: "conv6_5_internal_slice_internal61"
+  bottom: "conv6_5_internal_slice_internal62"
+  bottom: "conv6_5_internal_slice_internal63"
+  bottom: "conv6_5_internal_slice_internal64"
+  bottom: "conv6_5_internal_slice_internal65"
+  bottom: "conv6_5_internal_slice_internal66"
+  bottom: "conv6_5_internal_slice_internal67"
+  bottom: "conv6_5_internal_slice_internal68"
+  bottom: "conv6_5_internal_slice_internal69"
+  bottom: "conv6_5_internal_slice_internal70"
+  bottom: "conv6_5_internal_slice_internal71"
+  bottom: "conv6_5_internal_slice_internal72"
+  bottom: "conv6_5_internal_slice_internal73"
+  bottom: "conv6_5_internal_slice_internal74"
+  bottom: "conv6_5_internal_slice_internal75"
+  bottom: "conv6_5_internal_slice_internal76"
+  bottom: "conv6_5_internal_slice_internal77"
+  bottom: "conv6_5_internal_slice_internal78"
+  bottom: "conv6_5_internal_slice_internal79"
+  bottom: "conv6_5_internal_slice_internal80"
+  bottom: "conv6_5_internal_slice_internal81"
+  bottom: "conv6_5_internal_slice_internal82"
+  bottom: "conv6_5_internal_slice_internal83"
+  bottom: "conv6_5_internal_slice_internal84"
+  bottom: "conv6_5_internal_slice_internal85"
+  bottom: "conv6_5_internal_slice_internal86"
+  bottom: "conv6_5_internal_slice_internal87"
+  bottom: "conv6_5_internal_slice_internal88"
+  bottom: "conv6_5_internal_slice_internal89"
+  bottom: "conv6_5_internal_slice_internal90"
+  bottom: "conv6_5_internal_slice_internal91"
+  bottom: "conv6_5_internal_slice_internal92"
+  bottom: "conv6_5_internal_slice_internal93"
+  bottom: "conv6_5_internal_slice_internal94"
+  bottom: "conv6_5_internal_slice_internal95"
+  bottom: "conv6_5_internal_slice_internal96"
+  bottom: "conv6_5_internal_slice_internal97"
+  bottom: "conv6_5_internal_slice_internal98"
+  bottom: "conv6_5_internal_slice_internal99"
+  bottom: "conv6_5_internal_slice_internal100"
+  bottom: "conv6_5_internal_slice_internal101"
+  bottom: "conv6_5_internal_slice_internal102"
+  bottom: "conv6_5_internal_slice_internal103"
+  bottom: "conv6_5_internal_slice_internal104"
+  bottom: "conv6_5_internal_slice_internal105"
+  bottom: "conv6_5_internal_slice_internal106"
+  bottom: "conv6_5_internal_slice_internal107"
+  bottom: "conv6_5_internal_slice_internal108"
+  bottom: "conv6_5_internal_slice_internal109"
+  bottom: "conv6_5_internal_slice_internal110"
+  bottom: "conv6_5_internal_slice_internal111"
+  bottom: "conv6_5_internal_slice_internal112"
+  bottom: "conv6_5_internal_slice_internal113"
+  bottom: "conv6_5_internal_slice_internal114"
+  bottom: "conv6_5_internal_slice_internal115"
+  bottom: "conv6_5_internal_slice_internal116"
+  bottom: "conv6_5_internal_slice_internal117"
+  bottom: "conv6_5_internal_slice_internal118"
+  bottom: "conv6_5_internal_slice_internal119"
+  bottom: "conv6_5_internal_slice_internal120"
+  bottom: "conv6_5_internal_slice_internal121"
+  bottom: "conv6_5_internal_slice_internal122"
+  bottom: "conv6_5_internal_slice_internal123"
+  bottom: "conv6_5_internal_slice_internal124"
+  bottom: "conv6_5_internal_slice_internal125"
+  bottom: "conv6_5_internal_slice_internal126"
+  bottom: "conv6_5_internal_slice_internal127"
+  bottom: "conv6_5_internal_slice_internal128"
+  top: "conv6_5_internal_slice1"
+  concat_param { axis: 1 }
+}
+layer {
+  name: "conv6_5_internal_slice_internal_concat2"
+  type: "Concat"
+  bottom: "conv6_5_internal_slice_internal129"
+  bottom: "conv6_5_internal_slice_internal130"
+  bottom: "conv6_5_internal_slice_internal131"
+  bottom: "conv6_5_internal_slice_internal132"
+  bottom: "conv6_5_internal_slice_internal133"
+  bottom: "conv6_5_internal_slice_internal134"
+  bottom: "conv6_5_internal_slice_internal135"
+  bottom: "conv6_5_internal_slice_internal136"
+  bottom: "conv6_5_internal_slice_internal137"
+  bottom: "conv6_5_internal_slice_internal138"
+  bottom: "conv6_5_internal_slice_internal139"
+  bottom: "conv6_5_internal_slice_internal140"
+  bottom: "conv6_5_internal_slice_internal141"
+  bottom: "conv6_5_internal_slice_internal142"
+  bottom: "conv6_5_internal_slice_internal143"
+  bottom: "conv6_5_internal_slice_internal144"
+  bottom: "conv6_5_internal_slice_internal145"
+  bottom: "conv6_5_internal_slice_internal146"
+  bottom: "conv6_5_internal_slice_internal147"
+  bottom: "conv6_5_internal_slice_internal148"
+  bottom: "conv6_5_internal_slice_internal149"
+  bottom: "conv6_5_internal_slice_internal150"
+  bottom: "conv6_5_internal_slice_internal151"
+  bottom: "conv6_5_internal_slice_internal152"
+  bottom: "conv6_5_internal_slice_internal153"
+  bottom: "conv6_5_internal_slice_internal154"
+  bottom: "conv6_5_internal_slice_internal155"
+  bottom: "conv6_5_internal_slice_internal156"
+  bottom: "conv6_5_internal_slice_internal157"
+  bottom: "conv6_5_internal_slice_internal158"
+  bottom: "conv6_5_internal_slice_internal159"
+  bottom: "conv6_5_internal_slice_internal160"
+  bottom: "conv6_5_internal_slice_internal161"
+  bottom: "conv6_5_internal_slice_internal162"
+  bottom: "conv6_5_internal_slice_internal163"
+  bottom: "conv6_5_internal_slice_internal164"
+  bottom: "conv6_5_internal_slice_internal165"
+  bottom: "conv6_5_internal_slice_internal166"
+  bottom: "conv6_5_internal_slice_internal167"
+  bottom: "conv6_5_internal_slice_internal168"
+  bottom: "conv6_5_internal_slice_internal169"
+  bottom: "conv6_5_internal_slice_internal170"
+  bottom: "conv6_5_internal_slice_internal171"
+  bottom: "conv6_5_internal_slice_internal172"
+  bottom: "conv6_5_internal_slice_internal173"
+  bottom: "conv6_5_internal_slice_internal174"
+  bottom: "conv6_5_internal_slice_internal175"
+  bottom: "conv6_5_internal_slice_internal176"
+  bottom: "conv6_5_internal_slice_internal177"
+  bottom: "conv6_5_internal_slice_internal178"
+  bottom: "conv6_5_internal_slice_internal179"
+  bottom: "conv6_5_internal_slice_internal180"
+  bottom: "conv6_5_internal_slice_internal181"
+  bottom: "conv6_5_internal_slice_internal182"
+  bottom: "conv6_5_internal_slice_internal183"
+  bottom: "conv6_5_internal_slice_internal184"
+  bottom: "conv6_5_internal_slice_internal185"
+  bottom: "conv6_5_internal_slice_internal186"
+  bottom: "conv6_5_internal_slice_internal187"
+  bottom: "conv6_5_internal_slice_internal188"
+  bottom: "conv6_5_internal_slice_internal189"
+  bottom: "conv6_5_internal_slice_internal190"
+  bottom: "conv6_5_internal_slice_internal191"
+  bottom: "conv6_5_internal_slice_internal192"
+  bottom: "conv6_5_internal_slice_internal193"
+  bottom: "conv6_5_internal_slice_internal194"
+  bottom: "conv6_5_internal_slice_internal195"
+  bottom: "conv6_5_internal_slice_internal196"
+  bottom: "conv6_5_internal_slice_internal197"
+  bottom: "conv6_5_internal_slice_internal198"
+  bottom: "conv6_5_internal_slice_internal199"
+  bottom: "conv6_5_internal_slice_internal200"
+  bottom: "conv6_5_internal_slice_internal201"
+  bottom: "conv6_5_internal_slice_internal202"
+  bottom: "conv6_5_internal_slice_internal203"
+  bottom: "conv6_5_internal_slice_internal204"
+  bottom: "conv6_5_internal_slice_internal205"
+  bottom: "conv6_5_internal_slice_internal206"
+  bottom: "conv6_5_internal_slice_internal207"
+  bottom: "conv6_5_internal_slice_internal208"
+  bottom: "conv6_5_internal_slice_internal209"
+  bottom: "conv6_5_internal_slice_internal210"
+  bottom: "conv6_5_internal_slice_internal211"
+  bottom: "conv6_5_internal_slice_internal212"
+  bottom: "conv6_5_internal_slice_internal213"
+  bottom: "conv6_5_internal_slice_internal214"
+  bottom: "conv6_5_internal_slice_internal215"
+  bottom: "conv6_5_internal_slice_internal216"
+  bottom: "conv6_5_internal_slice_internal217"
+  bottom: "conv6_5_internal_slice_internal218"
+  bottom: "conv6_5_internal_slice_internal219"
+  bottom: "conv6_5_internal_slice_internal220"
+  bottom: "conv6_5_internal_slice_internal221"
+  bottom: "conv6_5_internal_slice_internal222"
+  bottom: "conv6_5_internal_slice_internal223"
+  bottom: "conv6_5_internal_slice_internal224"
+  bottom: "conv6_5_internal_slice_internal225"
+  bottom: "conv6_5_internal_slice_internal226"
+  bottom: "conv6_5_internal_slice_internal227"
+  bottom: "conv6_5_internal_slice_internal228"
+  bottom: "conv6_5_internal_slice_internal229"
+  bottom: "conv6_5_internal_slice_internal230"
+  bottom: "conv6_5_internal_slice_internal231"
+  bottom: "conv6_5_internal_slice_internal232"
+  bottom: "conv6_5_internal_slice_internal233"
+  bottom: "conv6_5_internal_slice_internal234"
+  bottom: "conv6_5_internal_slice_internal235"
+  bottom: "conv6_5_internal_slice_internal236"
+  bottom: "conv6_5_internal_slice_internal237"
+  bottom: "conv6_5_internal_slice_internal238"
+  bottom: "conv6_5_internal_slice_internal239"
+  bottom: "conv6_5_internal_slice_internal240"
+  bottom: "conv6_5_internal_slice_internal241"
+  bottom: "conv6_5_internal_slice_internal242"
+  bottom: "conv6_5_internal_slice_internal243"
+  bottom: "conv6_5_internal_slice_internal244"
+  bottom: "conv6_5_internal_slice_internal245"
+  bottom: "conv6_5_internal_slice_internal246"
+  bottom: "conv6_5_internal_slice_internal247"
+  bottom: "conv6_5_internal_slice_internal248"
+  bottom: "conv6_5_internal_slice_internal249"
+  bottom: "conv6_5_internal_slice_internal250"
+  bottom: "conv6_5_internal_slice_internal251"
+  bottom: "conv6_5_internal_slice_internal252"
+  bottom: "conv6_5_internal_slice_internal253"
+  bottom: "conv6_5_internal_slice_internal254"
+  bottom: "conv6_5_internal_slice_internal255"
+  bottom: "conv6_5_internal_slice_internal256"
+  top: "conv6_5_internal_slice2"
+  concat_param { axis: 1 }
+}
+layer {
+  name: "conv6_5_internal_conv1"
+  type: "Convolution"
+  bottom: "conv6_5_internal_slice1"
+  top: "conv6_5_internal_conv1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  convolution_param {
+    engine: CAFFE
+    group: 1
+    num_output: 256
+    bias_term: false
+    pad: 1
+    kernel_size: 3
+    dilation: 1
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+  }
+}
+layer {
+  name: "conv6_5_internal_conv2"
+  type: "Convolution"
+  bottom: "conv6_5_internal_slice2"
+  top: "conv6_5_internal_conv2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  convolution_param {
+    engine: CAFFE
+    group: 1
+    num_output: 256
+    bias_term: false
+    pad: 1
+    kernel_size: 3
+    dilation: 1
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+  }
+}
+layer {
+  name: "conv6_5_internal_concat"
+  type: "Concat"
+  bottom: "conv6_5_internal_conv1"
+  bottom: "conv6_5_internal_conv2"
+  top: "conv6_5"
+  concat_param {
+    axis: 1
+  }
+}
+###########################################
+
+layer {
+  name: "conv6_5_bn"
+  type: "BatchNorm"
+  bottom: "conv6_5"
+  top: "conv6_5"
+  batch_norm_param {
+    eps: 1e-06
+  }
+}
+layer {
+  name: "conv6_5_scale"
+  type: "Scale"
+  bottom: "conv6_5"
+  top: "conv6_5"
+  scale_param {
+    filler {
+      type: "constant"
+      value: 1
+    }
+    bias_term: true
+  }
+}
+layer {
+  name: "conv6_5_relu"
+  type: "ReLU"
+  bottom: "conv6_5"
+  top: "conv6_5"
+  relu_param {
+    negative_slope: 0.0
+  }
+}
+
+###########################################
+layer {
+  name: "conv7_1_internal_slice_internal_slice"
+  type: "Slice"
+  bottom: "conv6_5"
+  top: "conv7_1_internal_slice_internal1"
+  top: "conv7_1_internal_slice_internal2"
+  top: "conv7_1_internal_slice_internal3"
+  top: "conv7_1_internal_slice_internal4"
+  top: "conv7_1_internal_slice_internal5"
+  top: "conv7_1_internal_slice_internal6"
+  top: "conv7_1_internal_slice_internal7"
+  top: "conv7_1_internal_slice_internal8"
+  top: "conv7_1_internal_slice_internal9"
+  top: "conv7_1_internal_slice_internal10"
+  top: "conv7_1_internal_slice_internal11"
+  top: "conv7_1_internal_slice_internal12"
+  top: "conv7_1_internal_slice_internal13"
+  top: "conv7_1_internal_slice_internal14"
+  top: "conv7_1_internal_slice_internal15"
+  top: "conv7_1_internal_slice_internal16"
+  top: "conv7_1_internal_slice_internal17"
+  top: "conv7_1_internal_slice_internal18"
+  top: "conv7_1_internal_slice_internal19"
+  top: "conv7_1_internal_slice_internal20"
+  top: "conv7_1_internal_slice_internal21"
+  top: "conv7_1_internal_slice_internal22"
+  top: "conv7_1_internal_slice_internal23"
+  top: "conv7_1_internal_slice_internal24"
+  top: "conv7_1_internal_slice_internal25"
+  top: "conv7_1_internal_slice_internal26"
+  top: "conv7_1_internal_slice_internal27"
+  top: "conv7_1_internal_slice_internal28"
+  top: "conv7_1_internal_slice_internal29"
+  top: "conv7_1_internal_slice_internal30"
+  top: "conv7_1_internal_slice_internal31"
+  top: "conv7_1_internal_slice_internal32"
+  top: "conv7_1_internal_slice_internal33"
+  top: "conv7_1_internal_slice_internal34"
+  top: "conv7_1_internal_slice_internal35"
+  top: "conv7_1_internal_slice_internal36"
+  top: "conv7_1_internal_slice_internal37"
+  top: "conv7_1_internal_slice_internal38"
+  top: "conv7_1_internal_slice_internal39"
+  top: "conv7_1_internal_slice_internal40"
+  top: "conv7_1_internal_slice_internal41"
+  top: "conv7_1_internal_slice_internal42"
+  top: "conv7_1_internal_slice_internal43"
+  top: "conv7_1_internal_slice_internal44"
+  top: "conv7_1_internal_slice_internal45"
+  top: "conv7_1_internal_slice_internal46"
+  top: "conv7_1_internal_slice_internal47"
+  top: "conv7_1_internal_slice_internal48"
+  top: "conv7_1_internal_slice_internal49"
+  top: "conv7_1_internal_slice_internal50"
+  top: "conv7_1_internal_slice_internal51"
+  top: "conv7_1_internal_slice_internal52"
+  top: "conv7_1_internal_slice_internal53"
+  top: "conv7_1_internal_slice_internal54"
+  top: "conv7_1_internal_slice_internal55"
+  top: "conv7_1_internal_slice_internal56"
+  top: "conv7_1_internal_slice_internal57"
+  top: "conv7_1_internal_slice_internal58"
+  top: "conv7_1_internal_slice_internal59"
+  top: "conv7_1_internal_slice_internal60"
+  top: "conv7_1_internal_slice_internal61"
+  top: "conv7_1_internal_slice_internal62"
+  top: "conv7_1_internal_slice_internal63"
+  top: "conv7_1_internal_slice_internal64"
+  top: "conv7_1_internal_slice_internal65"
+  top: "conv7_1_internal_slice_internal66"
+  top: "conv7_1_internal_slice_internal67"
+  top: "conv7_1_internal_slice_internal68"
+  top: "conv7_1_internal_slice_internal69"
+  top: "conv7_1_internal_slice_internal70"
+  top: "conv7_1_internal_slice_internal71"
+  top: "conv7_1_internal_slice_internal72"
+  top: "conv7_1_internal_slice_internal73"
+  top: "conv7_1_internal_slice_internal74"
+  top: "conv7_1_internal_slice_internal75"
+  top: "conv7_1_internal_slice_internal76"
+  top: "conv7_1_internal_slice_internal77"
+  top: "conv7_1_internal_slice_internal78"
+  top: "conv7_1_internal_slice_internal79"
+  top: "conv7_1_internal_slice_internal80"
+  top: "conv7_1_internal_slice_internal81"
+  top: "conv7_1_internal_slice_internal82"
+  top: "conv7_1_internal_slice_internal83"
+  top: "conv7_1_internal_slice_internal84"
+  top: "conv7_1_internal_slice_internal85"
+  top: "conv7_1_internal_slice_internal86"
+  top: "conv7_1_internal_slice_internal87"
+  top: "conv7_1_internal_slice_internal88"
+  top: "conv7_1_internal_slice_internal89"
+  top: "conv7_1_internal_slice_internal90"
+  top: "conv7_1_internal_slice_internal91"
+  top: "conv7_1_internal_slice_internal92"
+  top: "conv7_1_internal_slice_internal93"
+  top: "conv7_1_internal_slice_internal94"
+  top: "conv7_1_internal_slice_internal95"
+  top: "conv7_1_internal_slice_internal96"
+  top: "conv7_1_internal_slice_internal97"
+  top: "conv7_1_internal_slice_internal98"
+  top: "conv7_1_internal_slice_internal99"
+  top: "conv7_1_internal_slice_internal100"
+  top: "conv7_1_internal_slice_internal101"
+  top: "conv7_1_internal_slice_internal102"
+  top: "conv7_1_internal_slice_internal103"
+  top: "conv7_1_internal_slice_internal104"
+  top: "conv7_1_internal_slice_internal105"
+  top: "conv7_1_internal_slice_internal106"
+  top: "conv7_1_internal_slice_internal107"
+  top: "conv7_1_internal_slice_internal108"
+  top: "conv7_1_internal_slice_internal109"
+  top: "conv7_1_internal_slice_internal110"
+  top: "conv7_1_internal_slice_internal111"
+  top: "conv7_1_internal_slice_internal112"
+  top: "conv7_1_internal_slice_internal113"
+  top: "conv7_1_internal_slice_internal114"
+  top: "conv7_1_internal_slice_internal115"
+  top: "conv7_1_internal_slice_internal116"
+  top: "conv7_1_internal_slice_internal117"
+  top: "conv7_1_internal_slice_internal118"
+  top: "conv7_1_internal_slice_internal119"
+  top: "conv7_1_internal_slice_internal120"
+  top: "conv7_1_internal_slice_internal121"
+  top: "conv7_1_internal_slice_internal122"
+  top: "conv7_1_internal_slice_internal123"
+  top: "conv7_1_internal_slice_internal124"
+  top: "conv7_1_internal_slice_internal125"
+  top: "conv7_1_internal_slice_internal126"
+  top: "conv7_1_internal_slice_internal127"
+  top: "conv7_1_internal_slice_internal128"
+  top: "conv7_1_internal_slice_internal129"
+  top: "conv7_1_internal_slice_internal130"
+  top: "conv7_1_internal_slice_internal131"
+  top: "conv7_1_internal_slice_internal132"
+  top: "conv7_1_internal_slice_internal133"
+  top: "conv7_1_internal_slice_internal134"
+  top: "conv7_1_internal_slice_internal135"
+  top: "conv7_1_internal_slice_internal136"
+  top: "conv7_1_internal_slice_internal137"
+  top: "conv7_1_internal_slice_internal138"
+  top: "conv7_1_internal_slice_internal139"
+  top: "conv7_1_internal_slice_internal140"
+  top: "conv7_1_internal_slice_internal141"
+  top: "conv7_1_internal_slice_internal142"
+  top: "conv7_1_internal_slice_internal143"
+  top: "conv7_1_internal_slice_internal144"
+  top: "conv7_1_internal_slice_internal145"
+  top: "conv7_1_internal_slice_internal146"
+  top: "conv7_1_internal_slice_internal147"
+  top: "conv7_1_internal_slice_internal148"
+  top: "conv7_1_internal_slice_internal149"
+  top: "conv7_1_internal_slice_internal150"
+  top: "conv7_1_internal_slice_internal151"
+  top: "conv7_1_internal_slice_internal152"
+  top: "conv7_1_internal_slice_internal153"
+  top: "conv7_1_internal_slice_internal154"
+  top: "conv7_1_internal_slice_internal155"
+  top: "conv7_1_internal_slice_internal156"
+  top: "conv7_1_internal_slice_internal157"
+  top: "conv7_1_internal_slice_internal158"
+  top: "conv7_1_internal_slice_internal159"
+  top: "conv7_1_internal_slice_internal160"
+  top: "conv7_1_internal_slice_internal161"
+  top: "conv7_1_internal_slice_internal162"
+  top: "conv7_1_internal_slice_internal163"
+  top: "conv7_1_internal_slice_internal164"
+  top: "conv7_1_internal_slice_internal165"
+  top: "conv7_1_internal_slice_internal166"
+  top: "conv7_1_internal_slice_internal167"
+  top: "conv7_1_internal_slice_internal168"
+  top: "conv7_1_internal_slice_internal169"
+  top: "conv7_1_internal_slice_internal170"
+  top: "conv7_1_internal_slice_internal171"
+  top: "conv7_1_internal_slice_internal172"
+  top: "conv7_1_internal_slice_internal173"
+  top: "conv7_1_internal_slice_internal174"
+  top: "conv7_1_internal_slice_internal175"
+  top: "conv7_1_internal_slice_internal176"
+  top: "conv7_1_internal_slice_internal177"
+  top: "conv7_1_internal_slice_internal178"
+  top: "conv7_1_internal_slice_internal179"
+  top: "conv7_1_internal_slice_internal180"
+  top: "conv7_1_internal_slice_internal181"
+  top: "conv7_1_internal_slice_internal182"
+  top: "conv7_1_internal_slice_internal183"
+  top: "conv7_1_internal_slice_internal184"
+  top: "conv7_1_internal_slice_internal185"
+  top: "conv7_1_internal_slice_internal186"
+  top: "conv7_1_internal_slice_internal187"
+  top: "conv7_1_internal_slice_internal188"
+  top: "conv7_1_internal_slice_internal189"
+  top: "conv7_1_internal_slice_internal190"
+  top: "conv7_1_internal_slice_internal191"
+  top: "conv7_1_internal_slice_internal192"
+  top: "conv7_1_internal_slice_internal193"
+  top: "conv7_1_internal_slice_internal194"
+  top: "conv7_1_internal_slice_internal195"
+  top: "conv7_1_internal_slice_internal196"
+  top: "conv7_1_internal_slice_internal197"
+  top: "conv7_1_internal_slice_internal198"
+  top: "conv7_1_internal_slice_internal199"
+  top: "conv7_1_internal_slice_internal200"
+  top: "conv7_1_internal_slice_internal201"
+  top: "conv7_1_internal_slice_internal202"
+  top: "conv7_1_internal_slice_internal203"
+  top: "conv7_1_internal_slice_internal204"
+  top: "conv7_1_internal_slice_internal205"
+  top: "conv7_1_internal_slice_internal206"
+  top: "conv7_1_internal_slice_internal207"
+  top: "conv7_1_internal_slice_internal208"
+  top: "conv7_1_internal_slice_internal209"
+  top: "conv7_1_internal_slice_internal210"
+  top: "conv7_1_internal_slice_internal211"
+  top: "conv7_1_internal_slice_internal212"
+  top: "conv7_1_internal_slice_internal213"
+  top: "conv7_1_internal_slice_internal214"
+  top: "conv7_1_internal_slice_internal215"
+  top: "conv7_1_internal_slice_internal216"
+  top: "conv7_1_internal_slice_internal217"
+  top: "conv7_1_internal_slice_internal218"
+  top: "conv7_1_internal_slice_internal219"
+  top: "conv7_1_internal_slice_internal220"
+  top: "conv7_1_internal_slice_internal221"
+  top: "conv7_1_internal_slice_internal222"
+  top: "conv7_1_internal_slice_internal223"
+  top: "conv7_1_internal_slice_internal224"
+  top: "conv7_1_internal_slice_internal225"
+  top: "conv7_1_internal_slice_internal226"
+  top: "conv7_1_internal_slice_internal227"
+  top: "conv7_1_internal_slice_internal228"
+  top: "conv7_1_internal_slice_internal229"
+  top: "conv7_1_internal_slice_internal230"
+  top: "conv7_1_internal_slice_internal231"
+  top: "conv7_1_internal_slice_internal232"
+  top: "conv7_1_internal_slice_internal233"
+  top: "conv7_1_internal_slice_internal234"
+  top: "conv7_1_internal_slice_internal235"
+  top: "conv7_1_internal_slice_internal236"
+  top: "conv7_1_internal_slice_internal237"
+  top: "conv7_1_internal_slice_internal238"
+  top: "conv7_1_internal_slice_internal239"
+  top: "conv7_1_internal_slice_internal240"
+  top: "conv7_1_internal_slice_internal241"
+  top: "conv7_1_internal_slice_internal242"
+  top: "conv7_1_internal_slice_internal243"
+  top: "conv7_1_internal_slice_internal244"
+  top: "conv7_1_internal_slice_internal245"
+  top: "conv7_1_internal_slice_internal246"
+  top: "conv7_1_internal_slice_internal247"
+  top: "conv7_1_internal_slice_internal248"
+  top: "conv7_1_internal_slice_internal249"
+  top: "conv7_1_internal_slice_internal250"
+  top: "conv7_1_internal_slice_internal251"
+  top: "conv7_1_internal_slice_internal252"
+  top: "conv7_1_internal_slice_internal253"
+  top: "conv7_1_internal_slice_internal254"
+  top: "conv7_1_internal_slice_internal255"
+  top: "conv7_1_internal_slice_internal256"
+  top: "conv7_1_internal_slice_internal257"
+  top: "conv7_1_internal_slice_internal258"
+  top: "conv7_1_internal_slice_internal259"
+  top: "conv7_1_internal_slice_internal260"
+  top: "conv7_1_internal_slice_internal261"
+  top: "conv7_1_internal_slice_internal262"
+  top: "conv7_1_internal_slice_internal263"
+  top: "conv7_1_internal_slice_internal264"
+  top: "conv7_1_internal_slice_internal265"
+  top: "conv7_1_internal_slice_internal266"
+  top: "conv7_1_internal_slice_internal267"
+  top: "conv7_1_internal_slice_internal268"
+  top: "conv7_1_internal_slice_internal269"
+  top: "conv7_1_internal_slice_internal270"
+  top: "conv7_1_internal_slice_internal271"
+  top: "conv7_1_internal_slice_internal272"
+  top: "conv7_1_internal_slice_internal273"
+  top: "conv7_1_internal_slice_internal274"
+  top: "conv7_1_internal_slice_internal275"
+  top: "conv7_1_internal_slice_internal276"
+  top: "conv7_1_internal_slice_internal277"
+  top: "conv7_1_internal_slice_internal278"
+  top: "conv7_1_internal_slice_internal279"
+  top: "conv7_1_internal_slice_internal280"
+  top: "conv7_1_internal_slice_internal281"
+  top: "conv7_1_internal_slice_internal282"
+  top: "conv7_1_internal_slice_internal283"
+  top: "conv7_1_internal_slice_internal284"
+  top: "conv7_1_internal_slice_internal285"
+  top: "conv7_1_internal_slice_internal286"
+  top: "conv7_1_internal_slice_internal287"
+  top: "conv7_1_internal_slice_internal288"
+  top: "conv7_1_internal_slice_internal289"
+  top: "conv7_1_internal_slice_internal290"
+  top: "conv7_1_internal_slice_internal291"
+  top: "conv7_1_internal_slice_internal292"
+  top: "conv7_1_internal_slice_internal293"
+  top: "conv7_1_internal_slice_internal294"
+  top: "conv7_1_internal_slice_internal295"
+  top: "conv7_1_internal_slice_internal296"
+  top: "conv7_1_internal_slice_internal297"
+  top: "conv7_1_internal_slice_internal298"
+  top: "conv7_1_internal_slice_internal299"
+  top: "conv7_1_internal_slice_internal300"
+  top: "conv7_1_internal_slice_internal301"
+  top: "conv7_1_internal_slice_internal302"
+  top: "conv7_1_internal_slice_internal303"
+  top: "conv7_1_internal_slice_internal304"
+  top: "conv7_1_internal_slice_internal305"
+  top: "conv7_1_internal_slice_internal306"
+  top: "conv7_1_internal_slice_internal307"
+  top: "conv7_1_internal_slice_internal308"
+  top: "conv7_1_internal_slice_internal309"
+  top: "conv7_1_internal_slice_internal310"
+  top: "conv7_1_internal_slice_internal311"
+  top: "conv7_1_internal_slice_internal312"
+  top: "conv7_1_internal_slice_internal313"
+  top: "conv7_1_internal_slice_internal314"
+  top: "conv7_1_internal_slice_internal315"
+  top: "conv7_1_internal_slice_internal316"
+  top: "conv7_1_internal_slice_internal317"
+  top: "conv7_1_internal_slice_internal318"
+  top: "conv7_1_internal_slice_internal319"
+  top: "conv7_1_internal_slice_internal320"
+  top: "conv7_1_internal_slice_internal321"
+  top: "conv7_1_internal_slice_internal322"
+  top: "conv7_1_internal_slice_internal323"
+  top: "conv7_1_internal_slice_internal324"
+  top: "conv7_1_internal_slice_internal325"
+  top: "conv7_1_internal_slice_internal326"
+  top: "conv7_1_internal_slice_internal327"
+  top: "conv7_1_internal_slice_internal328"
+  top: "conv7_1_internal_slice_internal329"
+  top: "conv7_1_internal_slice_internal330"
+  top: "conv7_1_internal_slice_internal331"
+  top: "conv7_1_internal_slice_internal332"
+  top: "conv7_1_internal_slice_internal333"
+  top: "conv7_1_internal_slice_internal334"
+  top: "conv7_1_internal_slice_internal335"
+  top: "conv7_1_internal_slice_internal336"
+  top: "conv7_1_internal_slice_internal337"
+  top: "conv7_1_internal_slice_internal338"
+  top: "conv7_1_internal_slice_internal339"
+  top: "conv7_1_internal_slice_internal340"
+  top: "conv7_1_internal_slice_internal341"
+  top: "conv7_1_internal_slice_internal342"
+  top: "conv7_1_internal_slice_internal343"
+  top: "conv7_1_internal_slice_internal344"
+  top: "conv7_1_internal_slice_internal345"
+  top: "conv7_1_internal_slice_internal346"
+  top: "conv7_1_internal_slice_internal347"
+  top: "conv7_1_internal_slice_internal348"
+  top: "conv7_1_internal_slice_internal349"
+  top: "conv7_1_internal_slice_internal350"
+  top: "conv7_1_internal_slice_internal351"
+  top: "conv7_1_internal_slice_internal352"
+  top: "conv7_1_internal_slice_internal353"
+  top: "conv7_1_internal_slice_internal354"
+  top: "conv7_1_internal_slice_internal355"
+  top: "conv7_1_internal_slice_internal356"
+  top: "conv7_1_internal_slice_internal357"
+  top: "conv7_1_internal_slice_internal358"
+  top: "conv7_1_internal_slice_internal359"
+  top: "conv7_1_internal_slice_internal360"
+  top: "conv7_1_internal_slice_internal361"
+  top: "conv7_1_internal_slice_internal362"
+  top: "conv7_1_internal_slice_internal363"
+  top: "conv7_1_internal_slice_internal364"
+  top: "conv7_1_internal_slice_internal365"
+  top: "conv7_1_internal_slice_internal366"
+  top: "conv7_1_internal_slice_internal367"
+  top: "conv7_1_internal_slice_internal368"
+  top: "conv7_1_internal_slice_internal369"
+  top: "conv7_1_internal_slice_internal370"
+  top: "conv7_1_internal_slice_internal371"
+  top: "conv7_1_internal_slice_internal372"
+  top: "conv7_1_internal_slice_internal373"
+  top: "conv7_1_internal_slice_internal374"
+  top: "conv7_1_internal_slice_internal375"
+  top: "conv7_1_internal_slice_internal376"
+  top: "conv7_1_internal_slice_internal377"
+  top: "conv7_1_internal_slice_internal378"
+  top: "conv7_1_internal_slice_internal379"
+  top: "conv7_1_internal_slice_internal380"
+  top: "conv7_1_internal_slice_internal381"
+  top: "conv7_1_internal_slice_internal382"
+  top: "conv7_1_internal_slice_internal383"
+  top: "conv7_1_internal_slice_internal384"
+  top: "conv7_1_internal_slice_internal385"
+  top: "conv7_1_internal_slice_internal386"
+  top: "conv7_1_internal_slice_internal387"
+  top: "conv7_1_internal_slice_internal388"
+  top: "conv7_1_internal_slice_internal389"
+  top: "conv7_1_internal_slice_internal390"
+  top: "conv7_1_internal_slice_internal391"
+  top: "conv7_1_internal_slice_internal392"
+  top: "conv7_1_internal_slice_internal393"
+  top: "conv7_1_internal_slice_internal394"
+  top: "conv7_1_internal_slice_internal395"
+  top: "conv7_1_internal_slice_internal396"
+  top: "conv7_1_internal_slice_internal397"
+  top: "conv7_1_internal_slice_internal398"
+  top: "conv7_1_internal_slice_internal399"
+  top: "conv7_1_internal_slice_internal400"
+  top: "conv7_1_internal_slice_internal401"
+  top: "conv7_1_internal_slice_internal402"
+  top: "conv7_1_internal_slice_internal403"
+  top: "conv7_1_internal_slice_internal404"
+  top: "conv7_1_internal_slice_internal405"
+  top: "conv7_1_internal_slice_internal406"
+  top: "conv7_1_internal_slice_internal407"
+  top: "conv7_1_internal_slice_internal408"
+  top: "conv7_1_internal_slice_internal409"
+  top: "conv7_1_internal_slice_internal410"
+  top: "conv7_1_internal_slice_internal411"
+  top: "conv7_1_internal_slice_internal412"
+  top: "conv7_1_internal_slice_internal413"
+  top: "conv7_1_internal_slice_internal414"
+  top: "conv7_1_internal_slice_internal415"
+  top: "conv7_1_internal_slice_internal416"
+  top: "conv7_1_internal_slice_internal417"
+  top: "conv7_1_internal_slice_internal418"
+  top: "conv7_1_internal_slice_internal419"
+  top: "conv7_1_internal_slice_internal420"
+  top: "conv7_1_internal_slice_internal421"
+  top: "conv7_1_internal_slice_internal422"
+  top: "conv7_1_internal_slice_internal423"
+  top: "conv7_1_internal_slice_internal424"
+  top: "conv7_1_internal_slice_internal425"
+  top: "conv7_1_internal_slice_internal426"
+  top: "conv7_1_internal_slice_internal427"
+  top: "conv7_1_internal_slice_internal428"
+  top: "conv7_1_internal_slice_internal429"
+  top: "conv7_1_internal_slice_internal430"
+  top: "conv7_1_internal_slice_internal431"
+  top: "conv7_1_internal_slice_internal432"
+  top: "conv7_1_internal_slice_internal433"
+  top: "conv7_1_internal_slice_internal434"
+  top: "conv7_1_internal_slice_internal435"
+  top: "conv7_1_internal_slice_internal436"
+  top: "conv7_1_internal_slice_internal437"
+  top: "conv7_1_internal_slice_internal438"
+  top: "conv7_1_internal_slice_internal439"
+  top: "conv7_1_internal_slice_internal440"
+  top: "conv7_1_internal_slice_internal441"
+  top: "conv7_1_internal_slice_internal442"
+  top: "conv7_1_internal_slice_internal443"
+  top: "conv7_1_internal_slice_internal444"
+  top: "conv7_1_internal_slice_internal445"
+  top: "conv7_1_internal_slice_internal446"
+  top: "conv7_1_internal_slice_internal447"
+  top: "conv7_1_internal_slice_internal448"
+  top: "conv7_1_internal_slice_internal449"
+  top: "conv7_1_internal_slice_internal450"
+  top: "conv7_1_internal_slice_internal451"
+  top: "conv7_1_internal_slice_internal452"
+  top: "conv7_1_internal_slice_internal453"
+  top: "conv7_1_internal_slice_internal454"
+  top: "conv7_1_internal_slice_internal455"
+  top: "conv7_1_internal_slice_internal456"
+  top: "conv7_1_internal_slice_internal457"
+  top: "conv7_1_internal_slice_internal458"
+  top: "conv7_1_internal_slice_internal459"
+  top: "conv7_1_internal_slice_internal460"
+  top: "conv7_1_internal_slice_internal461"
+  top: "conv7_1_internal_slice_internal462"
+  top: "conv7_1_internal_slice_internal463"
+  top: "conv7_1_internal_slice_internal464"
+  top: "conv7_1_internal_slice_internal465"
+  top: "conv7_1_internal_slice_internal466"
+  top: "conv7_1_internal_slice_internal467"
+  top: "conv7_1_internal_slice_internal468"
+  top: "conv7_1_internal_slice_internal469"
+  top: "conv7_1_internal_slice_internal470"
+  top: "conv7_1_internal_slice_internal471"
+  top: "conv7_1_internal_slice_internal472"
+  top: "conv7_1_internal_slice_internal473"
+  top: "conv7_1_internal_slice_internal474"
+  top: "conv7_1_internal_slice_internal475"
+  top: "conv7_1_internal_slice_internal476"
+  top: "conv7_1_internal_slice_internal477"
+  top: "conv7_1_internal_slice_internal478"
+  top: "conv7_1_internal_slice_internal479"
+  top: "conv7_1_internal_slice_internal480"
+  top: "conv7_1_internal_slice_internal481"
+  top: "conv7_1_internal_slice_internal482"
+  top: "conv7_1_internal_slice_internal483"
+  top: "conv7_1_internal_slice_internal484"
+  top: "conv7_1_internal_slice_internal485"
+  top: "conv7_1_internal_slice_internal486"
+  top: "conv7_1_internal_slice_internal487"
+  top: "conv7_1_internal_slice_internal488"
+  top: "conv7_1_internal_slice_internal489"
+  top: "conv7_1_internal_slice_internal490"
+  top: "conv7_1_internal_slice_internal491"
+  top: "conv7_1_internal_slice_internal492"
+  top: "conv7_1_internal_slice_internal493"
+  top: "conv7_1_internal_slice_internal494"
+  top: "conv7_1_internal_slice_internal495"
+  top: "conv7_1_internal_slice_internal496"
+  top: "conv7_1_internal_slice_internal497"
+  top: "conv7_1_internal_slice_internal498"
+  top: "conv7_1_internal_slice_internal499"
+  top: "conv7_1_internal_slice_internal500"
+  top: "conv7_1_internal_slice_internal501"
+  top: "conv7_1_internal_slice_internal502"
+  top: "conv7_1_internal_slice_internal503"
+  top: "conv7_1_internal_slice_internal504"
+  top: "conv7_1_internal_slice_internal505"
+  top: "conv7_1_internal_slice_internal506"
+  top: "conv7_1_internal_slice_internal507"
+  top: "conv7_1_internal_slice_internal508"
+  top: "conv7_1_internal_slice_internal509"
+  top: "conv7_1_internal_slice_internal510"
+  top: "conv7_1_internal_slice_internal511"
+  top: "conv7_1_internal_slice_internal512"
+  slice_param { axis: 1 }
+}
+
+layer {
+  name: "conv7_1_internal_slice_internal_concat1"
+  type: "Concat"
+  bottom: "conv7_1_internal_slice_internal1"
+  bottom: "conv7_1_internal_slice_internal2"
+  bottom: "conv7_1_internal_slice_internal3"
+  bottom: "conv7_1_internal_slice_internal4"
+  bottom: "conv7_1_internal_slice_internal5"
+  bottom: "conv7_1_internal_slice_internal6"
+  bottom: "conv7_1_internal_slice_internal7"
+  bottom: "conv7_1_internal_slice_internal8"
+  bottom: "conv7_1_internal_slice_internal9"
+  bottom: "conv7_1_internal_slice_internal10"
+  bottom: "conv7_1_internal_slice_internal11"
+  bottom: "conv7_1_internal_slice_internal12"
+  bottom: "conv7_1_internal_slice_internal13"
+  bottom: "conv7_1_internal_slice_internal14"
+  bottom: "conv7_1_internal_slice_internal15"
+  bottom: "conv7_1_internal_slice_internal16"
+  bottom: "conv7_1_internal_slice_internal17"
+  bottom: "conv7_1_internal_slice_internal18"
+  bottom: "conv7_1_internal_slice_internal19"
+  bottom: "conv7_1_internal_slice_internal20"
+  bottom: "conv7_1_internal_slice_internal21"
+  bottom: "conv7_1_internal_slice_internal22"
+  bottom: "conv7_1_internal_slice_internal23"
+  bottom: "conv7_1_internal_slice_internal24"
+  bottom: "conv7_1_internal_slice_internal25"
+  bottom: "conv7_1_internal_slice_internal26"
+  bottom: "conv7_1_internal_slice_internal27"
+  bottom: "conv7_1_internal_slice_internal28"
+  bottom: "conv7_1_internal_slice_internal29"
+  bottom: "conv7_1_internal_slice_internal30"
+  bottom: "conv7_1_internal_slice_internal31"
+  bottom: "conv7_1_internal_slice_internal32"
+  bottom: "conv7_1_internal_slice_internal33"
+  bottom: "conv7_1_internal_slice_internal34"
+  bottom: "conv7_1_internal_slice_internal35"
+  bottom: "conv7_1_internal_slice_internal36"
+  bottom: "conv7_1_internal_slice_internal37"
+  bottom: "conv7_1_internal_slice_internal38"
+  bottom: "conv7_1_internal_slice_internal39"
+  bottom: "conv7_1_internal_slice_internal40"
+  bottom: "conv7_1_internal_slice_internal41"
+  bottom: "conv7_1_internal_slice_internal42"
+  bottom: "conv7_1_internal_slice_internal43"
+  bottom: "conv7_1_internal_slice_internal44"
+  bottom: "conv7_1_internal_slice_internal45"
+  bottom: "conv7_1_internal_slice_internal46"
+  bottom: "conv7_1_internal_slice_internal47"
+  bottom: "conv7_1_internal_slice_internal48"
+  bottom: "conv7_1_internal_slice_internal49"
+  bottom: "conv7_1_internal_slice_internal50"
+  bottom: "conv7_1_internal_slice_internal51"
+  bottom: "conv7_1_internal_slice_internal52"
+  bottom: "conv7_1_internal_slice_internal53"
+  bottom: "conv7_1_internal_slice_internal54"
+  bottom: "conv7_1_internal_slice_internal55"
+  bottom: "conv7_1_internal_slice_internal56"
+  bottom: "conv7_1_internal_slice_internal57"
+  bottom: "conv7_1_internal_slice_internal58"
+  bottom: "conv7_1_internal_slice_internal59"
+  bottom: "conv7_1_internal_slice_internal60"
+  bottom: "conv7_1_internal_slice_internal61"
+  bottom: "conv7_1_internal_slice_internal62"
+  bottom: "conv7_1_internal_slice_internal63"
+  bottom: "conv7_1_internal_slice_internal64"
+  bottom: "conv7_1_internal_slice_internal65"
+  bottom: "conv7_1_internal_slice_internal66"
+  bottom: "conv7_1_internal_slice_internal67"
+  bottom: "conv7_1_internal_slice_internal68"
+  bottom: "conv7_1_internal_slice_internal69"
+  bottom: "conv7_1_internal_slice_internal70"
+  bottom: "conv7_1_internal_slice_internal71"
+  bottom: "conv7_1_internal_slice_internal72"
+  bottom: "conv7_1_internal_slice_internal73"
+  bottom: "conv7_1_internal_slice_internal74"
+  bottom: "conv7_1_internal_slice_internal75"
+  bottom: "conv7_1_internal_slice_internal76"
+  bottom: "conv7_1_internal_slice_internal77"
+  bottom: "conv7_1_internal_slice_internal78"
+  bottom: "conv7_1_internal_slice_internal79"
+  bottom: "conv7_1_internal_slice_internal80"
+  bottom: "conv7_1_internal_slice_internal81"
+  bottom: "conv7_1_internal_slice_internal82"
+  bottom: "conv7_1_internal_slice_internal83"
+  bottom: "conv7_1_internal_slice_internal84"
+  bottom: "conv7_1_internal_slice_internal85"
+  bottom: "conv7_1_internal_slice_internal86"
+  bottom: "conv7_1_internal_slice_internal87"
+  bottom: "conv7_1_internal_slice_internal88"
+  bottom: "conv7_1_internal_slice_internal89"
+  bottom: "conv7_1_internal_slice_internal90"
+  bottom: "conv7_1_internal_slice_internal91"
+  bottom: "conv7_1_internal_slice_internal92"
+  bottom: "conv7_1_internal_slice_internal93"
+  bottom: "conv7_1_internal_slice_internal94"
+  bottom: "conv7_1_internal_slice_internal95"
+  bottom: "conv7_1_internal_slice_internal96"
+  bottom: "conv7_1_internal_slice_internal97"
+  bottom: "conv7_1_internal_slice_internal98"
+  bottom: "conv7_1_internal_slice_internal99"
+  bottom: "conv7_1_internal_slice_internal100"
+  bottom: "conv7_1_internal_slice_internal101"
+  bottom: "conv7_1_internal_slice_internal102"
+  bottom: "conv7_1_internal_slice_internal103"
+  bottom: "conv7_1_internal_slice_internal104"
+  bottom: "conv7_1_internal_slice_internal105"
+  bottom: "conv7_1_internal_slice_internal106"
+  bottom: "conv7_1_internal_slice_internal107"
+  bottom: "conv7_1_internal_slice_internal108"
+  bottom: "conv7_1_internal_slice_internal109"
+  bottom: "conv7_1_internal_slice_internal110"
+  bottom: "conv7_1_internal_slice_internal111"
+  bottom: "conv7_1_internal_slice_internal112"
+  bottom: "conv7_1_internal_slice_internal113"
+  bottom: "conv7_1_internal_slice_internal114"
+  bottom: "conv7_1_internal_slice_internal115"
+  bottom: "conv7_1_internal_slice_internal116"
+  bottom: "conv7_1_internal_slice_internal117"
+  bottom: "conv7_1_internal_slice_internal118"
+  bottom: "conv7_1_internal_slice_internal119"
+  bottom: "conv7_1_internal_slice_internal120"
+  bottom: "conv7_1_internal_slice_internal121"
+  bottom: "conv7_1_internal_slice_internal122"
+  bottom: "conv7_1_internal_slice_internal123"
+  bottom: "conv7_1_internal_slice_internal124"
+  bottom: "conv7_1_internal_slice_internal125"
+  bottom: "conv7_1_internal_slice_internal126"
+  bottom: "conv7_1_internal_slice_internal127"
+  bottom: "conv7_1_internal_slice_internal128"
+  top: "conv7_1_internal_slice1"
+  concat_param { axis: 1 }
+}
+layer {
+  name: "conv7_1_internal_slice_internal_concat2"
+  type: "Concat"
+  bottom: "conv7_1_internal_slice_internal129"
+  bottom: "conv7_1_internal_slice_internal130"
+  bottom: "conv7_1_internal_slice_internal131"
+  bottom: "conv7_1_internal_slice_internal132"
+  bottom: "conv7_1_internal_slice_internal133"
+  bottom: "conv7_1_internal_slice_internal134"
+  bottom: "conv7_1_internal_slice_internal135"
+  bottom: "conv7_1_internal_slice_internal136"
+  bottom: "conv7_1_internal_slice_internal137"
+  bottom: "conv7_1_internal_slice_internal138"
+  bottom: "conv7_1_internal_slice_internal139"
+  bottom: "conv7_1_internal_slice_internal140"
+  bottom: "conv7_1_internal_slice_internal141"
+  bottom: "conv7_1_internal_slice_internal142"
+  bottom: "conv7_1_internal_slice_internal143"
+  bottom: "conv7_1_internal_slice_internal144"
+  bottom: "conv7_1_internal_slice_internal145"
+  bottom: "conv7_1_internal_slice_internal146"
+  bottom: "conv7_1_internal_slice_internal147"
+  bottom: "conv7_1_internal_slice_internal148"
+  bottom: "conv7_1_internal_slice_internal149"
+  bottom: "conv7_1_internal_slice_internal150"
+  bottom: "conv7_1_internal_slice_internal151"
+  bottom: "conv7_1_internal_slice_internal152"
+  bottom: "conv7_1_internal_slice_internal153"
+  bottom: "conv7_1_internal_slice_internal154"
+  bottom: "conv7_1_internal_slice_internal155"
+  bottom: "conv7_1_internal_slice_internal156"
+  bottom: "conv7_1_internal_slice_internal157"
+  bottom: "conv7_1_internal_slice_internal158"
+  bottom: "conv7_1_internal_slice_internal159"
+  bottom: "conv7_1_internal_slice_internal160"
+  bottom: "conv7_1_internal_slice_internal161"
+  bottom: "conv7_1_internal_slice_internal162"
+  bottom: "conv7_1_internal_slice_internal163"
+  bottom: "conv7_1_internal_slice_internal164"
+  bottom: "conv7_1_internal_slice_internal165"
+  bottom: "conv7_1_internal_slice_internal166"
+  bottom: "conv7_1_internal_slice_internal167"
+  bottom: "conv7_1_internal_slice_internal168"
+  bottom: "conv7_1_internal_slice_internal169"
+  bottom: "conv7_1_internal_slice_internal170"
+  bottom: "conv7_1_internal_slice_internal171"
+  bottom: "conv7_1_internal_slice_internal172"
+  bottom: "conv7_1_internal_slice_internal173"
+  bottom: "conv7_1_internal_slice_internal174"
+  bottom: "conv7_1_internal_slice_internal175"
+  bottom: "conv7_1_internal_slice_internal176"
+  bottom: "conv7_1_internal_slice_internal177"
+  bottom: "conv7_1_internal_slice_internal178"
+  bottom: "conv7_1_internal_slice_internal179"
+  bottom: "conv7_1_internal_slice_internal180"
+  bottom: "conv7_1_internal_slice_internal181"
+  bottom: "conv7_1_internal_slice_internal182"
+  bottom: "conv7_1_internal_slice_internal183"
+  bottom: "conv7_1_internal_slice_internal184"
+  bottom: "conv7_1_internal_slice_internal185"
+  bottom: "conv7_1_internal_slice_internal186"
+  bottom: "conv7_1_internal_slice_internal187"
+  bottom: "conv7_1_internal_slice_internal188"
+  bottom: "conv7_1_internal_slice_internal189"
+  bottom: "conv7_1_internal_slice_internal190"
+  bottom: "conv7_1_internal_slice_internal191"
+  bottom: "conv7_1_internal_slice_internal192"
+  bottom: "conv7_1_internal_slice_internal193"
+  bottom: "conv7_1_internal_slice_internal194"
+  bottom: "conv7_1_internal_slice_internal195"
+  bottom: "conv7_1_internal_slice_internal196"
+  bottom: "conv7_1_internal_slice_internal197"
+  bottom: "conv7_1_internal_slice_internal198"
+  bottom: "conv7_1_internal_slice_internal199"
+  bottom: "conv7_1_internal_slice_internal200"
+  bottom: "conv7_1_internal_slice_internal201"
+  bottom: "conv7_1_internal_slice_internal202"
+  bottom: "conv7_1_internal_slice_internal203"
+  bottom: "conv7_1_internal_slice_internal204"
+  bottom: "conv7_1_internal_slice_internal205"
+  bottom: "conv7_1_internal_slice_internal206"
+  bottom: "conv7_1_internal_slice_internal207"
+  bottom: "conv7_1_internal_slice_internal208"
+  bottom: "conv7_1_internal_slice_internal209"
+  bottom: "conv7_1_internal_slice_internal210"
+  bottom: "conv7_1_internal_slice_internal211"
+  bottom: "conv7_1_internal_slice_internal212"
+  bottom: "conv7_1_internal_slice_internal213"
+  bottom: "conv7_1_internal_slice_internal214"
+  bottom: "conv7_1_internal_slice_internal215"
+  bottom: "conv7_1_internal_slice_internal216"
+  bottom: "conv7_1_internal_slice_internal217"
+  bottom: "conv7_1_internal_slice_internal218"
+  bottom: "conv7_1_internal_slice_internal219"
+  bottom: "conv7_1_internal_slice_internal220"
+  bottom: "conv7_1_internal_slice_internal221"
+  bottom: "conv7_1_internal_slice_internal222"
+  bottom: "conv7_1_internal_slice_internal223"
+  bottom: "conv7_1_internal_slice_internal224"
+  bottom: "conv7_1_internal_slice_internal225"
+  bottom: "conv7_1_internal_slice_internal226"
+  bottom: "conv7_1_internal_slice_internal227"
+  bottom: "conv7_1_internal_slice_internal228"
+  bottom: "conv7_1_internal_slice_internal229"
+  bottom: "conv7_1_internal_slice_internal230"
+  bottom: "conv7_1_internal_slice_internal231"
+  bottom: "conv7_1_internal_slice_internal232"
+  bottom: "conv7_1_internal_slice_internal233"
+  bottom: "conv7_1_internal_slice_internal234"
+  bottom: "conv7_1_internal_slice_internal235"
+  bottom: "conv7_1_internal_slice_internal236"
+  bottom: "conv7_1_internal_slice_internal237"
+  bottom: "conv7_1_internal_slice_internal238"
+  bottom: "conv7_1_internal_slice_internal239"
+  bottom: "conv7_1_internal_slice_internal240"
+  bottom: "conv7_1_internal_slice_internal241"
+  bottom: "conv7_1_internal_slice_internal242"
+  bottom: "conv7_1_internal_slice_internal243"
+  bottom: "conv7_1_internal_slice_internal244"
+  bottom: "conv7_1_internal_slice_internal245"
+  bottom: "conv7_1_internal_slice_internal246"
+  bottom: "conv7_1_internal_slice_internal247"
+  bottom: "conv7_1_internal_slice_internal248"
+  bottom: "conv7_1_internal_slice_internal249"
+  bottom: "conv7_1_internal_slice_internal250"
+  bottom: "conv7_1_internal_slice_internal251"
+  bottom: "conv7_1_internal_slice_internal252"
+  bottom: "conv7_1_internal_slice_internal253"
+  bottom: "conv7_1_internal_slice_internal254"
+  bottom: "conv7_1_internal_slice_internal255"
+  bottom: "conv7_1_internal_slice_internal256"
+  top: "conv7_1_internal_slice2"
+  concat_param { axis: 1 }
+}
+layer {
+  name: "conv7_1_internal_slice_internal_concat3"
+  type: "Concat"
+  bottom: "conv7_1_internal_slice_internal257"
+  bottom: "conv7_1_internal_slice_internal258"
+  bottom: "conv7_1_internal_slice_internal259"
+  bottom: "conv7_1_internal_slice_internal260"
+  bottom: "conv7_1_internal_slice_internal261"
+  bottom: "conv7_1_internal_slice_internal262"
+  bottom: "conv7_1_internal_slice_internal263"
+  bottom: "conv7_1_internal_slice_internal264"
+  bottom: "conv7_1_internal_slice_internal265"
+  bottom: "conv7_1_internal_slice_internal266"
+  bottom: "conv7_1_internal_slice_internal267"
+  bottom: "conv7_1_internal_slice_internal268"
+  bottom: "conv7_1_internal_slice_internal269"
+  bottom: "conv7_1_internal_slice_internal270"
+  bottom: "conv7_1_internal_slice_internal271"
+  bottom: "conv7_1_internal_slice_internal272"
+  bottom: "conv7_1_internal_slice_internal273"
+  bottom: "conv7_1_internal_slice_internal274"
+  bottom: "conv7_1_internal_slice_internal275"
+  bottom: "conv7_1_internal_slice_internal276"
+  bottom: "conv7_1_internal_slice_internal277"
+  bottom: "conv7_1_internal_slice_internal278"
+  bottom: "conv7_1_internal_slice_internal279"
+  bottom: "conv7_1_internal_slice_internal280"
+  bottom: "conv7_1_internal_slice_internal281"
+  bottom: "conv7_1_internal_slice_internal282"
+  bottom: "conv7_1_internal_slice_internal283"
+  bottom: "conv7_1_internal_slice_internal284"
+  bottom: "conv7_1_internal_slice_internal285"
+  bottom: "conv7_1_internal_slice_internal286"
+  bottom: "conv7_1_internal_slice_internal287"
+  bottom: "conv7_1_internal_slice_internal288"
+  bottom: "conv7_1_internal_slice_internal289"
+  bottom: "conv7_1_internal_slice_internal290"
+  bottom: "conv7_1_internal_slice_internal291"
+  bottom: "conv7_1_internal_slice_internal292"
+  bottom: "conv7_1_internal_slice_internal293"
+  bottom: "conv7_1_internal_slice_internal294"
+  bottom: "conv7_1_internal_slice_internal295"
+  bottom: "conv7_1_internal_slice_internal296"
+  bottom: "conv7_1_internal_slice_internal297"
+  bottom: "conv7_1_internal_slice_internal298"
+  bottom: "conv7_1_internal_slice_internal299"
+  bottom: "conv7_1_internal_slice_internal300"
+  bottom: "conv7_1_internal_slice_internal301"
+  bottom: "conv7_1_internal_slice_internal302"
+  bottom: "conv7_1_internal_slice_internal303"
+  bottom: "conv7_1_internal_slice_internal304"
+  bottom: "conv7_1_internal_slice_internal305"
+  bottom: "conv7_1_internal_slice_internal306"
+  bottom: "conv7_1_internal_slice_internal307"
+  bottom: "conv7_1_internal_slice_internal308"
+  bottom: "conv7_1_internal_slice_internal309"
+  bottom: "conv7_1_internal_slice_internal310"
+  bottom: "conv7_1_internal_slice_internal311"
+  bottom: "conv7_1_internal_slice_internal312"
+  bottom: "conv7_1_internal_slice_internal313"
+  bottom: "conv7_1_internal_slice_internal314"
+  bottom: "conv7_1_internal_slice_internal315"
+  bottom: "conv7_1_internal_slice_internal316"
+  bottom: "conv7_1_internal_slice_internal317"
+  bottom: "conv7_1_internal_slice_internal318"
+  bottom: "conv7_1_internal_slice_internal319"
+  bottom: "conv7_1_internal_slice_internal320"
+  bottom: "conv7_1_internal_slice_internal321"
+  bottom: "conv7_1_internal_slice_internal322"
+  bottom: "conv7_1_internal_slice_internal323"
+  bottom: "conv7_1_internal_slice_internal324"
+  bottom: "conv7_1_internal_slice_internal325"
+  bottom: "conv7_1_internal_slice_internal326"
+  bottom: "conv7_1_internal_slice_internal327"
+  bottom: "conv7_1_internal_slice_internal328"
+  bottom: "conv7_1_internal_slice_internal329"
+  bottom: "conv7_1_internal_slice_internal330"
+  bottom: "conv7_1_internal_slice_internal331"
+  bottom: "conv7_1_internal_slice_internal332"
+  bottom: "conv7_1_internal_slice_internal333"
+  bottom: "conv7_1_internal_slice_internal334"
+  bottom: "conv7_1_internal_slice_internal335"
+  bottom: "conv7_1_internal_slice_internal336"
+  bottom: "conv7_1_internal_slice_internal337"
+  bottom: "conv7_1_internal_slice_internal338"
+  bottom: "conv7_1_internal_slice_internal339"
+  bottom: "conv7_1_internal_slice_internal340"
+  bottom: "conv7_1_internal_slice_internal341"
+  bottom: "conv7_1_internal_slice_internal342"
+  bottom: "conv7_1_internal_slice_internal343"
+  bottom: "conv7_1_internal_slice_internal344"
+  bottom: "conv7_1_internal_slice_internal345"
+  bottom: "conv7_1_internal_slice_internal346"
+  bottom: "conv7_1_internal_slice_internal347"
+  bottom: "conv7_1_internal_slice_internal348"
+  bottom: "conv7_1_internal_slice_internal349"
+  bottom: "conv7_1_internal_slice_internal350"
+  bottom: "conv7_1_internal_slice_internal351"
+  bottom: "conv7_1_internal_slice_internal352"
+  bottom: "conv7_1_internal_slice_internal353"
+  bottom: "conv7_1_internal_slice_internal354"
+  bottom: "conv7_1_internal_slice_internal355"
+  bottom: "conv7_1_internal_slice_internal356"
+  bottom: "conv7_1_internal_slice_internal357"
+  bottom: "conv7_1_internal_slice_internal358"
+  bottom: "conv7_1_internal_slice_internal359"
+  bottom: "conv7_1_internal_slice_internal360"
+  bottom: "conv7_1_internal_slice_internal361"
+  bottom: "conv7_1_internal_slice_internal362"
+  bottom: "conv7_1_internal_slice_internal363"
+  bottom: "conv7_1_internal_slice_internal364"
+  bottom: "conv7_1_internal_slice_internal365"
+  bottom: "conv7_1_internal_slice_internal366"
+  bottom: "conv7_1_internal_slice_internal367"
+  bottom: "conv7_1_internal_slice_internal368"
+  bottom: "conv7_1_internal_slice_internal369"
+  bottom: "conv7_1_internal_slice_internal370"
+  bottom: "conv7_1_internal_slice_internal371"
+  bottom: "conv7_1_internal_slice_internal372"
+  bottom: "conv7_1_internal_slice_internal373"
+  bottom: "conv7_1_internal_slice_internal374"
+  bottom: "conv7_1_internal_slice_internal375"
+  bottom: "conv7_1_internal_slice_internal376"
+  bottom: "conv7_1_internal_slice_internal377"
+  bottom: "conv7_1_internal_slice_internal378"
+  bottom: "conv7_1_internal_slice_internal379"
+  bottom: "conv7_1_internal_slice_internal380"
+  bottom: "conv7_1_internal_slice_internal381"
+  bottom: "conv7_1_internal_slice_internal382"
+  bottom: "conv7_1_internal_slice_internal383"
+  bottom: "conv7_1_internal_slice_internal384"
+  top: "conv7_1_internal_slice3"
+  concat_param { axis: 1 }
+}
+layer {
+  name: "conv7_1_internal_slice_internal_concat4"
+  type: "Concat"
+  bottom: "conv7_1_internal_slice_internal385"
+  bottom: "conv7_1_internal_slice_internal386"
+  bottom: "conv7_1_internal_slice_internal387"
+  bottom: "conv7_1_internal_slice_internal388"
+  bottom: "conv7_1_internal_slice_internal389"
+  bottom: "conv7_1_internal_slice_internal390"
+  bottom: "conv7_1_internal_slice_internal391"
+  bottom: "conv7_1_internal_slice_internal392"
+  bottom: "conv7_1_internal_slice_internal393"
+  bottom: "conv7_1_internal_slice_internal394"
+  bottom: "conv7_1_internal_slice_internal395"
+  bottom: "conv7_1_internal_slice_internal396"
+  bottom: "conv7_1_internal_slice_internal397"
+  bottom: "conv7_1_internal_slice_internal398"
+  bottom: "conv7_1_internal_slice_internal399"
+  bottom: "conv7_1_internal_slice_internal400"
+  bottom: "conv7_1_internal_slice_internal401"
+  bottom: "conv7_1_internal_slice_internal402"
+  bottom: "conv7_1_internal_slice_internal403"
+  bottom: "conv7_1_internal_slice_internal404"
+  bottom: "conv7_1_internal_slice_internal405"
+  bottom: "conv7_1_internal_slice_internal406"
+  bottom: "conv7_1_internal_slice_internal407"
+  bottom: "conv7_1_internal_slice_internal408"
+  bottom: "conv7_1_internal_slice_internal409"
+  bottom: "conv7_1_internal_slice_internal410"
+  bottom: "conv7_1_internal_slice_internal411"
+  bottom: "conv7_1_internal_slice_internal412"
+  bottom: "conv7_1_internal_slice_internal413"
+  bottom: "conv7_1_internal_slice_internal414"
+  bottom: "conv7_1_internal_slice_internal415"
+  bottom: "conv7_1_internal_slice_internal416"
+  bottom: "conv7_1_internal_slice_internal417"
+  bottom: "conv7_1_internal_slice_internal418"
+  bottom: "conv7_1_internal_slice_internal419"
+  bottom: "conv7_1_internal_slice_internal420"
+  bottom: "conv7_1_internal_slice_internal421"
+  bottom: "conv7_1_internal_slice_internal422"
+  bottom: "conv7_1_internal_slice_internal423"
+  bottom: "conv7_1_internal_slice_internal424"
+  bottom: "conv7_1_internal_slice_internal425"
+  bottom: "conv7_1_internal_slice_internal426"
+  bottom: "conv7_1_internal_slice_internal427"
+  bottom: "conv7_1_internal_slice_internal428"
+  bottom: "conv7_1_internal_slice_internal429"
+  bottom: "conv7_1_internal_slice_internal430"
+  bottom: "conv7_1_internal_slice_internal431"
+  bottom: "conv7_1_internal_slice_internal432"
+  bottom: "conv7_1_internal_slice_internal433"
+  bottom: "conv7_1_internal_slice_internal434"
+  bottom: "conv7_1_internal_slice_internal435"
+  bottom: "conv7_1_internal_slice_internal436"
+  bottom: "conv7_1_internal_slice_internal437"
+  bottom: "conv7_1_internal_slice_internal438"
+  bottom: "conv7_1_internal_slice_internal439"
+  bottom: "conv7_1_internal_slice_internal440"
+  bottom: "conv7_1_internal_slice_internal441"
+  bottom: "conv7_1_internal_slice_internal442"
+  bottom: "conv7_1_internal_slice_internal443"
+  bottom: "conv7_1_internal_slice_internal444"
+  bottom: "conv7_1_internal_slice_internal445"
+  bottom: "conv7_1_internal_slice_internal446"
+  bottom: "conv7_1_internal_slice_internal447"
+  bottom: "conv7_1_internal_slice_internal448"
+  bottom: "conv7_1_internal_slice_internal449"
+  bottom: "conv7_1_internal_slice_internal450"
+  bottom: "conv7_1_internal_slice_internal451"
+  bottom: "conv7_1_internal_slice_internal452"
+  bottom: "conv7_1_internal_slice_internal453"
+  bottom: "conv7_1_internal_slice_internal454"
+  bottom: "conv7_1_internal_slice_internal455"
+  bottom: "conv7_1_internal_slice_internal456"
+  bottom: "conv7_1_internal_slice_internal457"
+  bottom: "conv7_1_internal_slice_internal458"
+  bottom: "conv7_1_internal_slice_internal459"
+  bottom: "conv7_1_internal_slice_internal460"
+  bottom: "conv7_1_internal_slice_internal461"
+  bottom: "conv7_1_internal_slice_internal462"
+  bottom: "conv7_1_internal_slice_internal463"
+  bottom: "conv7_1_internal_slice_internal464"
+  bottom: "conv7_1_internal_slice_internal465"
+  bottom: "conv7_1_internal_slice_internal466"
+  bottom: "conv7_1_internal_slice_internal467"
+  bottom: "conv7_1_internal_slice_internal468"
+  bottom: "conv7_1_internal_slice_internal469"
+  bottom: "conv7_1_internal_slice_internal470"
+  bottom: "conv7_1_internal_slice_internal471"
+  bottom: "conv7_1_internal_slice_internal472"
+  bottom: "conv7_1_internal_slice_internal473"
+  bottom: "conv7_1_internal_slice_internal474"
+  bottom: "conv7_1_internal_slice_internal475"
+  bottom: "conv7_1_internal_slice_internal476"
+  bottom: "conv7_1_internal_slice_internal477"
+  bottom: "conv7_1_internal_slice_internal478"
+  bottom: "conv7_1_internal_slice_internal479"
+  bottom: "conv7_1_internal_slice_internal480"
+  bottom: "conv7_1_internal_slice_internal481"
+  bottom: "conv7_1_internal_slice_internal482"
+  bottom: "conv7_1_internal_slice_internal483"
+  bottom: "conv7_1_internal_slice_internal484"
+  bottom: "conv7_1_internal_slice_internal485"
+  bottom: "conv7_1_internal_slice_internal486"
+  bottom: "conv7_1_internal_slice_internal487"
+  bottom: "conv7_1_internal_slice_internal488"
+  bottom: "conv7_1_internal_slice_internal489"
+  bottom: "conv7_1_internal_slice_internal490"
+  bottom: "conv7_1_internal_slice_internal491"
+  bottom: "conv7_1_internal_slice_internal492"
+  bottom: "conv7_1_internal_slice_internal493"
+  bottom: "conv7_1_internal_slice_internal494"
+  bottom: "conv7_1_internal_slice_internal495"
+  bottom: "conv7_1_internal_slice_internal496"
+  bottom: "conv7_1_internal_slice_internal497"
+  bottom: "conv7_1_internal_slice_internal498"
+  bottom: "conv7_1_internal_slice_internal499"
+  bottom: "conv7_1_internal_slice_internal500"
+  bottom: "conv7_1_internal_slice_internal501"
+  bottom: "conv7_1_internal_slice_internal502"
+  bottom: "conv7_1_internal_slice_internal503"
+  bottom: "conv7_1_internal_slice_internal504"
+  bottom: "conv7_1_internal_slice_internal505"
+  bottom: "conv7_1_internal_slice_internal506"
+  bottom: "conv7_1_internal_slice_internal507"
+  bottom: "conv7_1_internal_slice_internal508"
+  bottom: "conv7_1_internal_slice_internal509"
+  bottom: "conv7_1_internal_slice_internal510"
+  bottom: "conv7_1_internal_slice_internal511"
+  bottom: "conv7_1_internal_slice_internal512"
+  top: "conv7_1_internal_slice4"
+  concat_param { axis: 1 }
+}
+layer {
+  name: "conv7_1_internal_conv1"
+  type: "Convolution"
+  bottom: "conv7_1_internal_slice1"
+  top: "conv7_1_internal_conv1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  convolution_param {
+    engine: CAFFE
+    group: 1
+    num_output: 128
+    bias_term: false
+    pad: 1
+    kernel_size: 3
+    dilation: 1
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+  }
+}
+layer {
+  name: "conv7_1_internal_conv2"
+  type: "Convolution"
+  bottom: "conv7_1_internal_slice2"
+  top: "conv7_1_internal_conv2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  convolution_param {
+    engine: CAFFE
+    group: 1
+    num_output: 128
+    bias_term: false
+    pad: 1
+    kernel_size: 3
+    dilation: 1
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+  }
+}
+layer {
+  name: "conv7_1_internal_conv3"
+  type: "Convolution"
+  bottom: "conv7_1_internal_slice3"
+  top: "conv7_1_internal_conv3"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  convolution_param {
+    engine: CAFFE
+    group: 1
+    num_output: 128
+    bias_term: false
+    pad: 1
+    kernel_size: 3
+    dilation: 1
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+  }
+}
+layer {
+  name: "conv7_1_internal_conv4"
+  type: "Convolution"
+  bottom: "conv7_1_internal_slice4"
+  top: "conv7_1_internal_conv4"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  convolution_param {
+    engine: CAFFE
+    group: 1
+    num_output: 128
+    bias_term: false
+    pad: 1
+    kernel_size: 3
+    dilation: 1
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+  }
+}
+layer {
+  name: "conv7_1_internal_concat"
+  type: "Concat"
+  bottom: "conv7_1_internal_conv1"
+  bottom: "conv7_1_internal_conv2"
+  bottom: "conv7_1_internal_conv3"
+  bottom: "conv7_1_internal_conv4"
+  top: "conv7_1"
+  concat_param {
+    axis: 1
+  }
+}
+###########################################
+
+layer {
+  name: "conv7_1_bn"
+  type: "BatchNorm"
+  bottom: "conv7_1"
+  top: "conv7_1"
+  batch_norm_param {
+    eps: 1e-06
+  }
+}
+layer {
+  name: "conv7_1_scale"
+  type: "Scale"
+  bottom: "conv7_1"
+  top: "conv7_1"
+  scale_param {
+    filler {
+      type: "constant"
+      value: 1
+    }
+    bias_term: true
+  }
+}
+layer {
+  name: "conv7_1_relu"
+  type: "ReLU"
+  bottom: "conv7_1"
+  top: "conv7_1"
+  relu_param {
+    negative_slope: 0.0
+  }
+}
+
+layer {
+  name: "conv7_2"
+  type: "Convolution"
+  bottom: "conv7_1"
+  top: "conv7_2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  convolution_param {
+    num_output: 256
+    bias_term: false
+    pad: 1
+    kernel_size: 3
+    dilation: 1
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+  }
+}
+layer {
+  name: "conv7_2_bn"
+  type: "BatchNorm"
+  bottom: "conv7_2"
+  top: "conv7_2"
+  batch_norm_param {
+    eps: 1e-06
+  }
+}
+layer {
+  name: "conv7_2_scale"
+  type: "Scale"
+  bottom: "conv7_2"
+  top: "conv7_2"
+  scale_param {
+    filler {
+      type: "constant"
+      value: 1
+    }
+    bias_term: true
+  }
+}
+layer {
+  name: "conv7_2_relu"
+  type: "ReLU"
+  bottom: "conv7_2"
+  top: "conv7_2"
+  relu_param {
+    negative_slope: 0.0
+  }
+}
+
+
+##############
+layer {
+  name: "concat8"
+  type: "Concat"
+  bottom: "conv5_5"
+  bottom: "conv7_2"
+  top: "concat8"
+  concat_param {
+    axis: 1
+  }
+}
+
+###########################################
+layer {
+  name: "conv9_internal_slice_internal_slice"
+  type: "Slice"
+  bottom: "concat8"
+  top: "conv9_internal_slice_internal1"
+  top: "conv9_internal_slice_internal2"
+  top: "conv9_internal_slice_internal3"
+  top: "conv9_internal_slice_internal4"
+  top: "conv9_internal_slice_internal5"
+  top: "conv9_internal_slice_internal6"
+  top: "conv9_internal_slice_internal7"
+  top: "conv9_internal_slice_internal8"
+  top: "conv9_internal_slice_internal9"
+  top: "conv9_internal_slice_internal10"
+  top: "conv9_internal_slice_internal11"
+  top: "conv9_internal_slice_internal12"
+  top: "conv9_internal_slice_internal13"
+  top: "conv9_internal_slice_internal14"
+  top: "conv9_internal_slice_internal15"
+  top: "conv9_internal_slice_internal16"
+  top: "conv9_internal_slice_internal17"
+  top: "conv9_internal_slice_internal18"
+  top: "conv9_internal_slice_internal19"
+  top: "conv9_internal_slice_internal20"
+  top: "conv9_internal_slice_internal21"
+  top: "conv9_internal_slice_internal22"
+  top: "conv9_internal_slice_internal23"
+  top: "conv9_internal_slice_internal24"
+  top: "conv9_internal_slice_internal25"
+  top: "conv9_internal_slice_internal26"
+  top: "conv9_internal_slice_internal27"
+  top: "conv9_internal_slice_internal28"
+  top: "conv9_internal_slice_internal29"
+  top: "conv9_internal_slice_internal30"
+  top: "conv9_internal_slice_internal31"
+  top: "conv9_internal_slice_internal32"
+  top: "conv9_internal_slice_internal33"
+  top: "conv9_internal_slice_internal34"
+  top: "conv9_internal_slice_internal35"
+  top: "conv9_internal_slice_internal36"
+  top: "conv9_internal_slice_internal37"
+  top: "conv9_internal_slice_internal38"
+  top: "conv9_internal_slice_internal39"
+  top: "conv9_internal_slice_internal40"
+  top: "conv9_internal_slice_internal41"
+  top: "conv9_internal_slice_internal42"
+  top: "conv9_internal_slice_internal43"
+  top: "conv9_internal_slice_internal44"
+  top: "conv9_internal_slice_internal45"
+  top: "conv9_internal_slice_internal46"
+  top: "conv9_internal_slice_internal47"
+  top: "conv9_internal_slice_internal48"
+  top: "conv9_internal_slice_internal49"
+  top: "conv9_internal_slice_internal50"
+  top: "conv9_internal_slice_internal51"
+  top: "conv9_internal_slice_internal52"
+  top: "conv9_internal_slice_internal53"
+  top: "conv9_internal_slice_internal54"
+  top: "conv9_internal_slice_internal55"
+  top: "conv9_internal_slice_internal56"
+  top: "conv9_internal_slice_internal57"
+  top: "conv9_internal_slice_internal58"
+  top: "conv9_internal_slice_internal59"
+  top: "conv9_internal_slice_internal60"
+  top: "conv9_internal_slice_internal61"
+  top: "conv9_internal_slice_internal62"
+  top: "conv9_internal_slice_internal63"
+  top: "conv9_internal_slice_internal64"
+  top: "conv9_internal_slice_internal65"
+  top: "conv9_internal_slice_internal66"
+  top: "conv9_internal_slice_internal67"
+  top: "conv9_internal_slice_internal68"
+  top: "conv9_internal_slice_internal69"
+  top: "conv9_internal_slice_internal70"
+  top: "conv9_internal_slice_internal71"
+  top: "conv9_internal_slice_internal72"
+  top: "conv9_internal_slice_internal73"
+  top: "conv9_internal_slice_internal74"
+  top: "conv9_internal_slice_internal75"
+  top: "conv9_internal_slice_internal76"
+  top: "conv9_internal_slice_internal77"
+  top: "conv9_internal_slice_internal78"
+  top: "conv9_internal_slice_internal79"
+  top: "conv9_internal_slice_internal80"
+  top: "conv9_internal_slice_internal81"
+  top: "conv9_internal_slice_internal82"
+  top: "conv9_internal_slice_internal83"
+  top: "conv9_internal_slice_internal84"
+  top: "conv9_internal_slice_internal85"
+  top: "conv9_internal_slice_internal86"
+  top: "conv9_internal_slice_internal87"
+  top: "conv9_internal_slice_internal88"
+  top: "conv9_internal_slice_internal89"
+  top: "conv9_internal_slice_internal90"
+  top: "conv9_internal_slice_internal91"
+  top: "conv9_internal_slice_internal92"
+  top: "conv9_internal_slice_internal93"
+  top: "conv9_internal_slice_internal94"
+  top: "conv9_internal_slice_internal95"
+  top: "conv9_internal_slice_internal96"
+  top: "conv9_internal_slice_internal97"
+  top: "conv9_internal_slice_internal98"
+  top: "conv9_internal_slice_internal99"
+  top: "conv9_internal_slice_internal100"
+  top: "conv9_internal_slice_internal101"
+  top: "conv9_internal_slice_internal102"
+  top: "conv9_internal_slice_internal103"
+  top: "conv9_internal_slice_internal104"
+  top: "conv9_internal_slice_internal105"
+  top: "conv9_internal_slice_internal106"
+  top: "conv9_internal_slice_internal107"
+  top: "conv9_internal_slice_internal108"
+  top: "conv9_internal_slice_internal109"
+  top: "conv9_internal_slice_internal110"
+  top: "conv9_internal_slice_internal111"
+  top: "conv9_internal_slice_internal112"
+  top: "conv9_internal_slice_internal113"
+  top: "conv9_internal_slice_internal114"
+  top: "conv9_internal_slice_internal115"
+  top: "conv9_internal_slice_internal116"
+  top: "conv9_internal_slice_internal117"
+  top: "conv9_internal_slice_internal118"
+  top: "conv9_internal_slice_internal119"
+  top: "conv9_internal_slice_internal120"
+  top: "conv9_internal_slice_internal121"
+  top: "conv9_internal_slice_internal122"
+  top: "conv9_internal_slice_internal123"
+  top: "conv9_internal_slice_internal124"
+  top: "conv9_internal_slice_internal125"
+  top: "conv9_internal_slice_internal126"
+  top: "conv9_internal_slice_internal127"
+  top: "conv9_internal_slice_internal128"
+  top: "conv9_internal_slice_internal129"
+  top: "conv9_internal_slice_internal130"
+  top: "conv9_internal_slice_internal131"
+  top: "conv9_internal_slice_internal132"
+  top: "conv9_internal_slice_internal133"
+  top: "conv9_internal_slice_internal134"
+  top: "conv9_internal_slice_internal135"
+  top: "conv9_internal_slice_internal136"
+  top: "conv9_internal_slice_internal137"
+  top: "conv9_internal_slice_internal138"
+  top: "conv9_internal_slice_internal139"
+  top: "conv9_internal_slice_internal140"
+  top: "conv9_internal_slice_internal141"
+  top: "conv9_internal_slice_internal142"
+  top: "conv9_internal_slice_internal143"
+  top: "conv9_internal_slice_internal144"
+  top: "conv9_internal_slice_internal145"
+  top: "conv9_internal_slice_internal146"
+  top: "conv9_internal_slice_internal147"
+  top: "conv9_internal_slice_internal148"
+  top: "conv9_internal_slice_internal149"
+  top: "conv9_internal_slice_internal150"
+  top: "conv9_internal_slice_internal151"
+  top: "conv9_internal_slice_internal152"
+  top: "conv9_internal_slice_internal153"
+  top: "conv9_internal_slice_internal154"
+  top: "conv9_internal_slice_internal155"
+  top: "conv9_internal_slice_internal156"
+  top: "conv9_internal_slice_internal157"
+  top: "conv9_internal_slice_internal158"
+  top: "conv9_internal_slice_internal159"
+  top: "conv9_internal_slice_internal160"
+  top: "conv9_internal_slice_internal161"
+  top: "conv9_internal_slice_internal162"
+  top: "conv9_internal_slice_internal163"
+  top: "conv9_internal_slice_internal164"
+  top: "conv9_internal_slice_internal165"
+  top: "conv9_internal_slice_internal166"
+  top: "conv9_internal_slice_internal167"
+  top: "conv9_internal_slice_internal168"
+  top: "conv9_internal_slice_internal169"
+  top: "conv9_internal_slice_internal170"
+  top: "conv9_internal_slice_internal171"
+  top: "conv9_internal_slice_internal172"
+  top: "conv9_internal_slice_internal173"
+  top: "conv9_internal_slice_internal174"
+  top: "conv9_internal_slice_internal175"
+  top: "conv9_internal_slice_internal176"
+  top: "conv9_internal_slice_internal177"
+  top: "conv9_internal_slice_internal178"
+  top: "conv9_internal_slice_internal179"
+  top: "conv9_internal_slice_internal180"
+  top: "conv9_internal_slice_internal181"
+  top: "conv9_internal_slice_internal182"
+  top: "conv9_internal_slice_internal183"
+  top: "conv9_internal_slice_internal184"
+  top: "conv9_internal_slice_internal185"
+  top: "conv9_internal_slice_internal186"
+  top: "conv9_internal_slice_internal187"
+  top: "conv9_internal_slice_internal188"
+  top: "conv9_internal_slice_internal189"
+  top: "conv9_internal_slice_internal190"
+  top: "conv9_internal_slice_internal191"
+  top: "conv9_internal_slice_internal192"
+  top: "conv9_internal_slice_internal193"
+  top: "conv9_internal_slice_internal194"
+  top: "conv9_internal_slice_internal195"
+  top: "conv9_internal_slice_internal196"
+  top: "conv9_internal_slice_internal197"
+  top: "conv9_internal_slice_internal198"
+  top: "conv9_internal_slice_internal199"
+  top: "conv9_internal_slice_internal200"
+  top: "conv9_internal_slice_internal201"
+  top: "conv9_internal_slice_internal202"
+  top: "conv9_internal_slice_internal203"
+  top: "conv9_internal_slice_internal204"
+  top: "conv9_internal_slice_internal205"
+  top: "conv9_internal_slice_internal206"
+  top: "conv9_internal_slice_internal207"
+  top: "conv9_internal_slice_internal208"
+  top: "conv9_internal_slice_internal209"
+  top: "conv9_internal_slice_internal210"
+  top: "conv9_internal_slice_internal211"
+  top: "conv9_internal_slice_internal212"
+  top: "conv9_internal_slice_internal213"
+  top: "conv9_internal_slice_internal214"
+  top: "conv9_internal_slice_internal215"
+  top: "conv9_internal_slice_internal216"
+  top: "conv9_internal_slice_internal217"
+  top: "conv9_internal_slice_internal218"
+  top: "conv9_internal_slice_internal219"
+  top: "conv9_internal_slice_internal220"
+  top: "conv9_internal_slice_internal221"
+  top: "conv9_internal_slice_internal222"
+  top: "conv9_internal_slice_internal223"
+  top: "conv9_internal_slice_internal224"
+  top: "conv9_internal_slice_internal225"
+  top: "conv9_internal_slice_internal226"
+  top: "conv9_internal_slice_internal227"
+  top: "conv9_internal_slice_internal228"
+  top: "conv9_internal_slice_internal229"
+  top: "conv9_internal_slice_internal230"
+  top: "conv9_internal_slice_internal231"
+  top: "conv9_internal_slice_internal232"
+  top: "conv9_internal_slice_internal233"
+  top: "conv9_internal_slice_internal234"
+  top: "conv9_internal_slice_internal235"
+  top: "conv9_internal_slice_internal236"
+  top: "conv9_internal_slice_internal237"
+  top: "conv9_internal_slice_internal238"
+  top: "conv9_internal_slice_internal239"
+  top: "conv9_internal_slice_internal240"
+  top: "conv9_internal_slice_internal241"
+  top: "conv9_internal_slice_internal242"
+  top: "conv9_internal_slice_internal243"
+  top: "conv9_internal_slice_internal244"
+  top: "conv9_internal_slice_internal245"
+  top: "conv9_internal_slice_internal246"
+  top: "conv9_internal_slice_internal247"
+  top: "conv9_internal_slice_internal248"
+  top: "conv9_internal_slice_internal249"
+  top: "conv9_internal_slice_internal250"
+  top: "conv9_internal_slice_internal251"
+  top: "conv9_internal_slice_internal252"
+  top: "conv9_internal_slice_internal253"
+  top: "conv9_internal_slice_internal254"
+  top: "conv9_internal_slice_internal255"
+  top: "conv9_internal_slice_internal256"
+  top: "conv9_internal_slice_internal257"
+  top: "conv9_internal_slice_internal258"
+  top: "conv9_internal_slice_internal259"
+  top: "conv9_internal_slice_internal260"
+  top: "conv9_internal_slice_internal261"
+  top: "conv9_internal_slice_internal262"
+  top: "conv9_internal_slice_internal263"
+  top: "conv9_internal_slice_internal264"
+  top: "conv9_internal_slice_internal265"
+  top: "conv9_internal_slice_internal266"
+  top: "conv9_internal_slice_internal267"
+  top: "conv9_internal_slice_internal268"
+  top: "conv9_internal_slice_internal269"
+  top: "conv9_internal_slice_internal270"
+  top: "conv9_internal_slice_internal271"
+  top: "conv9_internal_slice_internal272"
+  top: "conv9_internal_slice_internal273"
+  top: "conv9_internal_slice_internal274"
+  top: "conv9_internal_slice_internal275"
+  top: "conv9_internal_slice_internal276"
+  top: "conv9_internal_slice_internal277"
+  top: "conv9_internal_slice_internal278"
+  top: "conv9_internal_slice_internal279"
+  top: "conv9_internal_slice_internal280"
+  top: "conv9_internal_slice_internal281"
+  top: "conv9_internal_slice_internal282"
+  top: "conv9_internal_slice_internal283"
+  top: "conv9_internal_slice_internal284"
+  top: "conv9_internal_slice_internal285"
+  top: "conv9_internal_slice_internal286"
+  top: "conv9_internal_slice_internal287"
+  top: "conv9_internal_slice_internal288"
+  top: "conv9_internal_slice_internal289"
+  top: "conv9_internal_slice_internal290"
+  top: "conv9_internal_slice_internal291"
+  top: "conv9_internal_slice_internal292"
+  top: "conv9_internal_slice_internal293"
+  top: "conv9_internal_slice_internal294"
+  top: "conv9_internal_slice_internal295"
+  top: "conv9_internal_slice_internal296"
+  top: "conv9_internal_slice_internal297"
+  top: "conv9_internal_slice_internal298"
+  top: "conv9_internal_slice_internal299"
+  top: "conv9_internal_slice_internal300"
+  top: "conv9_internal_slice_internal301"
+  top: "conv9_internal_slice_internal302"
+  top: "conv9_internal_slice_internal303"
+  top: "conv9_internal_slice_internal304"
+  top: "conv9_internal_slice_internal305"
+  top: "conv9_internal_slice_internal306"
+  top: "conv9_internal_slice_internal307"
+  top: "conv9_internal_slice_internal308"
+  top: "conv9_internal_slice_internal309"
+  top: "conv9_internal_slice_internal310"
+  top: "conv9_internal_slice_internal311"
+  top: "conv9_internal_slice_internal312"
+  top: "conv9_internal_slice_internal313"
+  top: "conv9_internal_slice_internal314"
+  top: "conv9_internal_slice_internal315"
+  top: "conv9_internal_slice_internal316"
+  top: "conv9_internal_slice_internal317"
+  top: "conv9_internal_slice_internal318"
+  top: "conv9_internal_slice_internal319"
+  top: "conv9_internal_slice_internal320"
+  top: "conv9_internal_slice_internal321"
+  top: "conv9_internal_slice_internal322"
+  top: "conv9_internal_slice_internal323"
+  top: "conv9_internal_slice_internal324"
+  top: "conv9_internal_slice_internal325"
+  top: "conv9_internal_slice_internal326"
+  top: "conv9_internal_slice_internal327"
+  top: "conv9_internal_slice_internal328"
+  top: "conv9_internal_slice_internal329"
+  top: "conv9_internal_slice_internal330"
+  top: "conv9_internal_slice_internal331"
+  top: "conv9_internal_slice_internal332"
+  top: "conv9_internal_slice_internal333"
+  top: "conv9_internal_slice_internal334"
+  top: "conv9_internal_slice_internal335"
+  top: "conv9_internal_slice_internal336"
+  top: "conv9_internal_slice_internal337"
+  top: "conv9_internal_slice_internal338"
+  top: "conv9_internal_slice_internal339"
+  top: "conv9_internal_slice_internal340"
+  top: "conv9_internal_slice_internal341"
+  top: "conv9_internal_slice_internal342"
+  top: "conv9_internal_slice_internal343"
+  top: "conv9_internal_slice_internal344"
+  top: "conv9_internal_slice_internal345"
+  top: "conv9_internal_slice_internal346"
+  top: "conv9_internal_slice_internal347"
+  top: "conv9_internal_slice_internal348"
+  top: "conv9_internal_slice_internal349"
+  top: "conv9_internal_slice_internal350"
+  top: "conv9_internal_slice_internal351"
+  top: "conv9_internal_slice_internal352"
+  top: "conv9_internal_slice_internal353"
+  top: "conv9_internal_slice_internal354"
+  top: "conv9_internal_slice_internal355"
+  top: "conv9_internal_slice_internal356"
+  top: "conv9_internal_slice_internal357"
+  top: "conv9_internal_slice_internal358"
+  top: "conv9_internal_slice_internal359"
+  top: "conv9_internal_slice_internal360"
+  top: "conv9_internal_slice_internal361"
+  top: "conv9_internal_slice_internal362"
+  top: "conv9_internal_slice_internal363"
+  top: "conv9_internal_slice_internal364"
+  top: "conv9_internal_slice_internal365"
+  top: "conv9_internal_slice_internal366"
+  top: "conv9_internal_slice_internal367"
+  top: "conv9_internal_slice_internal368"
+  top: "conv9_internal_slice_internal369"
+  top: "conv9_internal_slice_internal370"
+  top: "conv9_internal_slice_internal371"
+  top: "conv9_internal_slice_internal372"
+  top: "conv9_internal_slice_internal373"
+  top: "conv9_internal_slice_internal374"
+  top: "conv9_internal_slice_internal375"
+  top: "conv9_internal_slice_internal376"
+  top: "conv9_internal_slice_internal377"
+  top: "conv9_internal_slice_internal378"
+  top: "conv9_internal_slice_internal379"
+  top: "conv9_internal_slice_internal380"
+  top: "conv9_internal_slice_internal381"
+  top: "conv9_internal_slice_internal382"
+  top: "conv9_internal_slice_internal383"
+  top: "conv9_internal_slice_internal384"
+  top: "conv9_internal_slice_internal385"
+  top: "conv9_internal_slice_internal386"
+  top: "conv9_internal_slice_internal387"
+  top: "conv9_internal_slice_internal388"
+  top: "conv9_internal_slice_internal389"
+  top: "conv9_internal_slice_internal390"
+  top: "conv9_internal_slice_internal391"
+  top: "conv9_internal_slice_internal392"
+  top: "conv9_internal_slice_internal393"
+  top: "conv9_internal_slice_internal394"
+  top: "conv9_internal_slice_internal395"
+  top: "conv9_internal_slice_internal396"
+  top: "conv9_internal_slice_internal397"
+  top: "conv9_internal_slice_internal398"
+  top: "conv9_internal_slice_internal399"
+  top: "conv9_internal_slice_internal400"
+  top: "conv9_internal_slice_internal401"
+  top: "conv9_internal_slice_internal402"
+  top: "conv9_internal_slice_internal403"
+  top: "conv9_internal_slice_internal404"
+  top: "conv9_internal_slice_internal405"
+  top: "conv9_internal_slice_internal406"
+  top: "conv9_internal_slice_internal407"
+  top: "conv9_internal_slice_internal408"
+  top: "conv9_internal_slice_internal409"
+  top: "conv9_internal_slice_internal410"
+  top: "conv9_internal_slice_internal411"
+  top: "conv9_internal_slice_internal412"
+  top: "conv9_internal_slice_internal413"
+  top: "conv9_internal_slice_internal414"
+  top: "conv9_internal_slice_internal415"
+  top: "conv9_internal_slice_internal416"
+  top: "conv9_internal_slice_internal417"
+  top: "conv9_internal_slice_internal418"
+  top: "conv9_internal_slice_internal419"
+  top: "conv9_internal_slice_internal420"
+  top: "conv9_internal_slice_internal421"
+  top: "conv9_internal_slice_internal422"
+  top: "conv9_internal_slice_internal423"
+  top: "conv9_internal_slice_internal424"
+  top: "conv9_internal_slice_internal425"
+  top: "conv9_internal_slice_internal426"
+  top: "conv9_internal_slice_internal427"
+  top: "conv9_internal_slice_internal428"
+  top: "conv9_internal_slice_internal429"
+  top: "conv9_internal_slice_internal430"
+  top: "conv9_internal_slice_internal431"
+  top: "conv9_internal_slice_internal432"
+  top: "conv9_internal_slice_internal433"
+  top: "conv9_internal_slice_internal434"
+  top: "conv9_internal_slice_internal435"
+  top: "conv9_internal_slice_internal436"
+  top: "conv9_internal_slice_internal437"
+  top: "conv9_internal_slice_internal438"
+  top: "conv9_internal_slice_internal439"
+  top: "conv9_internal_slice_internal440"
+  top: "conv9_internal_slice_internal441"
+  top: "conv9_internal_slice_internal442"
+  top: "conv9_internal_slice_internal443"
+  top: "conv9_internal_slice_internal444"
+  top: "conv9_internal_slice_internal445"
+  top: "conv9_internal_slice_internal446"
+  top: "conv9_internal_slice_internal447"
+  top: "conv9_internal_slice_internal448"
+  top: "conv9_internal_slice_internal449"
+  top: "conv9_internal_slice_internal450"
+  top: "conv9_internal_slice_internal451"
+  top: "conv9_internal_slice_internal452"
+  top: "conv9_internal_slice_internal453"
+  top: "conv9_internal_slice_internal454"
+  top: "conv9_internal_slice_internal455"
+  top: "conv9_internal_slice_internal456"
+  top: "conv9_internal_slice_internal457"
+  top: "conv9_internal_slice_internal458"
+  top: "conv9_internal_slice_internal459"
+  top: "conv9_internal_slice_internal460"
+  top: "conv9_internal_slice_internal461"
+  top: "conv9_internal_slice_internal462"
+  top: "conv9_internal_slice_internal463"
+  top: "conv9_internal_slice_internal464"
+  top: "conv9_internal_slice_internal465"
+  top: "conv9_internal_slice_internal466"
+  top: "conv9_internal_slice_internal467"
+  top: "conv9_internal_slice_internal468"
+  top: "conv9_internal_slice_internal469"
+  top: "conv9_internal_slice_internal470"
+  top: "conv9_internal_slice_internal471"
+  top: "conv9_internal_slice_internal472"
+  top: "conv9_internal_slice_internal473"
+  top: "conv9_internal_slice_internal474"
+  top: "conv9_internal_slice_internal475"
+  top: "conv9_internal_slice_internal476"
+  top: "conv9_internal_slice_internal477"
+  top: "conv9_internal_slice_internal478"
+  top: "conv9_internal_slice_internal479"
+  top: "conv9_internal_slice_internal480"
+  top: "conv9_internal_slice_internal481"
+  top: "conv9_internal_slice_internal482"
+  top: "conv9_internal_slice_internal483"
+  top: "conv9_internal_slice_internal484"
+  top: "conv9_internal_slice_internal485"
+  top: "conv9_internal_slice_internal486"
+  top: "conv9_internal_slice_internal487"
+  top: "conv9_internal_slice_internal488"
+  top: "conv9_internal_slice_internal489"
+  top: "conv9_internal_slice_internal490"
+  top: "conv9_internal_slice_internal491"
+  top: "conv9_internal_slice_internal492"
+  top: "conv9_internal_slice_internal493"
+  top: "conv9_internal_slice_internal494"
+  top: "conv9_internal_slice_internal495"
+  top: "conv9_internal_slice_internal496"
+  top: "conv9_internal_slice_internal497"
+  top: "conv9_internal_slice_internal498"
+  top: "conv9_internal_slice_internal499"
+  top: "conv9_internal_slice_internal500"
+  top: "conv9_internal_slice_internal501"
+  top: "conv9_internal_slice_internal502"
+  top: "conv9_internal_slice_internal503"
+  top: "conv9_internal_slice_internal504"
+  top: "conv9_internal_slice_internal505"
+  top: "conv9_internal_slice_internal506"
+  top: "conv9_internal_slice_internal507"
+  top: "conv9_internal_slice_internal508"
+  top: "conv9_internal_slice_internal509"
+  top: "conv9_internal_slice_internal510"
+  top: "conv9_internal_slice_internal511"
+  top: "conv9_internal_slice_internal512"
+  slice_param { axis: 1 }
+}
+
+layer {
+  name: "conv9_internal_slice_internal_concat1"
+  type: "Concat"
+  bottom: "conv9_internal_slice_internal1"
+  bottom: "conv9_internal_slice_internal2"
+  bottom: "conv9_internal_slice_internal3"
+  bottom: "conv9_internal_slice_internal4"
+  bottom: "conv9_internal_slice_internal5"
+  bottom: "conv9_internal_slice_internal6"
+  bottom: "conv9_internal_slice_internal7"
+  bottom: "conv9_internal_slice_internal8"
+  bottom: "conv9_internal_slice_internal9"
+  bottom: "conv9_internal_slice_internal10"
+  bottom: "conv9_internal_slice_internal11"
+  bottom: "conv9_internal_slice_internal12"
+  bottom: "conv9_internal_slice_internal13"
+  bottom: "conv9_internal_slice_internal14"
+  bottom: "conv9_internal_slice_internal15"
+  bottom: "conv9_internal_slice_internal16"
+  bottom: "conv9_internal_slice_internal17"
+  bottom: "conv9_internal_slice_internal18"
+  bottom: "conv9_internal_slice_internal19"
+  bottom: "conv9_internal_slice_internal20"
+  bottom: "conv9_internal_slice_internal21"
+  bottom: "conv9_internal_slice_internal22"
+  bottom: "conv9_internal_slice_internal23"
+  bottom: "conv9_internal_slice_internal24"
+  bottom: "conv9_internal_slice_internal25"
+  bottom: "conv9_internal_slice_internal26"
+  bottom: "conv9_internal_slice_internal27"
+  bottom: "conv9_internal_slice_internal28"
+  bottom: "conv9_internal_slice_internal29"
+  bottom: "conv9_internal_slice_internal30"
+  bottom: "conv9_internal_slice_internal31"
+  bottom: "conv9_internal_slice_internal32"
+  bottom: "conv9_internal_slice_internal33"
+  bottom: "conv9_internal_slice_internal34"
+  bottom: "conv9_internal_slice_internal35"
+  bottom: "conv9_internal_slice_internal36"
+  bottom: "conv9_internal_slice_internal37"
+  bottom: "conv9_internal_slice_internal38"
+  bottom: "conv9_internal_slice_internal39"
+  bottom: "conv9_internal_slice_internal40"
+  bottom: "conv9_internal_slice_internal41"
+  bottom: "conv9_internal_slice_internal42"
+  bottom: "conv9_internal_slice_internal43"
+  bottom: "conv9_internal_slice_internal44"
+  bottom: "conv9_internal_slice_internal45"
+  bottom: "conv9_internal_slice_internal46"
+  bottom: "conv9_internal_slice_internal47"
+  bottom: "conv9_internal_slice_internal48"
+  bottom: "conv9_internal_slice_internal49"
+  bottom: "conv9_internal_slice_internal50"
+  bottom: "conv9_internal_slice_internal51"
+  bottom: "conv9_internal_slice_internal52"
+  bottom: "conv9_internal_slice_internal53"
+  bottom: "conv9_internal_slice_internal54"
+  bottom: "conv9_internal_slice_internal55"
+  bottom: "conv9_internal_slice_internal56"
+  bottom: "conv9_internal_slice_internal57"
+  bottom: "conv9_internal_slice_internal58"
+  bottom: "conv9_internal_slice_internal59"
+  bottom: "conv9_internal_slice_internal60"
+  bottom: "conv9_internal_slice_internal61"
+  bottom: "conv9_internal_slice_internal62"
+  bottom: "conv9_internal_slice_internal63"
+  bottom: "conv9_internal_slice_internal64"
+  bottom: "conv9_internal_slice_internal65"
+  bottom: "conv9_internal_slice_internal66"
+  bottom: "conv9_internal_slice_internal67"
+  bottom: "conv9_internal_slice_internal68"
+  bottom: "conv9_internal_slice_internal69"
+  bottom: "conv9_internal_slice_internal70"
+  bottom: "conv9_internal_slice_internal71"
+  bottom: "conv9_internal_slice_internal72"
+  bottom: "conv9_internal_slice_internal73"
+  bottom: "conv9_internal_slice_internal74"
+  bottom: "conv9_internal_slice_internal75"
+  bottom: "conv9_internal_slice_internal76"
+  bottom: "conv9_internal_slice_internal77"
+  bottom: "conv9_internal_slice_internal78"
+  bottom: "conv9_internal_slice_internal79"
+  bottom: "conv9_internal_slice_internal80"
+  bottom: "conv9_internal_slice_internal81"
+  bottom: "conv9_internal_slice_internal82"
+  bottom: "conv9_internal_slice_internal83"
+  bottom: "conv9_internal_slice_internal84"
+  bottom: "conv9_internal_slice_internal85"
+  bottom: "conv9_internal_slice_internal86"
+  bottom: "conv9_internal_slice_internal87"
+  bottom: "conv9_internal_slice_internal88"
+  bottom: "conv9_internal_slice_internal89"
+  bottom: "conv9_internal_slice_internal90"
+  bottom: "conv9_internal_slice_internal91"
+  bottom: "conv9_internal_slice_internal92"
+  bottom: "conv9_internal_slice_internal93"
+  bottom: "conv9_internal_slice_internal94"
+  bottom: "conv9_internal_slice_internal95"
+  bottom: "conv9_internal_slice_internal96"
+  bottom: "conv9_internal_slice_internal97"
+  bottom: "conv9_internal_slice_internal98"
+  bottom: "conv9_internal_slice_internal99"
+  bottom: "conv9_internal_slice_internal100"
+  bottom: "conv9_internal_slice_internal101"
+  bottom: "conv9_internal_slice_internal102"
+  bottom: "conv9_internal_slice_internal103"
+  bottom: "conv9_internal_slice_internal104"
+  bottom: "conv9_internal_slice_internal105"
+  bottom: "conv9_internal_slice_internal106"
+  bottom: "conv9_internal_slice_internal107"
+  bottom: "conv9_internal_slice_internal108"
+  bottom: "conv9_internal_slice_internal109"
+  bottom: "conv9_internal_slice_internal110"
+  bottom: "conv9_internal_slice_internal111"
+  bottom: "conv9_internal_slice_internal112"
+  bottom: "conv9_internal_slice_internal113"
+  bottom: "conv9_internal_slice_internal114"
+  bottom: "conv9_internal_slice_internal115"
+  bottom: "conv9_internal_slice_internal116"
+  bottom: "conv9_internal_slice_internal117"
+  bottom: "conv9_internal_slice_internal118"
+  bottom: "conv9_internal_slice_internal119"
+  bottom: "conv9_internal_slice_internal120"
+  bottom: "conv9_internal_slice_internal121"
+  bottom: "conv9_internal_slice_internal122"
+  bottom: "conv9_internal_slice_internal123"
+  bottom: "conv9_internal_slice_internal124"
+  bottom: "conv9_internal_slice_internal125"
+  bottom: "conv9_internal_slice_internal126"
+  bottom: "conv9_internal_slice_internal127"
+  bottom: "conv9_internal_slice_internal128"
+  top: "conv9_internal_slice1"
+  concat_param { axis: 1 }
+}
+layer {
+  name: "conv9_internal_slice_internal_concat2"
+  type: "Concat"
+  bottom: "conv9_internal_slice_internal129"
+  bottom: "conv9_internal_slice_internal130"
+  bottom: "conv9_internal_slice_internal131"
+  bottom: "conv9_internal_slice_internal132"
+  bottom: "conv9_internal_slice_internal133"
+  bottom: "conv9_internal_slice_internal134"
+  bottom: "conv9_internal_slice_internal135"
+  bottom: "conv9_internal_slice_internal136"
+  bottom: "conv9_internal_slice_internal137"
+  bottom: "conv9_internal_slice_internal138"
+  bottom: "conv9_internal_slice_internal139"
+  bottom: "conv9_internal_slice_internal140"
+  bottom: "conv9_internal_slice_internal141"
+  bottom: "conv9_internal_slice_internal142"
+  bottom: "conv9_internal_slice_internal143"
+  bottom: "conv9_internal_slice_internal144"
+  bottom: "conv9_internal_slice_internal145"
+  bottom: "conv9_internal_slice_internal146"
+  bottom: "conv9_internal_slice_internal147"
+  bottom: "conv9_internal_slice_internal148"
+  bottom: "conv9_internal_slice_internal149"
+  bottom: "conv9_internal_slice_internal150"
+  bottom: "conv9_internal_slice_internal151"
+  bottom: "conv9_internal_slice_internal152"
+  bottom: "conv9_internal_slice_internal153"
+  bottom: "conv9_internal_slice_internal154"
+  bottom: "conv9_internal_slice_internal155"
+  bottom: "conv9_internal_slice_internal156"
+  bottom: "conv9_internal_slice_internal157"
+  bottom: "conv9_internal_slice_internal158"
+  bottom: "conv9_internal_slice_internal159"
+  bottom: "conv9_internal_slice_internal160"
+  bottom: "conv9_internal_slice_internal161"
+  bottom: "conv9_internal_slice_internal162"
+  bottom: "conv9_internal_slice_internal163"
+  bottom: "conv9_internal_slice_internal164"
+  bottom: "conv9_internal_slice_internal165"
+  bottom: "conv9_internal_slice_internal166"
+  bottom: "conv9_internal_slice_internal167"
+  bottom: "conv9_internal_slice_internal168"
+  bottom: "conv9_internal_slice_internal169"
+  bottom: "conv9_internal_slice_internal170"
+  bottom: "conv9_internal_slice_internal171"
+  bottom: "conv9_internal_slice_internal172"
+  bottom: "conv9_internal_slice_internal173"
+  bottom: "conv9_internal_slice_internal174"
+  bottom: "conv9_internal_slice_internal175"
+  bottom: "conv9_internal_slice_internal176"
+  bottom: "conv9_internal_slice_internal177"
+  bottom: "conv9_internal_slice_internal178"
+  bottom: "conv9_internal_slice_internal179"
+  bottom: "conv9_internal_slice_internal180"
+  bottom: "conv9_internal_slice_internal181"
+  bottom: "conv9_internal_slice_internal182"
+  bottom: "conv9_internal_slice_internal183"
+  bottom: "conv9_internal_slice_internal184"
+  bottom: "conv9_internal_slice_internal185"
+  bottom: "conv9_internal_slice_internal186"
+  bottom: "conv9_internal_slice_internal187"
+  bottom: "conv9_internal_slice_internal188"
+  bottom: "conv9_internal_slice_internal189"
+  bottom: "conv9_internal_slice_internal190"
+  bottom: "conv9_internal_slice_internal191"
+  bottom: "conv9_internal_slice_internal192"
+  bottom: "conv9_internal_slice_internal193"
+  bottom: "conv9_internal_slice_internal194"
+  bottom: "conv9_internal_slice_internal195"
+  bottom: "conv9_internal_slice_internal196"
+  bottom: "conv9_internal_slice_internal197"
+  bottom: "conv9_internal_slice_internal198"
+  bottom: "conv9_internal_slice_internal199"
+  bottom: "conv9_internal_slice_internal200"
+  bottom: "conv9_internal_slice_internal201"
+  bottom: "conv9_internal_slice_internal202"
+  bottom: "conv9_internal_slice_internal203"
+  bottom: "conv9_internal_slice_internal204"
+  bottom: "conv9_internal_slice_internal205"
+  bottom: "conv9_internal_slice_internal206"
+  bottom: "conv9_internal_slice_internal207"
+  bottom: "conv9_internal_slice_internal208"
+  bottom: "conv9_internal_slice_internal209"
+  bottom: "conv9_internal_slice_internal210"
+  bottom: "conv9_internal_slice_internal211"
+  bottom: "conv9_internal_slice_internal212"
+  bottom: "conv9_internal_slice_internal213"
+  bottom: "conv9_internal_slice_internal214"
+  bottom: "conv9_internal_slice_internal215"
+  bottom: "conv9_internal_slice_internal216"
+  bottom: "conv9_internal_slice_internal217"
+  bottom: "conv9_internal_slice_internal218"
+  bottom: "conv9_internal_slice_internal219"
+  bottom: "conv9_internal_slice_internal220"
+  bottom: "conv9_internal_slice_internal221"
+  bottom: "conv9_internal_slice_internal222"
+  bottom: "conv9_internal_slice_internal223"
+  bottom: "conv9_internal_slice_internal224"
+  bottom: "conv9_internal_slice_internal225"
+  bottom: "conv9_internal_slice_internal226"
+  bottom: "conv9_internal_slice_internal227"
+  bottom: "conv9_internal_slice_internal228"
+  bottom: "conv9_internal_slice_internal229"
+  bottom: "conv9_internal_slice_internal230"
+  bottom: "conv9_internal_slice_internal231"
+  bottom: "conv9_internal_slice_internal232"
+  bottom: "conv9_internal_slice_internal233"
+  bottom: "conv9_internal_slice_internal234"
+  bottom: "conv9_internal_slice_internal235"
+  bottom: "conv9_internal_slice_internal236"
+  bottom: "conv9_internal_slice_internal237"
+  bottom: "conv9_internal_slice_internal238"
+  bottom: "conv9_internal_slice_internal239"
+  bottom: "conv9_internal_slice_internal240"
+  bottom: "conv9_internal_slice_internal241"
+  bottom: "conv9_internal_slice_internal242"
+  bottom: "conv9_internal_slice_internal243"
+  bottom: "conv9_internal_slice_internal244"
+  bottom: "conv9_internal_slice_internal245"
+  bottom: "conv9_internal_slice_internal246"
+  bottom: "conv9_internal_slice_internal247"
+  bottom: "conv9_internal_slice_internal248"
+  bottom: "conv9_internal_slice_internal249"
+  bottom: "conv9_internal_slice_internal250"
+  bottom: "conv9_internal_slice_internal251"
+  bottom: "conv9_internal_slice_internal252"
+  bottom: "conv9_internal_slice_internal253"
+  bottom: "conv9_internal_slice_internal254"
+  bottom: "conv9_internal_slice_internal255"
+  bottom: "conv9_internal_slice_internal256"
+  top: "conv9_internal_slice2"
+  concat_param { axis: 1 }
+}
+layer {
+  name: "conv9_internal_slice_internal_concat3"
+  type: "Concat"
+  bottom: "conv9_internal_slice_internal257"
+  bottom: "conv9_internal_slice_internal258"
+  bottom: "conv9_internal_slice_internal259"
+  bottom: "conv9_internal_slice_internal260"
+  bottom: "conv9_internal_slice_internal261"
+  bottom: "conv9_internal_slice_internal262"
+  bottom: "conv9_internal_slice_internal263"
+  bottom: "conv9_internal_slice_internal264"
+  bottom: "conv9_internal_slice_internal265"
+  bottom: "conv9_internal_slice_internal266"
+  bottom: "conv9_internal_slice_internal267"
+  bottom: "conv9_internal_slice_internal268"
+  bottom: "conv9_internal_slice_internal269"
+  bottom: "conv9_internal_slice_internal270"
+  bottom: "conv9_internal_slice_internal271"
+  bottom: "conv9_internal_slice_internal272"
+  bottom: "conv9_internal_slice_internal273"
+  bottom: "conv9_internal_slice_internal274"
+  bottom: "conv9_internal_slice_internal275"
+  bottom: "conv9_internal_slice_internal276"
+  bottom: "conv9_internal_slice_internal277"
+  bottom: "conv9_internal_slice_internal278"
+  bottom: "conv9_internal_slice_internal279"
+  bottom: "conv9_internal_slice_internal280"
+  bottom: "conv9_internal_slice_internal281"
+  bottom: "conv9_internal_slice_internal282"
+  bottom: "conv9_internal_slice_internal283"
+  bottom: "conv9_internal_slice_internal284"
+  bottom: "conv9_internal_slice_internal285"
+  bottom: "conv9_internal_slice_internal286"
+  bottom: "conv9_internal_slice_internal287"
+  bottom: "conv9_internal_slice_internal288"
+  bottom: "conv9_internal_slice_internal289"
+  bottom: "conv9_internal_slice_internal290"
+  bottom: "conv9_internal_slice_internal291"
+  bottom: "conv9_internal_slice_internal292"
+  bottom: "conv9_internal_slice_internal293"
+  bottom: "conv9_internal_slice_internal294"
+  bottom: "conv9_internal_slice_internal295"
+  bottom: "conv9_internal_slice_internal296"
+  bottom: "conv9_internal_slice_internal297"
+  bottom: "conv9_internal_slice_internal298"
+  bottom: "conv9_internal_slice_internal299"
+  bottom: "conv9_internal_slice_internal300"
+  bottom: "conv9_internal_slice_internal301"
+  bottom: "conv9_internal_slice_internal302"
+  bottom: "conv9_internal_slice_internal303"
+  bottom: "conv9_internal_slice_internal304"
+  bottom: "conv9_internal_slice_internal305"
+  bottom: "conv9_internal_slice_internal306"
+  bottom: "conv9_internal_slice_internal307"
+  bottom: "conv9_internal_slice_internal308"
+  bottom: "conv9_internal_slice_internal309"
+  bottom: "conv9_internal_slice_internal310"
+  bottom: "conv9_internal_slice_internal311"
+  bottom: "conv9_internal_slice_internal312"
+  bottom: "conv9_internal_slice_internal313"
+  bottom: "conv9_internal_slice_internal314"
+  bottom: "conv9_internal_slice_internal315"
+  bottom: "conv9_internal_slice_internal316"
+  bottom: "conv9_internal_slice_internal317"
+  bottom: "conv9_internal_slice_internal318"
+  bottom: "conv9_internal_slice_internal319"
+  bottom: "conv9_internal_slice_internal320"
+  bottom: "conv9_internal_slice_internal321"
+  bottom: "conv9_internal_slice_internal322"
+  bottom: "conv9_internal_slice_internal323"
+  bottom: "conv9_internal_slice_internal324"
+  bottom: "conv9_internal_slice_internal325"
+  bottom: "conv9_internal_slice_internal326"
+  bottom: "conv9_internal_slice_internal327"
+  bottom: "conv9_internal_slice_internal328"
+  bottom: "conv9_internal_slice_internal329"
+  bottom: "conv9_internal_slice_internal330"
+  bottom: "conv9_internal_slice_internal331"
+  bottom: "conv9_internal_slice_internal332"
+  bottom: "conv9_internal_slice_internal333"
+  bottom: "conv9_internal_slice_internal334"
+  bottom: "conv9_internal_slice_internal335"
+  bottom: "conv9_internal_slice_internal336"
+  bottom: "conv9_internal_slice_internal337"
+  bottom: "conv9_internal_slice_internal338"
+  bottom: "conv9_internal_slice_internal339"
+  bottom: "conv9_internal_slice_internal340"
+  bottom: "conv9_internal_slice_internal341"
+  bottom: "conv9_internal_slice_internal342"
+  bottom: "conv9_internal_slice_internal343"
+  bottom: "conv9_internal_slice_internal344"
+  bottom: "conv9_internal_slice_internal345"
+  bottom: "conv9_internal_slice_internal346"
+  bottom: "conv9_internal_slice_internal347"
+  bottom: "conv9_internal_slice_internal348"
+  bottom: "conv9_internal_slice_internal349"
+  bottom: "conv9_internal_slice_internal350"
+  bottom: "conv9_internal_slice_internal351"
+  bottom: "conv9_internal_slice_internal352"
+  bottom: "conv9_internal_slice_internal353"
+  bottom: "conv9_internal_slice_internal354"
+  bottom: "conv9_internal_slice_internal355"
+  bottom: "conv9_internal_slice_internal356"
+  bottom: "conv9_internal_slice_internal357"
+  bottom: "conv9_internal_slice_internal358"
+  bottom: "conv9_internal_slice_internal359"
+  bottom: "conv9_internal_slice_internal360"
+  bottom: "conv9_internal_slice_internal361"
+  bottom: "conv9_internal_slice_internal362"
+  bottom: "conv9_internal_slice_internal363"
+  bottom: "conv9_internal_slice_internal364"
+  bottom: "conv9_internal_slice_internal365"
+  bottom: "conv9_internal_slice_internal366"
+  bottom: "conv9_internal_slice_internal367"
+  bottom: "conv9_internal_slice_internal368"
+  bottom: "conv9_internal_slice_internal369"
+  bottom: "conv9_internal_slice_internal370"
+  bottom: "conv9_internal_slice_internal371"
+  bottom: "conv9_internal_slice_internal372"
+  bottom: "conv9_internal_slice_internal373"
+  bottom: "conv9_internal_slice_internal374"
+  bottom: "conv9_internal_slice_internal375"
+  bottom: "conv9_internal_slice_internal376"
+  bottom: "conv9_internal_slice_internal377"
+  bottom: "conv9_internal_slice_internal378"
+  bottom: "conv9_internal_slice_internal379"
+  bottom: "conv9_internal_slice_internal380"
+  bottom: "conv9_internal_slice_internal381"
+  bottom: "conv9_internal_slice_internal382"
+  bottom: "conv9_internal_slice_internal383"
+  bottom: "conv9_internal_slice_internal384"
+  top: "conv9_internal_slice3"
+  concat_param { axis: 1 }
+}
+layer {
+  name: "conv9_internal_slice_internal_concat4"
+  type: "Concat"
+  bottom: "conv9_internal_slice_internal385"
+  bottom: "conv9_internal_slice_internal386"
+  bottom: "conv9_internal_slice_internal387"
+  bottom: "conv9_internal_slice_internal388"
+  bottom: "conv9_internal_slice_internal389"
+  bottom: "conv9_internal_slice_internal390"
+  bottom: "conv9_internal_slice_internal391"
+  bottom: "conv9_internal_slice_internal392"
+  bottom: "conv9_internal_slice_internal393"
+  bottom: "conv9_internal_slice_internal394"
+  bottom: "conv9_internal_slice_internal395"
+  bottom: "conv9_internal_slice_internal396"
+  bottom: "conv9_internal_slice_internal397"
+  bottom: "conv9_internal_slice_internal398"
+  bottom: "conv9_internal_slice_internal399"
+  bottom: "conv9_internal_slice_internal400"
+  bottom: "conv9_internal_slice_internal401"
+  bottom: "conv9_internal_slice_internal402"
+  bottom: "conv9_internal_slice_internal403"
+  bottom: "conv9_internal_slice_internal404"
+  bottom: "conv9_internal_slice_internal405"
+  bottom: "conv9_internal_slice_internal406"
+  bottom: "conv9_internal_slice_internal407"
+  bottom: "conv9_internal_slice_internal408"
+  bottom: "conv9_internal_slice_internal409"
+  bottom: "conv9_internal_slice_internal410"
+  bottom: "conv9_internal_slice_internal411"
+  bottom: "conv9_internal_slice_internal412"
+  bottom: "conv9_internal_slice_internal413"
+  bottom: "conv9_internal_slice_internal414"
+  bottom: "conv9_internal_slice_internal415"
+  bottom: "conv9_internal_slice_internal416"
+  bottom: "conv9_internal_slice_internal417"
+  bottom: "conv9_internal_slice_internal418"
+  bottom: "conv9_internal_slice_internal419"
+  bottom: "conv9_internal_slice_internal420"
+  bottom: "conv9_internal_slice_internal421"
+  bottom: "conv9_internal_slice_internal422"
+  bottom: "conv9_internal_slice_internal423"
+  bottom: "conv9_internal_slice_internal424"
+  bottom: "conv9_internal_slice_internal425"
+  bottom: "conv9_internal_slice_internal426"
+  bottom: "conv9_internal_slice_internal427"
+  bottom: "conv9_internal_slice_internal428"
+  bottom: "conv9_internal_slice_internal429"
+  bottom: "conv9_internal_slice_internal430"
+  bottom: "conv9_internal_slice_internal431"
+  bottom: "conv9_internal_slice_internal432"
+  bottom: "conv9_internal_slice_internal433"
+  bottom: "conv9_internal_slice_internal434"
+  bottom: "conv9_internal_slice_internal435"
+  bottom: "conv9_internal_slice_internal436"
+  bottom: "conv9_internal_slice_internal437"
+  bottom: "conv9_internal_slice_internal438"
+  bottom: "conv9_internal_slice_internal439"
+  bottom: "conv9_internal_slice_internal440"
+  bottom: "conv9_internal_slice_internal441"
+  bottom: "conv9_internal_slice_internal442"
+  bottom: "conv9_internal_slice_internal443"
+  bottom: "conv9_internal_slice_internal444"
+  bottom: "conv9_internal_slice_internal445"
+  bottom: "conv9_internal_slice_internal446"
+  bottom: "conv9_internal_slice_internal447"
+  bottom: "conv9_internal_slice_internal448"
+  bottom: "conv9_internal_slice_internal449"
+  bottom: "conv9_internal_slice_internal450"
+  bottom: "conv9_internal_slice_internal451"
+  bottom: "conv9_internal_slice_internal452"
+  bottom: "conv9_internal_slice_internal453"
+  bottom: "conv9_internal_slice_internal454"
+  bottom: "conv9_internal_slice_internal455"
+  bottom: "conv9_internal_slice_internal456"
+  bottom: "conv9_internal_slice_internal457"
+  bottom: "conv9_internal_slice_internal458"
+  bottom: "conv9_internal_slice_internal459"
+  bottom: "conv9_internal_slice_internal460"
+  bottom: "conv9_internal_slice_internal461"
+  bottom: "conv9_internal_slice_internal462"
+  bottom: "conv9_internal_slice_internal463"
+  bottom: "conv9_internal_slice_internal464"
+  bottom: "conv9_internal_slice_internal465"
+  bottom: "conv9_internal_slice_internal466"
+  bottom: "conv9_internal_slice_internal467"
+  bottom: "conv9_internal_slice_internal468"
+  bottom: "conv9_internal_slice_internal469"
+  bottom: "conv9_internal_slice_internal470"
+  bottom: "conv9_internal_slice_internal471"
+  bottom: "conv9_internal_slice_internal472"
+  bottom: "conv9_internal_slice_internal473"
+  bottom: "conv9_internal_slice_internal474"
+  bottom: "conv9_internal_slice_internal475"
+  bottom: "conv9_internal_slice_internal476"
+  bottom: "conv9_internal_slice_internal477"
+  bottom: "conv9_internal_slice_internal478"
+  bottom: "conv9_internal_slice_internal479"
+  bottom: "conv9_internal_slice_internal480"
+  bottom: "conv9_internal_slice_internal481"
+  bottom: "conv9_internal_slice_internal482"
+  bottom: "conv9_internal_slice_internal483"
+  bottom: "conv9_internal_slice_internal484"
+  bottom: "conv9_internal_slice_internal485"
+  bottom: "conv9_internal_slice_internal486"
+  bottom: "conv9_internal_slice_internal487"
+  bottom: "conv9_internal_slice_internal488"
+  bottom: "conv9_internal_slice_internal489"
+  bottom: "conv9_internal_slice_internal490"
+  bottom: "conv9_internal_slice_internal491"
+  bottom: "conv9_internal_slice_internal492"
+  bottom: "conv9_internal_slice_internal493"
+  bottom: "conv9_internal_slice_internal494"
+  bottom: "conv9_internal_slice_internal495"
+  bottom: "conv9_internal_slice_internal496"
+  bottom: "conv9_internal_slice_internal497"
+  bottom: "conv9_internal_slice_internal498"
+  bottom: "conv9_internal_slice_internal499"
+  bottom: "conv9_internal_slice_internal500"
+  bottom: "conv9_internal_slice_internal501"
+  bottom: "conv9_internal_slice_internal502"
+  bottom: "conv9_internal_slice_internal503"
+  bottom: "conv9_internal_slice_internal504"
+  bottom: "conv9_internal_slice_internal505"
+  bottom: "conv9_internal_slice_internal506"
+  bottom: "conv9_internal_slice_internal507"
+  bottom: "conv9_internal_slice_internal508"
+  bottom: "conv9_internal_slice_internal509"
+  bottom: "conv9_internal_slice_internal510"
+  bottom: "conv9_internal_slice_internal511"
+  bottom: "conv9_internal_slice_internal512"
+  top: "conv9_internal_slice4"
+  concat_param { axis: 1 }
+}
+layer {
+  name: "conv9_internal_conv1"
+  type: "Convolution"
+  bottom: "conv9_internal_slice1"
+  top: "conv9_internal_conv1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  convolution_param {
+    engine: CAFFE
+    group: 1
+    num_output: 128
+    bias_term: false
+    pad: 1
+    kernel_size: 3
+    dilation: 1
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+  }
+}
+layer {
+  name: "conv9_internal_conv2"
+  type: "Convolution"
+  bottom: "conv9_internal_slice2"
+  top: "conv9_internal_conv2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  convolution_param {
+    engine: CAFFE
+    group: 1
+    num_output: 128
+    bias_term: false
+    pad: 1
+    kernel_size: 3
+    dilation: 1
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+  }
+}
+layer {
+  name: "conv9_internal_conv3"
+  type: "Convolution"
+  bottom: "conv9_internal_slice3"
+  top: "conv9_internal_conv3"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  convolution_param {
+    engine: CAFFE
+    group: 1
+    num_output: 128
+    bias_term: false
+    pad: 1
+    kernel_size: 3
+    dilation: 1
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+  }
+}
+layer {
+  name: "conv9_internal_conv4"
+  type: "Convolution"
+  bottom: "conv9_internal_slice4"
+  top: "conv9_internal_conv4"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  convolution_param {
+    engine: CAFFE
+    group: 1
+    num_output: 128
+    bias_term: false
+    pad: 1
+    kernel_size: 3
+    dilation: 1
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+  }
+}
+layer {
+  name: "conv9_internal_concat"
+  type: "Concat"
+  bottom: "conv9_internal_conv1"
+  bottom: "conv9_internal_conv2"
+  bottom: "conv9_internal_conv3"
+  bottom: "conv9_internal_conv4"
+  top: "conv9"
+  concat_param {
+    axis: 1
+  }
+}
+###########################################
+
+layer {
+  name: "conv9_bn"
+  type: "BatchNorm"
+  bottom: "conv9"
+  top: "conv9"
+  batch_norm_param {
+    eps: 1e-06
+  }
+}
+layer {
+  name: "conv9_scale"
+  type: "Scale"
+  bottom: "conv9"
+  top: "conv9"
+  scale_param {
+    filler {
+      type: "constant"
+      value: 1
+    }
+    bias_term: true
+  }
+}
+layer {
+  name: "conv9_relu"
+  type: "ReLU"
+  bottom: "conv9"
+  top: "conv9"
+  relu_param {
+    negative_slope: 0.0
+  }
+}
+###########################
+########car light##########
+###########################
+layer {
+  name: "brvis_ori"
+  type: "Convolution"
+  bottom: "conv9"
+  top: "brvis_ori"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  convolution_param {
+    num_output: 16
+    bias_term: true
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+  }
+}
+layer {
+  name: "brvis_perm"
+  type: "Permute"
+  bottom: "brvis_ori"
+  top: "brvis_pred"
+  permute_param {
+    order: 0
+    order: 2
+    order: 3
+    order: 1
+  }
+}
+layer {
+  name: "ltvis_ori"
+  type: "Convolution"
+  bottom: "conv9"
+  top: "ltvis_ori"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  convolution_param {
+    num_output: 16
+    bias_term: true
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+  }
+}
+layer {
+  name: "ltvis_perm"
+  type: "Permute"
+  bottom: "ltvis_ori"
+  top: "ltvis_pred"
+  permute_param {
+    order: 0
+    order: 2
+    order: 3
+    order: 1
+  }
+}
+layer {
+  name: "rtvis_ori"
+  type: "Convolution"
+  bottom: "conv9"
+  top: "rtvis_ori"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  convolution_param {
+    num_output: 16
+    bias_term: true
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+  }
+}
+layer {
+  name: "rtvis_perm"
+  type: "Permute"
+  bottom: "rtvis_ori"
+  top: "rtvis_pred"
+  permute_param {
+    order: 0
+    order: 2
+    order: 3
+    order: 1
+  }
+}
+layer {
+  name: "brswt_ori"
+  type: "Convolution"
+  bottom: "conv9"
+  top: "brswt_ori"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  convolution_param {
+    num_output: 16
+    bias_term: true
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+  }
+}
+layer {
+  name: "brswt_perm"
+  type: "Permute"
+  bottom: "brswt_ori"
+  top: "brswt_pred"
+  permute_param {
+    order: 0
+    order: 2
+    order: 3
+    order: 1
+  }
+}
+layer {
+  name: "ltswt_ori"
+  type: "Convolution"
+  bottom: "conv9"
+  top: "ltswt_ori"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  convolution_param {
+    num_output: 16
+    bias_term: true
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+  }
+}
+layer {
+  name: "ltswt_perm"
+  type: "Permute"
+  bottom: "ltswt_ori"
+  top: "ltswt_pred"
+  permute_param {
+    order: 0
+    order: 2
+    order: 3
+    order: 1
+  }
+}
+layer {
+  name: "rtswt_ori"
+  type: "Convolution"
+  bottom: "conv9"
+  top: "rtswt_ori"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  convolution_param {
+    num_output: 16
+    bias_term: true
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+  }
+}
+layer {
+  name: "rtswt_perm"
+  type: "Permute"
+  bottom: "rtswt_ori"
+  top: "rtswt_pred"
+  permute_param {
+    order: 0
+    order: 2
+    order: 3
+    order: 1
+  }
+}
+#########################
+
+
+layer {
+  name: "conv_final_8cls"
+  type: "Convolution"
+  bottom: "conv9"
+  top: "conv_final"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  convolution_param {
+    num_output: 208
+    bias_term: true
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+  }
+}
+layer {
+  name: "conv_final_permute"
+  type: "Permute"
+  bottom: "conv_final"
+  top: "conv_final_permute"
+  permute_param {
+    order: 0
+    order: 2
+    order: 3
+    order: 1
+  }
+}
+layer {
+  name: "slice"
+  type: "Slice"
+  bottom: "conv_final_permute"
+  top: "loc_pred"
+  top: "obj_perm"
+  top: "cls_perm"
+  slice_param {
+    slice_point: 64
+    slice_point: 80
+    axis: 3
+  }
+}
+layer {
+  name: "cls_reshape"
+  type: "Reshape"
+  bottom: "cls_perm"
+  top: "cls_reshape"
+  reshape_param {
+    shape {
+      dim: 0
+      dim: 0
+      dim: -1
+      dim: 4
+    }
+  }
+}
+layer {
+  name: "cls_pred_prob"
+  type: "Softmax"
+  bottom: "cls_reshape"
+  top: "cls_pred_prob"
+  softmax_param {
+    axis: 3
+  }
+}
+layer {
+  name: "cls_pred"
+  type: "Reshape"
+  bottom: "cls_pred_prob"
+  top: "cls_pred"
+  reshape_param {
+    shape {
+      dim: 0
+      dim: 0
+      dim: -1
+      dim: 64
+    }
+  }
+}
+layer {
+  name: "obj_pred"
+  type: "Sigmoid"
+  bottom: "obj_perm"
+  top: "obj_pred"
+}
+
+###########################
+######## BBOX3D ###########
+###########################
+layer {
+  name: "ori_origin"
+  type: "Convolution"
+  bottom: "conv9"
+  top: "ori_origin"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  convolution_param {
+    num_output: 32
+    bias_term: true
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+  }
+}
+layer {
+  name: "ori_pred"
+  type: "Permute"
+  bottom: "ori_origin"
+  top: "ori_pred"
+  permute_param {
+    order: 0
+    order: 2
+    order: 3
+    order: 1
+  }
+}
+layer {
+  name: "dim_origin"
+  type: "Convolution"
+  bottom: "conv9"
+  top: "dim_origin"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  convolution_param {
+    num_output: 48
+    bias_term: true
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+  }
+}
+layer {
+  name: "dim_pred"
+  type: "Permute"
+  bottom: "dim_origin"
+  top: "dim_pred"
+  permute_param {
+    order: 0
+    order: 2
+    order: 3
+    order: 1
+  }
+}
+
+################################
+# visible prediction ###########
+################################
+layer {
+  name: "vis_pack"
+  type: "Convolution"
+  bottom: "conv9"
+  top: "vis_pack"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  convolution_param {
+    num_output: 64
+    bias_term: true
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+  }
+}
+layer {
+  name: "vis_perm"
+  type: "Permute"
+  bottom: "vis_pack"
+  top: "vis_perm"
+  permute_param {
+    order: 0
+    order: 2
+    order: 3
+    order: 1
+  }
+}
+layer {
+  name: "vis_perm_reshape"
+  type: "Reshape"
+  bottom: "vis_perm"
+  top: "vis_perm_reshape"
+  reshape_param {
+    shape {
+      dim: 0
+      dim: 0
+      dim: -1
+      dim: 4
+    }
+  }
+}
+layer {
+  name: "vis_pred"
+  type: "Sigmoid"
+  bottom: "vis_perm_reshape"
+  top: "vis_pred"
+}
+################################
+# cut off prediction ###########
+################################
+layer {
+  name: "cut_4d_origin"
+  type: "Convolution"
+  bottom: "conv9"
+  top: "cut_4d_origin"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  convolution_param {
+    num_output: 64
+    bias_term: true
+    pad: 0
+    kernel_size: 1
+    stride: 1
+    weight_filler {
+      type: "xavier"
+    }
+  }
+}
+layer {
+  name: "cut_sig"
+  type: "Sigmoid"
+  bottom: "cut_4d_origin"
+  top: "cut_sig"
+}
+layer {
+  name: "cut_pred"
+  type: "Permute"
+  bottom: "cut_sig"
+  top: "cut_pred"
+  permute_param {
+    order: 0
+    order: 2
+    order: 3
+    order: 1
+  }
+}

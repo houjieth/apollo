@@ -115,17 +115,21 @@ __global__ void get_object_kernel(int n,
     int box_block = kBoxBlockSize;
 
     int idx = i;
+    // JIEJIE: c is A in RPN
     int c = idx % num_anchors;
     idx = idx / num_anchors;
     int w = idx % width;
     idx = idx / width;
     int h = idx;
+    // JIEJIE: loc_index is the index for anchor box
     int loc_index = (h * width + w) * num_anchors + c;
     int offset_loc = loc_index * 4;
     int offset_cls = loc_index * num_classes;
     float scale = obj_data[loc_index];
+    // JIEJIE: cx is "center x", cy is "center y"
     float cx = (w + sigmoid_gpu(loc_data[offset_loc + 0])) / width;
     float cy = (h + sigmoid_gpu(loc_data[offset_loc + 1])) / height;
+    // JIEJIE: hw is "half width", hh is "half height"
     float hw = exp(loc_data[offset_loc + 2]) * anchor_data[2 * c] / width * 0.5;
     float hh =
         exp(loc_data[offset_loc + 3]) * anchor_data[2 * c + 1] / height * 0.5;
@@ -144,6 +148,7 @@ __global__ void get_object_kernel(int n,
 
     auto &&dst_ptr = res_box_data + i * box_block;
     hw += expand_data[max_index];
+    // JIEJIE: dst_ptr[0:4]: top-left x, top-left y, bottom-right x, bottom-right y
     dst_ptr[0] = cx - hw;
     dst_ptr[1] = cy - hh;
     dst_ptr[2] = cx + hw;
@@ -151,9 +156,11 @@ __global__ void get_object_kernel(int n,
 
     if (with_box3d) {
       int offset_ori = loc_index * 2;
+      // JIEJIE: dst_ptr[4]: yaw in 3d (front is 0)
       dst_ptr[4] = atan2(ori_data[offset_ori + 1], ori_data[offset_ori]);
 
       int offset_dim = loc_index * 3;
+      // JIEJIE: dst_ptr[5:8]: x, y, z in 3d (ego car is 0,0,0)
       dst_ptr[5] = dim_data[offset_dim + 0];
       dst_ptr[6] = dim_data[offset_dim + 1];
       dst_ptr[7] = dim_data[offset_dim + 2];
@@ -167,6 +174,8 @@ __global__ void get_object_kernel(int n,
         auto sb_y = src_ptr[1] * hh * 2 + cy;
         auto sb_hw = exp(src_ptr[2]) * hw;
         auto sb_hh = exp(src_ptr[3]) * hh;
+        // JIEJIE: frbox means front box
+        // JIEJIE: dst_ptr[8:12] Front box tl-x (top-left-x), tl-y, br-x, br-y
         dst_ptr[8] = sb_x - sb_hw;
         dst_ptr[9] = sb_y - sb_hh;
         dst_ptr[10] = sb_x + sb_hw;
@@ -174,6 +183,8 @@ __global__ void get_object_kernel(int n,
       }
 
       {
+        // JIEJIE: This part is for back box
+        // JIEJIE: dst_ptr[12:16] Back box tl-x, tl-y, br-x, br-y
         int offset_lor = loc_index * 4;
         auto &&src_ptr = lor_data + offset_lor;
         auto sb_x = src_ptr[0] * hw * 2 + cx;
@@ -188,6 +199,12 @@ __global__ void get_object_kernel(int n,
     }
 
     if (with_lights) {
+      // JIEJIE: brvis means brake light visible
+      // JIEJIE: brswt means brake light switch is on
+      // JIEJIE: ltvis means left-turn light visible
+      // JIEJIE: ltswt means left-turn light switch is on
+      // JIEJIE: rtvis means right-turn light visible
+      // JIEJIE: rtswt means right-turn light switch is on
       dst_ptr[16] = sigmoid_gpu(brvis_data[loc_index]);
       dst_ptr[17] = sigmoid_gpu(brswt_data[loc_index]);
       dst_ptr[18] = sigmoid_gpu(ltvis_data[loc_index]);
@@ -211,6 +228,7 @@ __global__ void get_object_kernel(int n,
     }
 
     if (with_ratios) {
+      // JIEJIE: dst_ptr[22:26] visible ratio of face a, b, c, d
       // 0~3: cos2, left, visa, visb
       auto vis_pred = visible_ratio_data + loc_index * 4;
       auto vis_ptr = dst_ptr + 22;
@@ -239,8 +257,10 @@ __global__ void get_object_kernel(int n,
       }
 
       int offset_cut = loc_index * 4;
+      // JIEJIE: dst_ptr[26:28] cut off ratio on width and length (3D)
       dst_ptr[26] = cut_off_ratio_data[offset_cut + 0];
       dst_ptr[27] = cut_off_ratio_data[offset_cut + 1];
+      // JIEJIE: dst_ptr[28:30] cut off on left and right side (2D)
       dst_ptr[28] = cut_off_ratio_data[offset_cut + 2];
       dst_ptr[29] = cut_off_ratio_data[offset_cut + 3];
     }
@@ -254,6 +274,7 @@ __global__ void get_object_kernel(int n,
               max_area_id = area_id;
           }
       }
+      // JIEJIE: dst_ptr[30:32] ???
       dst_ptr[30] = max_area_id + 1;
       dst_ptr[31] = area_id_data[offset_area_id + max_area_id];
     }
@@ -341,8 +362,8 @@ void compute_overlapped_by_idx_gpu(const int nthreads,
               overlapped_data);
 }
 
-void apply_nms_gpu(const float *bbox_data,
-                   const float *conf_data,
+void apply_nms_gpu(const float *bbox_data,  // GPU data
+                   const float *conf_data,  // CPU data
                    const std::vector<int> &origin_indices,
                    const int bbox_step,
                    const float confidence_threshold,
@@ -514,8 +535,8 @@ void get_objects_gpu(const YoloBlobs &yolo_blobs,
   int top_k = idx_sm->count();
   int num_kept = 0;
   // inter-cls NMS
-  apply_nms_gpu(res_box_data,
-                cpu_cls_data + num_classes * num_candidates,
+  apply_nms_gpu(res_box_data,  // GPU data
+                cpu_cls_data + num_classes * num_candidates,  // CPU data
                 all_indices,
                 kBoxBlockSize,
                 nms.inter_cls_conf_thresh,

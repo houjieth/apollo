@@ -93,24 +93,37 @@ TEST(YoloCameraDetectorTest, demo_test) {
         cv::Scalar(0, 255, 0), 2);
     std::stringstream text;
     text << static_cast<int>(obj->sub_type) << " - " << obj_id++;
+//    text << "depth " << obj->size[0] << " width " << obj->size[1] << "\n height " << obj->size[2]
+//         << "yaw " << obj->camera_supplement.alpha;
+//    text << "yaw " << obj->camera_supplement.alpha;
     fprintf(stderr,
-            "%4d 0 0 %6.3f %8.2f %8.2f %8.2f %8.2f %6.3f %6.3f %6.3f "
-            "0 0 0 0 %6.3f %4d %6.3f %6.3f %6.3f %6.3f %6.3f %6.3f\n",
-            static_cast<int>(obj->sub_type), obj->camera_supplement.alpha,
+            "type %d sub_type %d "
+            "alpha %6.3f "
+            "box xmin %6.3f ymin %6.3f xmax %6.3f ymax %6.3f "
+            "size_2 %6.3f size_1 %6.3f size_0 %6.3f "
+            "type_prob %6.3f "
+            "visible_ratios prob %6.3f %6.3f %6.3f %6.3f "
+            "cut_off_ratios %6.3f %6.3f\n",
+            static_cast<int>(obj->type), static_cast<int>(obj->sub_type),
+            obj->camera_supplement.alpha,
             obj->camera_supplement.box.xmin, obj->camera_supplement.box.ymin,
             obj->camera_supplement.box.xmax, obj->camera_supplement.box.ymax,
             obj->size[2], obj->size[1], obj->size[0],
-            obj->type_probs[static_cast<int>(obj->type)], 0,
+            obj->type_probs[static_cast<int>(obj->type)],
             obj->camera_supplement.visible_ratios[0],
             obj->camera_supplement.visible_ratios[1],
             obj->camera_supplement.visible_ratios[2],
             obj->camera_supplement.visible_ratios[3],
             obj->camera_supplement.cut_off_ratios[0],
             obj->camera_supplement.cut_off_ratios[1]);
+//    cv::putText(
+//        cv_img, text.str(),
+//        cv::Point(static_cast<int>(box.xmin), static_cast<int>(box.ymin)),
+//        cv::FONT_HERSHEY_PLAIN, 2, cv::Scalar(255, 0, 0), 2);
     cv::putText(
         cv_img, text.str(),
         cv::Point(static_cast<int>(box.xmin), static_cast<int>(box.ymin)),
-        cv::FONT_HERSHEY_PLAIN, 2, cv::Scalar(255, 0, 0), 2);
+        cv::FONT_HERSHEY_PLAIN, 2, cv::Scalar(0, 255, 0), 2);
   }
   cv::imwrite("output.jpg", cv_img);
   delete detector;

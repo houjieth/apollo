@@ -313,6 +313,7 @@ void recover_bbox(int roi_w, int roi_h, int offset_y,
 }
 
 void fill_base(base::ObjectPtr obj, const float *bbox) {
+  // JIEJIE: fill 2d box prediction
   obj->camera_supplement.box.xmin = bbox[0];
   obj->camera_supplement.box.ymin = bbox[1];
   obj->camera_supplement.box.xmax = bbox[2];
@@ -320,6 +321,7 @@ void fill_base(base::ObjectPtr obj, const float *bbox) {
 }
 
 void fill_bbox3d(bool with_box3d, base::ObjectPtr obj, const float *bbox) {
+  // JIEJIE: fill 3d box prediction
   if (with_box3d) {
     obj->camera_supplement.alpha = bbox[0];
     obj->size[2] = bbox[1];

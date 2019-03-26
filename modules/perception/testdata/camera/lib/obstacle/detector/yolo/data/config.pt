@@ -1,14 +1,14 @@
 model_param {
   model_name: "./ut"
-  proto_file: "caffe.pt"
-  weight_file: "caffe.md"
+  proto_file: "caffe_refactored_group_no_slice_point.pt"
+  weight_file: "caffe_refactored_group_no_slice_point.md"
   anchors_file: "anchors.txt"
   types_file: "types.txt"
   feature_file: "feature.pt"
   offset_ratio: 0.288889
   confidence_threshold: 0.5
   min_2d_height: 10
-  model_type: "RTNet"
+  model_type: "CaffeNet"
   cropped_ratio: 0.711111
   resized_width: 1440
   aligned_pixel: 32

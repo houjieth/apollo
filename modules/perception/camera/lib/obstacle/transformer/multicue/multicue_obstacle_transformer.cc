@@ -37,7 +37,15 @@ bool MultiCueObstacleTransformer::Init(
         << " \ndo template search: " << multicue_param_.check_dimension();
 
   // Init object template
+  // JIEJIE: hack start
   object_template_manager_ = ObjectTemplateManager::Instance();
+  ObjectTemplateManagerInitOptions object_template_init_options;
+  object_template_init_options.root_dir =
+      "/apollo/modules/perception/testdata/"
+      "camera/app/data/perception/camera/common/object_template/";
+  object_template_init_options.conf_file = "object_template.pt";
+  CHECK(object_template_manager_->Init(object_template_init_options));
+  // JIEJIE: hack end
 
   return true;
 }
@@ -85,6 +93,7 @@ void MultiCueObstacleTransformer::SetObjMapperOptions(
   obj_mapper_options->ry = rotation_y;
   obj_mapper_options->is_veh = (obj->type == base::ObjectType::VEHICLE);
   obj_mapper_options->check_dimension = multicue_param_.check_dimension();
+//  ADEBUG << "JIEJIE: inside 1";
   obj_mapper_options->type_min_vol_index =
       MatchTemplates(sub_type, dimension_hwl);
 
@@ -173,7 +182,8 @@ void MultiCueObstacleTransformer::FillResults(
   obj->camera_supplement.local_center(0) = object_center[0];
   obj->camera_supplement.local_center(1) = object_center[1];
   obj->camera_supplement.local_center(2) = object_center[2];
-  ADEBUG << "Obj id: " << obj->track_id;
+//  ADEBUG << "Obj id: " << obj->track_id;
+  ADEBUG << "Obj id: " << obj->id;
   ADEBUG << "Obj type: " << static_cast<int>(obj->sub_type);
   ADEBUG << "Obj ori dimension: " << obj->size[2] << ", " << obj->size[1]
          << ", " << obj->size[0];
@@ -205,10 +215,12 @@ void MultiCueObstacleTransformer::FillResults(
 
   obj->camera_supplement.alpha = rotation_y - theta_ray;
 
-  ADEBUG << "Dimension hwl: " << dimension_hwl[0] << ", " << dimension_hwl[1]
+  ADEBUG << "Dimension hwl (size): " << dimension_hwl[0] << ", " << dimension_hwl[1]
          << ", " << dimension_hwl[2];
   ADEBUG << "Obj ry:" << rotation_y;
   ADEBUG << "Obj theta: " << obj->theta;
+  ADEBUG << "Obj direction " << obj->direction[0] << " " << obj->direction[1]
+         << " " << obj->direction[2];
   AINFO << "Obj center from transformer: " << obj->center.transpose();
 }
 
@@ -237,10 +249,14 @@ bool MultiCueObstacleTransformer::Transform(
   const auto &camera2world_pose = frame->camera2world_pose;
   mapper_->Init(k_mat, width_image, height_image);
 
+//  ADEBUG << "JIEJIE: here 1";
+
   ObjMapperOptions obj_mapper_options;
   float object_center[3] = {0};
   float dimension_hwl[3] = {0};
   float rotation_y = 0.0f;
+
+//  ADEBUG << "JIEJIE: here 2";
 
   int nr_transformed_obj = 0;
   for (auto &obj : frame->detected_objects) {
@@ -248,19 +264,24 @@ bool MultiCueObstacleTransformer::Transform(
       ADEBUG << "Empty object input to transformer.";
       continue;
     }
+//    ADEBUG << "JIEJIE: iter 0";
 
     // set object mapper options
     float theta_ray = 0.0f;
     SetObjMapperOptions(obj, camera_k_matrix, width_image, height_image,
                         &obj_mapper_options, &theta_ray);
 
+//    ADEBUG << "JIEJIE: iter 1";
     // process
     mapper_->Solve3dBbox(obj_mapper_options, object_center, dimension_hwl,
                          &rotation_y);
 
+//    ADEBUG << "JIEJIE: iter 2";
     // fill back results
     FillResults(object_center, dimension_hwl, rotation_y, camera2world_pose,
                 theta_ray, obj);
+
+//    ADEBUG << "JIEJIE: iter 3";
 
     ++nr_transformed_obj;
   }

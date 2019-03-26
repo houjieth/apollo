@@ -23,6 +23,7 @@
 #include "modules/perception/inference/inference_factory.h"
 #include "modules/perception/inference/utils/resize.h"
 #include "modules/perception/lib/utils/perf.h"
+#include "modules/perception/camera/lib/feature_extractor/tfe/tracking_feat_extractor.h"
 
 namespace apollo {
 namespace perception {
@@ -201,9 +202,11 @@ bool YoloObstacleDetector::Init(const ObstacleDetectorInitOptions &options) {
   BASE_CUDA_CHECK(cudaStreamCreate(&stream_));
 
   base_camera_model_ = options.base_camera_model;
+  AINFO << "JIEJIE: base_camera_model_.name " <<  base_camera_model_->name();
   CHECK(base_camera_model_ != nullptr) << "base_camera_model is nullptr!";
   std::string config_path =
       GetAbsolutePath(options.root_dir, options.conf_file);
+  AINFO << "JIEJIE: YoloObstacleDetector::Init() config_path " << config_path;
   if (!cyber::common::GetProtoFromFile(config_path, &yolo_param_)) {
     AERROR << "read proto_config fail";
     return false;
@@ -250,8 +253,11 @@ bool YoloObstacleDetector::InitFeatureExtractor(const std::string &root_dir) {
   feat_options.feat_blob = inference_->get_blob(feat_blob_name);
   feat_options.input_height = height_;
   feat_options.input_width = width_;
-  feature_extractor_.reset(BaseFeatureExtractorRegisterer::GetInstanceByName(
-      "TrackingFeatureExtractor"));
+  // JIEJIE: hack start
+//  feature_extractor_.reset(BaseFeatureExtractorRegisterer::GetInstanceByName(
+//      "TrackingFeatureExtractor"));
+  feature_extractor_.reset(new TrackingFeatureExtractor());
+  // JIEJIE: hack end
   if (!feature_extractor_->Init(feat_options)) {
     return false;
   }
